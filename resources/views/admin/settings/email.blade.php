@@ -11,26 +11,26 @@
     <div class="flex items-center gap-4">
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Server Host :</label>
-            <input type="text" name="MAIL_HOST" id="MAIL_HOST" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.host') }}" required />
+            <input type="text" name="MAIL_HOST" id="MAIL_HOST" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_HOST') }}" required />
         </div>
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col w-3/12">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Port :</label>
-            <input type="text" name="MAIL_PORT" id="MAIL_PORT" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.port') }}" required />
+            <input type="text" name="MAIL_PORT" id="MAIL_PORT" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_PORT') }}" required />
         </div>
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col w-3/12">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Enkripsi :</label>
-            <input type="text" name="MAIL_ENCRYPTION" id="MAIL_ENCRYPTION" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.encryption') }}" required />
+            <input type="text" name="MAIL_ENCRYPTION" id="MAIL_ENCRYPTION" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_ENCRYPTION') }}" required />
         </div>
     </div>
 
     <div class="flex items-center gap-4">
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Username :</label>
-            <input type="text" name="MAIL_USERNAME" id="MAIL_USERNAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.username') }}" required />
+            <input type="text" name="MAIL_USERNAME" id="MAIL_USERNAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_USERNAME') }}" required />
         </div>
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Password :</label>
-            <input type="text" name="MAIL_PASSWORD" id="MAIL_PASSWORD" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.password') }}" required />
+            <input type="text" name="MAIL_PASSWORD" id="MAIL_PASSWORD" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_PASSWORD') }}" required />
         </div>
     </div>
 
@@ -41,11 +41,11 @@
     <div class="flex items-center gap-4">
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">From Name :</label>
-            <input type="text" name="MAIL_FROM_NAME" id="MAIL_FROM_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.username') }}" required />
+            <input type="text" name="MAIL_FROM_NAME" id="MAIL_FROM_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_FROM_NAME') }}" required />
         </div>
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">From Address :</label>
-            <input type="text" name="MAIL_FROM_ADDRESS" id="MAIL_FROM_ADDRESS" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ config('mail.mailers.smtp.password') }}" required />
+            <input type="text" name="MAIL_FROM_ADDRESS" id="MAIL_FROM_ADDRESS" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('MAIL_FROM_ADDRESS') }}" required />
         </div>
     </div>
 

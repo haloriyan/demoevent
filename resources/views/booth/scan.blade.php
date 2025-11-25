@@ -129,6 +129,9 @@
         toggleHidden('#ScanCheck');
         select("#ScanCheck #LoadingContainer").classList.remove('hidden');
         selectAll(".Response").forEach(item => item.classList.add('hidden'));
+
+        console.log(data);
+        
         
         const response = await fetch("/booth/scan/check", {
             method: "POST",

@@ -88,6 +88,11 @@
         <ion-icon name="person-outline"></ion-icon>
         <div class="text-sm flex">Peserta</div>
     </a>
+    <a href="{{ route('admin.broadcast') }}" class="flex items-center gap-4 {{ $routeName == 'admin.broadcast' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
+        <div class="h-12 w-1 {{ $routeName == 'broadcast' ? 'bg-primary' : 'bg-white' }}"></div>
+        <ion-icon name="volume-high-outline"></ion-icon>
+        <div class="text-sm flex">Broadcast</div>
+    </a>
     <a href="{{ route('admin.booth') }}" class="flex items-center gap-4 {{ $routeName == 'admin.booth' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
         <div class="h-12 w-1 {{ $routeName == 'booth' ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="storefront-outline"></ion-icon>
@@ -116,6 +121,11 @@
                 <div class="h-10 w-1 bg-white"></div>
                 <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'email' ? 'text-primary' : '' }}"></ion-icon>
                 <div class="text-sm flex grow {{ @$routes[2] == 'email' ? 'text-primary' : '' }}">Email</div>
+            </a>
+            <a href="{{ route('admin.settings.whatsapp') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}">WhatsApp</div>
             </a>
             <a href="{{ route('admin.settings.admin') }}" class="flex items-center gap-4 text-slate-500">
                 <div class="h-10 w-1 bg-white"></div>

@@ -13,6 +13,7 @@ Route::group(['prefix' => "booth"], function () {
         Route::get('scan', [BoothController::class, 'scan'])->name('booth.scan');
         Route::post('checkin', [BoothController::class, 'checkin'])->name('booth.scan.checkin');
         Route::get('profile', [BoothController::class, 'profile'])->name('booth.profile');
+        Route::post('profile/{id}/update', [BoothController::class, 'update'])->name('booth.profile.update');
     });
 
     Route::group(['prefix' => "scan", 'middleware' => "Cors"], function () {

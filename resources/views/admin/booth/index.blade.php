@@ -12,10 +12,12 @@
             </button>
         </form>
 
-        <button class="bg-primary text-white text-sm font-medium h-14 px-8 rounded-lg flex items-center gap-2" onclick="toggleHidden('#CreateBooth')">
-            <ion-icon name="add-outline" class="text-xl"></ion-icon>
-            Booth
-        </button>
+        @if ($me->role == "admin")
+            <button class="bg-primary text-white text-sm font-medium h-14 px-8 rounded-lg flex items-center gap-2" onclick="toggleHidden('#CreateBooth')">
+                <ion-icon name="add-outline" class="text-xl"></ion-icon>
+                Booth
+            </button>
+        @endif
     </div>
 
     @include('partials.flash_message')
@@ -27,24 +29,26 @@
                 <h4 class="text-slate-700 mt-4">{{ $boo->name }}</h4>
                 <div class="text-xs text-slate-600">{{ $boo->description }}</div>
 
-                <div class="absolute top-0 right-0 p-4">
-                    <div class="group relative">
-                        <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center cursor-pointer">
-                            <ion-icon name="ellipsis-horizontal-outline" class="text-lg"></ion-icon>
-                        </div>
+                @if ($me->role == "admin")
+                    <div class="absolute top-0 right-0 p-4">
+                        <div class="group relative">
+                            <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center cursor-pointer">
+                                <ion-icon name="ellipsis-horizontal-outline" class="text-lg"></ion-icon>
+                            </div>
 
-                        <div class="absolute top-0 right-0 flex-col py-2 bg-white rounded-lg shadow hidden group-hover:flex">
-                            <a href="{{ route('admin.booth.update', $boo->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-green-500" onclick="EditBooth(event, '{{ $boo }}')">
-                                <ion-icon name="create-outline" class="text-lg"></ion-icon>
-                                Edit
-                            </a>
-                            <a href="{{ route('admin.booth.delete', $boo->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-red-500" onclick="DeleteBooth(event, '{{ $boo }}')">
-                                <ion-icon name="trash-outline" class="text-lg"></ion-icon>
-                                Hapus
-                            </a>
+                            <div class="absolute top-0 right-0 flex-col py-2 bg-white rounded-lg shadow hidden group-hover:flex">
+                                <a href="{{ route('admin.booth.update', $boo->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-green-500" onclick="EditBooth(event, '{{ $boo }}')">
+                                    <ion-icon name="create-outline" class="text-lg"></ion-icon>
+                                    Edit
+                                </a>
+                                <a href="{{ route('admin.booth.delete', $boo->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-red-500" onclick="DeleteBooth(event, '{{ $boo }}')">
+                                    <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+                                    Hapus
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         @endforeach
     </div>

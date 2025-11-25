@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BoothController;
+use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
@@ -64,9 +65,25 @@ Route::group(['prefix' => "admin"], function () {
         });
 
         Route::group(['prefix' => "settings"], function () {
+            Route::group(['prefix' => "whatsapp"], function () {
+                Route::get('{id}/primary', [AdminController::class, 'setWhatsappPrimary'])->name('admin.settings.whatsapp.primary');
+                Route::match(['get', 'post'], '{id}/remove', [AdminController::class, 'removeWhatsapp'])->name('admin.settings.whatsapp.remove');
+                Route::match(['get', 'post'], '/', [AdminController::class, 'whatsappSettings'])->name('admin.settings.whatsapp');
+            });
+            Route::match(['get', 'post'], 'whatsapp', [AdminController::class, 'whatsappSettings'])->name('admin.settings.whatsapp');
             Route::match(['get', 'post'], 'email', [AdminController::class, 'emailSettings'])->name('admin.settings.email');
             Route::get('admin', [AdminController::class, 'admins'])->name('admin.settings.admin');
             Route::match(['get', 'post'], '/', [AdminController::class, 'generalSettings'])->name('admin.settings.general');
+        });
+
+        Route::group(['prefix' => "broadcast"], function () {
+            Route::get('{id}/detail', [BroadcastController::class, 'detail'])->name('admin.broadcast.detail');
+            Route::post('store', [BroadcastController::class, 'store'])->name('admin.broadcast.store');
+            Route::get('/', [AdminController::class, 'broadcast'])->name('admin.broadcast');
+        });
+
+        Route::group(['prefix' => "export"], function () {
+            // Route::get('peserta', [])
         });
     });
 });

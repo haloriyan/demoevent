@@ -16,6 +16,9 @@ function me($guard = null) {
     $user = Auth::guard($guard)->user();
 	return $user;
 }
+function wasap() {
+	// 
+}
 function nullify($value) {
 	return $value === "null" ? null : $value;
 }

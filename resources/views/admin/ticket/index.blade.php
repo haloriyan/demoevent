@@ -20,19 +20,23 @@
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-4 grow">
                     <h3 class="text-xl text-slate-700 font-medium">{{ $category->name }}</h3>
-                    <a href="{{ route('admin.ticket.category.update', $category->id) }}" class="flex items-center gap-1 p-1 px-3 border-[0.3px] bg-green-100 text-green-500 border-green-500 rounded-full text-xs" onclick="EditCategory(event, '{{ $category }}')">
-                        <ion-icon name="create-outline"></ion-icon>
-                        Edit
-                    </a>
-                    <a href="{{ route('admin.ticket.category.delete', $category->id) }}" class="flex items-center gap-1 p-1 px-3 border-[0.3px] bg-red-100 text-red-500 border-red-500 rounded-full text-xs" onclick="DeleteCategory(event, '{{ $category }}')">
-                        <ion-icon name="trash-outline"></ion-icon>
-                        Hapus
-                    </a>
+                    @if ($me->role == "admin")
+                        <a href="{{ route('admin.ticket.category.update', $category->id) }}" class="flex items-center gap-1 p-1 px-3 border-[0.3px] bg-green-100 text-green-500 border-green-500 rounded-full text-xs" onclick="EditCategory(event, '{{ $category }}')">
+                            <ion-icon name="create-outline"></ion-icon>
+                            Edit
+                        </a>
+                        <a href="{{ route('admin.ticket.category.delete', $category->id) }}" class="flex items-center gap-1 p-1 px-3 border-[0.3px] bg-red-100 text-red-500 border-red-500 rounded-full text-xs" onclick="DeleteCategory(event, '{{ $category }}')">
+                            <ion-icon name="trash-outline"></ion-icon>
+                            Hapus
+                        </a>
+                    @endif
                 </div>
-                <button class="bg-primary p-3 px-5 rounded-lg text-white text-xs font-medium flex items-center gap-3" onclick="AddTicket(event, '{{ $category }}')">
-                    <ion-icon name="add-outline" class="text-lg"></ion-icon>
-                    Tambah Tiket
-                </button>
+                @if ($me->role == "admin")
+                    <button class="bg-primary p-3 px-5 rounded-lg text-white text-xs font-medium flex items-center gap-3" onclick="AddTicket(event, '{{ $category }}')">
+                        <ion-icon name="add-outline" class="text-lg"></ion-icon>
+                        Tambah Tiket
+                    </button>
+                @endif
             </div>
 
             <div class="grid grid-cols-3 gap-8">
@@ -44,22 +48,24 @@
                     <div class="bg-white p-8 rounded-lg shadow-sm flex flex-col gap-3">
                         <div class="flex items-center gap-4">
                             <h4 class="text-lg text-slate-700 font-medium flex basis-24 grow">{{ $ticket->name }}</h4>
-                            <div class="w-10 h-10 border rounded-lg flex items-center justify-center cursor-pointer group relative">
-                                <ion-icon name="ellipsis-horizontal-outline" class="text-xl"></ion-icon>
+                            @if ($me->role == "admin")
+                                <div class="w-10 h-10 border rounded-lg flex items-center justify-center cursor-pointer group relative">
+                                    <ion-icon name="ellipsis-horizontal-outline" class="text-xl"></ion-icon>
 
-                                <div class="absolute top-[-10px] right-[-10px] rounded-lg bg-white py-4 border hidden group-hover:flex flex-col">
-                                    <a href="{{ route('admin.ticket.update', $ticket->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-green-500" onclick="EditTicket(event, '{{ $ticket }}')">
-                                        <ion-icon name="create-outline" class="text-lg"></ion-icon>
-                                        Edit
-                                    </a>
-                                    @if ($ticket->quantity == $ticket->start_quantity)
-                                        <a href="{{ route('admin.ticket.delete', $ticket->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-red-500" onclick="DeleteTicket(event, '{{ $ticket }}')">
-                                            <ion-icon name="trash-outline" class="text-lg"></ion-icon>
-                                            Hapus
+                                    <div class="absolute top-[-10px] right-[-10px] rounded-lg bg-white py-4 border hidden group-hover:flex flex-col">
+                                        <a href="{{ route('admin.ticket.update', $ticket->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-green-500" onclick="EditTicket(event, '{{ $ticket }}')">
+                                            <ion-icon name="create-outline" class="text-lg"></ion-icon>
+                                            Edit
                                         </a>
-                                    @endif
+                                        @if ($ticket->quantity == $ticket->start_quantity)
+                                            <a href="{{ route('admin.ticket.delete', $ticket->id) }}" class="flex items-center gap-3 p-2 px-5 hover:bg-slate-100 text-sm text-red-500" onclick="DeleteTicket(event, '{{ $ticket }}')">
+                                                <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+                                                Hapus
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                         <div></div>
                         <div class="flex items-center gap-3 text-slate-500 text-xs">
@@ -83,15 +89,17 @@
             </div>
         </div>
     @endforeach
-    <div class="p-8 relative">
-        <div class="w-full h-[1px] bg-primary"></div>
-        <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <div class="flex items-center justify-center gap-3 bg-slate-100 p-4 px-5 cursor-pointer text-primary text-sm" onclick="toggleHidden('#AddCategory')">
-                <ion-icon name="add-circle-outline" class="text-lg"></ion-icon>
-                Kategori Tiket Baru
+    @if ($me->role == "admin")
+        <div class="p-8 relative">
+            <div class="w-full h-[1px] bg-primary"></div>
+            <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                <div class="flex items-center justify-center gap-3 bg-slate-100 p-4 px-5 cursor-pointer text-primary text-sm" onclick="toggleHidden('#AddCategory')">
+                    <ion-icon name="add-circle-outline" class="text-lg"></ion-icon>
+                    Kategori Tiket Baru
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>
 @endsection
 

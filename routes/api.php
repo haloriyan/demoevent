@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -13,4 +14,14 @@ Route::get('/user', function (Request $request) {
 Route::post('handbooks', [AdminController::class, 'handbook']);
 Route::group(['middleware' => "Cors"], function () {
     Route::get('pdf/{filename}', [UserController::class, 'streamPdf']);
+});
+
+Route::group(['prefix' => "callback"], function () {
+    Route::post('wa', [AdminController::class, 'callbackWa']);
+});
+
+Route::group(['prefix' => "v2"], function () {
+    Route::post('home', [ContentController::class, 'home']);
+    Route::post('preparation', [ContentController::class, 'preparation']);
+    Route::post('store', [ContentController::class, 'store']);
 });

@@ -69,8 +69,10 @@ class BoothController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $me = me('booth');
         $boo = Booth::where('id', $id);
         $booth = $boo->first();
+        $logout = false;
 
         $toUpdate = [
             'name' => $request->name,
@@ -80,6 +82,9 @@ class BoothController extends Controller
 
         if ($request->password != "") {
             $toUpdate['password'] = bcrypt($request->password);
+            if ($me != null) {
+                $logout = true;
+            }
         }
 
         if ($request->hasFile('icon')) {
@@ -89,6 +94,15 @@ class BoothController extends Controller
             $toUpdate['icon'] = $iconFileName;
             $icon->move(
                 public_path('storage/booth_icons/'), $iconFileName
+            );
+        }
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover');
+            $coverFileName = time()."_".$cover->getClientOriginalName();
+            Storage::delete('public/booth_covers/' . $booth->cover);
+            $toUpdate['cover'] = $coverFileName;
+            $cover->move(
+                public_path('storage/booth_covers/'), $coverFileName
             );
         }
 
@@ -150,9 +164,11 @@ class BoothController extends Controller
     }
     public function profile() {
         $me = me('booth');
+        $message = Session::get('message');
 
         return view('booth.profile', [
             'me' => $me,
+            'message' => $message,
         ]);
     }
 }

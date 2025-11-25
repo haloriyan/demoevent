@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PesertaExport;
 use App\Models\Admin;
 use App\Models\Booth;
+use App\Models\Broadcast;
 use App\Models\Handbook;
 use App\Models\HandbookCategory;
 use App\Models\Scan;
@@ -11,11 +13,15 @@ use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\WaDevice;
 use App\Notifications\EmailChanged;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -48,7 +54,7 @@ class AdminController extends Controller
         ]);
     }
     public function dashboard(Request $request) {
-        $me = me();
+        $me = me('admin');
         $message = Session::get('message');
         $isValid = $request->isValid ?? false;
         $users = 0;
@@ -73,7 +79,7 @@ class AdminController extends Controller
         ]);
     }
     public function ticket(Request $request) {
-        $me = me();
+        $me = me('admin');
         $message = Session::get('message');
         $categories = TicketCategory::orderBy('name', 'ASC')->with(['tickets'])->get();
 
@@ -84,7 +90,7 @@ class AdminController extends Controller
         ]);
     }
     public function booth(Request $request) {
-        $me = me();
+        $me = me('admin');
         $message = Session::get('message');
         $filter = [];
         $booths = Booth::where($filter)->get();
@@ -96,7 +102,7 @@ class AdminController extends Controller
         ]);
     }
     public function peserta(Request $request) {
-        $me = me();
+        $me = me('admin');
         $message = Session::get('message');
         $filterCount = 0;
         $tickets = Ticket::orderBy('name', 'ASC')->get();
@@ -124,6 +130,17 @@ class AdminController extends Controller
         $users = $u->orderBy('created_at', 'DESC')
         ->with(['transaction.ticket'])
         ->paginate(25);
+
+        if ($request->download == 1) {
+            $filename = "Data_Peserta-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+
+            return Excel::download(
+                new PesertaExport([
+                    'peserta' => $users
+                ]),
+                $filename
+            );
+        }
 
         return view('admin.peserta.index', [
             'me' => $me,
@@ -158,7 +175,7 @@ class AdminController extends Controller
         ]);
     }
     public function handbook(Request $request) {
-        $me = me();
+        $me = me('admin');
         $message = Session::get('message');
 
         $categories = HandbookCategory::orderBy('priority', 'DESC')->orderBy('updated_at', 'DESC')->get();
@@ -187,6 +204,22 @@ class AdminController extends Controller
                 'handbooks' => $handbooks,
             ]);
         }
+    }
+    public function broadcast(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+        $devices = WaDevice::orderBy('name', 'ASC')->get();
+        $broadcasts = Broadcast::orderBy('created_at', 'DESC')
+        ->with(['device'])
+        ->paginate(25);
+
+        return view('admin.broadcast.index', [
+            'me' => $me,
+            'message' => $message,
+            'request' => $request,
+            'devices' => $devices,
+            'broadcasts' => $broadcasts,
+        ]);
     }
 
     public function scan(Request $request) {
@@ -328,5 +361,58 @@ class AdminController extends Controller
                 'message' => "Berhasil menyimpan pengaturan"
             ]);
         }
+    }
+    public function whatsappSettings(Request $request) {
+        $devices = WaDevice::orderBy('created_at', 'DESC')->get();
+        $message = Session::get('message');
+
+        return view('admin.settings.whatsapp.index', [
+            'devices' => $devices,
+            'message' => $message,
+        ]);
+    }
+    public function removeWhatsapp(Request $request, $id) {
+        $dev = WaDevice::where('id', $id);
+        $device = $dev->first();
+
+        $dev->delete();
+
+        Http::post(env('WA_URL') . "/disconnect", [
+            'client_id' => $device->client_id,
+        ]);
+
+        return redirect()->back()->with([
+            'message' => "Berhasil menghapus perangkat " . $device->name,
+        ]);
+    }
+    public function setWhatsappPrimary(Request $request, $id) {
+        $dev = WaDevice::where('id', $id);
+        $device = $dev->first();
+
+        WaDevice::update(['is_primary' => false]);
+
+        $dev->update([
+            'is_primary' => true,
+        ]);
+
+        return redirect()->back()->with([
+            'message' => "Berhasil menjadikan perangkat " . $device->name . " sebagai utama",
+        ]);
+    }
+    public function callbackWa(Request $request) {
+        $devices = WaDevice::all(['id']);
+        $isPrimary = $devices->count() > 0 ? false : true;
+
+        $device = WaDevice::create([
+            'client_id' => $request->client_id,
+            'name' => $request->name,
+            'number' => $request->number,
+            'profile_picture' => $request->profile_picture,
+            'is_primary' => $isPrimary,
+        ]);
+
+        return response()->json([
+            'ok',
+        ]);
     }
 }

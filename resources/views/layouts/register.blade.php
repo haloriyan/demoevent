@@ -63,6 +63,71 @@
 
         return props;
     }
+    const onChangeImage = (input, target) => {
+        const file = input.files[0];
+        const reader = new FileReader();
+        const imagePreview = document.querySelector(target);
+
+        reader.onload = function () {
+            const source = reader.result;
+
+            // Set image as background
+            imagePreview.style.backgroundImage = `url("${source}")`;
+            imagePreview.style.backgroundSize = "cover";
+            imagePreview.style.backgroundPosition = "center center";
+
+            // Remove placeholder icons (but keep input)
+            Array.from(imagePreview.childNodes).forEach(ch => {
+                if (ch.tagName !== "INPUT") {
+                    ch.remove();
+                }
+            });
+
+            // If input name ends with [], clone new input
+            if (input.name.endsWith("[]")) {
+                // Add remove button
+                const removeIcon = document.createElement("ion-icon");
+                removeIcon.setAttribute("name", "close-circle");
+                // removeIcon.className = "text-red-500 text-xl text-white absolute top-1 right-1 cursor-pointer z-10";
+                removeIcon.classList.add('text-red-500', 'text-2xl', 'text-white', 'absolute', 'top-1', 'right-1', 'cursor-pointer', 'z-10');
+                removeIcon.addEventListener("click", () => {
+                    // Only remove if more than one preview exists
+                    if (imagePreview.parentNode.querySelectorAll('[id^="imagePreviewEdit"]').length > 1) {
+                        imagePreview.remove();
+                    }
+                });
+                imagePreview.appendChild(removeIcon);
+                
+                const newWrapper = imagePreview.cloneNode(true);
+                const newInput = newWrapper.querySelector('input[type="file"]');
+
+                // Reset background and file input
+                newWrapper.style.backgroundImage = '';
+                newInput.value = '';
+                newInput.removeAttribute("required"); // ✅ REMOVE required on clone
+                newWrapper.querySelectorAll("*:not(input)").forEach(el => el.remove());
+
+                // Restore placeholder icon
+                const placeholderIcon = document.createElement("ion-icon");
+                placeholderIcon.setAttribute("name", "image-outline");
+                placeholderIcon.className = "text-xl text-slate-700";
+                newWrapper.insertBefore(placeholderIcon, newInput);
+
+                // Set new ID and event
+                const newId = `imagePreviewEdit-${Date.now()}`;
+                newWrapper.id = newId;
+                newInput.setAttribute("onchange", `onChangeImage(this, '#${newId}')`);
+
+                // Append new block
+                imagePreview.parentNode.appendChild(newWrapper);
+            }
+
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
 </script>
 @yield('javascript')
 

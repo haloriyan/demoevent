@@ -24,10 +24,12 @@
             </button>
         </form>
 
-        <button class="bg-primary text-white text-sm font-medium h-14 px-8 rounded-lg flex items-center gap-2" onclick="toggleHidden('#AddHandbook')">
-            <ion-icon name="add-outline" class="text-xl"></ion-icon>
-            Dokumen Baru
-        </button>
+        @if ($me->role == "admin")
+            <button class="bg-primary text-white text-sm font-medium h-14 px-8 rounded-lg flex items-center gap-2" onclick="toggleHidden('#AddHandbook')">
+                <ion-icon name="add-outline" class="text-xl"></ion-icon>
+                Dokumen Baru
+            </button>
+        @endif
     </div>
 
     @include('partials.flash_message')
