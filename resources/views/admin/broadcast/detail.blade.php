@@ -44,7 +44,7 @@
                 Log
             </div>
 
-            <div class="flex flex-col gap-2 mt-4">
+            <div class="flex flex-col gap-2 mt-4 overflow-y-auto">
                 @foreach ($broadcast->logs as $log)
                     <div class="flex items-start gap-4">
                         <div class="flex items-center pt-[5px]">

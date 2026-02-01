@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
+    public function search(Request $request) {
+        $u = User::where('name', 'LIKE', "%".$request->q."%");
+        if ($request->with != "") {
+            $u = $u->with($request->with);
+        }
+        $users = $u->take(20)->get();
+
+        return response()->json([
+            'users' => $users,
+        ]);
+    }
     public function streamPdf($filename) {
         $filename = base64_decode($filename);
         $path = public_path('storage/handbooks/' . $filename);

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+Route::post('users/search', [UserController::class, 'search']);
 
 Route::post('handbooks', [AdminController::class, 'handbook']);
 Route::group(['middleware' => "Cors"], function () {

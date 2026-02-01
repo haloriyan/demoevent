@@ -8,8 +8,15 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
+Route::group(['prefix' => "fo"], function () {
+    Route::get('home', [AdminController::class, 'foHome'])->name('fo.home');
+});
+
 Route::group(['prefix' => "admin"], function () {
     Route::match(['get', 'post'], 'login', [AdminController::class, 'login'])->name('admin.login');
+    Route::group(['middleware' => "Cors"], function () {
+        Route::post('scan', [AdminController::class, 'scan'])->name('admin.scan');
+    });
 
     Route::group(['middleware' => "Admin"], function () {
         Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
@@ -20,10 +27,8 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('/', [AdminController::class, 'peserta'])->name('admin.peserta');
         });
 
-        Route::post('scan', [AdminController::class, 'scan'])->name('admin.scan');
-
         Route::group(['prefix' => "transaksi/{id}"], function () {
-            Route::post('confirm', [TransactionController::class, 'confirmByAdmin'])->name('admin.transaction.confirm');
+            Route::match(['get', 'post'], 'confirm', [TransactionController::class, 'confirmByAdmin'])->name('admin.transaction.confirm');
         });
 
         Route::group(['prefix' => "ticket"], function () {
@@ -37,6 +42,11 @@ Route::group(['prefix' => "admin"], function () {
             Route::post('{id}/update', [TicketController::class, 'update'])->name('admin.ticket.update');
             Route::get('{id}/delete', [TicketController::class, 'delete'])->name('admin.ticket.delete');
             Route::get('/', [AdminController::class, 'ticket'])->name('admin.ticket');
+        });
+
+        Route::group(['prefix' => "check-in"], function () {
+            Route::get('registrasi', [AdminController::class, 'registrasiCheckin'])->name('admin.checkin.registrasi');
+            Route::get('booth', [AdminController::class, 'boothCheckin'])->name('admin.checkin.booth');
         });
 
         Route::group(['prefix' => "handbook"], function () {

@@ -88,8 +88,30 @@
         <ion-icon name="person-outline"></ion-icon>
         <div class="text-sm flex">Peserta</div>
     </a>
-    <a href="{{ route('admin.broadcast') }}" class="flex items-center gap-4 {{ $routeName == 'admin.broadcast' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
-        <div class="h-12 w-1 {{ $routeName == 'broadcast' ? 'bg-primary' : 'bg-white' }}"></div>
+
+    <div class="group relative">
+        <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'checkin' ? 'bg-primary-transparent text-primary' : '' }}">
+            <div class="h-12 w-1 {{ $routes[1] == 'checkin' ? 'bg-primary' : 'bg-white' }}"></div>
+            <ion-icon name="checkbox-outline" class="{{ $routes[1] == 'checkin' ? 'text-primary' : '' }}"></ion-icon>
+            <div class="text-sm flex grow {{ $routes[1] == 'checkin' ? 'text-primary' : '' }}">Check-in</div>
+            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
+        </a>
+        <div class="{{ $routes[1] == 'checkin' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+            <a href="{{ route('admin.checkin.registrasi') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'registrasi' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'registrasi' ? 'text-primary' : '' }}">Registrasi</div>
+            </a>
+            <a href="{{ route('admin.checkin.booth') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'booth' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'booth' ? 'text-primary' : '' }}">Booth</div>
+            </a>
+        </div>
+    </div>
+
+    <a href="{{ route('admin.broadcast') }}" class="flex items-center gap-4 {{ in_array('broadcast', $routes) ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
+        <div class="h-12 w-1 {{ in_array('broadcast', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="volume-high-outline"></ion-icon>
         <div class="text-sm flex">Broadcast</div>
     </a>

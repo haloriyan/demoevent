@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Booth;
+use App\Http\Middleware\ConstructionPreview;
 use App\Http\Middleware\Cors;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->appendToGroup('Cors', [
             Cors::class,
+        ]);
+        $middleware->appendToGroup('Construction', [
+            ConstructionPreview::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

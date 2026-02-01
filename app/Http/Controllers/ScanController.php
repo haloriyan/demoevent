@@ -11,7 +11,6 @@ class ScanController extends Controller
     public function check(Request $request) {
         $transaction = Transaction::where('id', $request->trx_id)->with(['ticket', 'user'])->first();
         $user = null;
-        Log::info($request->trx_id);
 
         if ($transaction && $transaction->payment_status == "PAID") {
             $user = $transaction->user;

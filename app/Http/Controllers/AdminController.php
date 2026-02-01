@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Exports\PesertaExport;
 use App\Models\Admin;
 use App\Models\Booth;
+use App\Models\BoothCheckin;
 use App\Models\Broadcast;
 use App\Models\Handbook;
 use App\Models\HandbookCategory;
@@ -221,16 +223,70 @@ class AdminController extends Controller
             'broadcasts' => $broadcasts,
         ]);
     }
+    public function registrasiCheckin(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+
+        $check = Scan::orderBy('created_at', 'DESC')->with(['user', 'transaction', 'ticket']);
+        $checkins = $check->paginate(25);
+
+        return view('admin.checkin.registrasi', [
+            'me' => $me,
+            'message' => $message,
+            'request' => $request,
+            'checkins' => $checkins,
+        ]);
+    }
+    public function boothCheckin(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+        $booths = Booth::orderBy('name', 'ASC')->get();
+        $filter = [];
+
+        if ($request->booth_id != null) {
+            array_push($filter, ['booth_id', $request->booth_id]);
+        }
+        
+        $check = BoothCheckin::where($filter)->orderBy('created_at', 'DESC')->with(['user', 'booth']);
+        if ($request->download == 1) {
+            $filename = "Data_Checkin_Booth"."-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            $checkins = $check->get();
+
+            return Excel::download(
+                new ExportsBoothCheckin([
+                    'role' => "ADMIN",
+                    'checkins' => $checkins,
+                ]),
+                $filename
+            );
+        }
+
+        $checkins = $check->paginate(25);
+
+        return view('admin.checkin.booth', [
+            'me' => $me,
+            'message' => $message,
+            'request' => $request,
+            'booths' => $booths,
+            'checkins' => $checkins,
+        ]);
+    }
 
     public function scan(Request $request) {
         $p = json_decode(base64_decode($request->p));
 
         $trx = Transaction::where('id', $p->trx_id);
         $transaction = $trx->with(['user', 'ticket'])->first();
+        $scan = null;
+        $check = Scan::where([
+            ['user_id', $p->user_id],
+            ['transaction_id', $p->trx_id],
+        ])->first();
 
         if (
             $transaction->payment_status == "PAID" &&
-            $transaction->user_id == $p->user_id
+            $transaction->user_id == $p->user_id &&
+            $check == null
         ) {
 
             if ($request->confirm != "y") {
@@ -245,14 +301,36 @@ class AdminController extends Controller
                 'transaction_id' => $p->trx_id,
                 'ticket_id' => $transaction->ticket_id,
             ]);
+            $scan = Scan::where('id', $scan->id)->with(['user', 'transaction', 'ticket'])->first();
 
-            return redirect()->route('admin.dashboard')->with([
-                'message' => "Berhasil scan"
-            ]);
+            if ($request->response_type == "api") {
+                return response()->json([
+                    'scan' => $scan,
+                    'message' => "Berhasil scan"
+                ]);
+            } else {
+                return redirect()->route('admin.dashboard')->with([
+                    'message' => "Berhasil scan"
+                ]);
+            }
         } else {
-            return redirect()->back()->withErrors([
-                'Gagal melakukan scan',
-            ]);
+            $message = "Gagal melakukan scan";
+            if ($check != null) {
+                $message = "Sudah cek-in dengan QR ini.";
+            } else if ($transaction == null || $transaction->payment_status != "PAID" || $transaction->user_id != $p->user_id) {
+                $message = "Transaksi tidak valid";
+            }
+
+            if ($request->response_type == "api") {
+                return response()->json([
+                    'scan' => $scan,
+                    'message' => $message
+                ]);
+            } else {
+                return redirect()->back()->withErrors([
+                    $message,
+                ]);
+            }
         }
     }
 
@@ -389,7 +467,7 @@ class AdminController extends Controller
         $dev = WaDevice::where('id', $id);
         $device = $dev->first();
 
-        WaDevice::update(['is_primary' => false]);
+        $devices = WaDevice::where([])->update(['is_primary' => false]);
 
         $dev->update([
             'is_primary' => true,
@@ -414,5 +492,9 @@ class AdminController extends Controller
         return response()->json([
             'ok',
         ]);
+    }
+
+    public function foHome() {
+        return view('fo.home');
     }
 }

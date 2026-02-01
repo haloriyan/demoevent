@@ -7,18 +7,24 @@ use App\Models\WaDevice;
 use App\Notifications\PaymentConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
     public function confirmByAdmin(Request $request, $id) {
         $trx = Transaction::where('id', $id);
         $transaction = $trx->with(['user', 'ticket'])->first();
+        $message = "Berhasil mengkonfirmasi pembayaran #" . $transaction->id;
+
+        if ($request->is_resend == "y") {
+            $message = "Berhasil mengirim ulang konfirmasi pembayaran dan Kode QR";
+        }
 
         $toUpdate = [
             'payment_status' => "PAID"
         ];
 
-        if ($transaction->payment_evidence == null) {
+        if ($transaction->payment_evidence == null && $request->hasFile('evidence')) {
             $evidence = $request->file('evidence');
             $fileName = time()."_".$evidence->getClientOriginalName();
             $evidence->move(
@@ -36,10 +42,18 @@ class TransactionController extends Controller
                 'trx' => $transaction,
             ]));
 
+            $qrString = base64_encode(json_encode([
+                'trx_id' => $transaction->id,
+                'user_id' => $user->id,
+            ]));
+            $qrLink = "https://api.qrserver.com/v1/create-qr-code/?data=$qrString&size=256x256";
+            Log::info($qrLink);
+
             $device = WaDevice::where('is_primary', true)->first();
             Http::post(env('WA_URL') . "/send", [
                 'client_id' => $device->client_id,
                 'destination' => "62".$user->whatsapp,
+                'image' => $qrLink,
                 'message' => "Yth. " . $user->name . "\n\n" .
                                 'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.'.
                                 'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
@@ -51,7 +65,7 @@ class TransactionController extends Controller
         }
 
         return redirect()->back()->with([
-            'message' => "Berhasil mengkonfirmasi pembayaran #" . $transaction->id,
+            'message' => $message,
         ]);
     }
 }

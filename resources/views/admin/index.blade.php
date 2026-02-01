@@ -103,7 +103,7 @@
 
 @section('javascript')
 <script>
-    // toggleHidden("#CreateAdmin");
+    const params = new URLSearchParams(window.location.search);
 
     const chooseRole = (prefix, role) => {
         select(`${prefix} #role`).value = role;
@@ -131,6 +131,10 @@
         select("#EditAdmin #role").value = data.role;
         chooseRole("#EditAdmin", data.role);
         toggleHidden("#EditAdmin");
+    }
+
+    if (params.get('role')) {
+        chooseRole("#CreateAdmin", params.get('role'));
     }
 </script>
 @endsection

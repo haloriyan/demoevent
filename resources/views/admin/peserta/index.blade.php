@@ -70,6 +70,7 @@
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">No. Pendaftaran</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">NIK</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Nama</th>
+                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Instansi</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Email</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">No. Telepon</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">
@@ -98,6 +99,12 @@
                                             Konfirmasi Pembayaran
                                         </a>
                                     @endif
+                                    @if ($user->transaction->payment_status == "PAID")
+                                        <a href="{{ route('admin.transaction.confirm', ['id' => $user->transaction->id, 'is_resend' => 'y']) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                            <ion-icon name="qr-code-outline" class="text-lg text-green-500"></ion-icon>
+                                            Kirim Ulang QR
+                                        </a>
+                                    @endif
                                     @if ($me->role == "admin")
                                         <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="EditPeserta(event, '{{ $user }}')">
                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
@@ -122,6 +129,9 @@
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $user->name }}
+                        </td>
+                        <td class="py-3 px-4 text-sm text-slate-600">
+                            {{ $user->instansi ?? '-' }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $user->email }}

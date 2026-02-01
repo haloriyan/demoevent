@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
+use App\Models\Scan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BoothController extends Controller
 {
@@ -144,9 +148,25 @@ class BoothController extends Controller
         ]);
     }
 
-    public function dashboard() {
+    public function dashboard(Request $request) {
         $me = me('booth');
-        $checkins = BoothCheckin::where('booth_id', $me->id)->with(['user'])->paginate(25);
+        $check = BoothCheckin::where('booth_id', $me->id)->with(['user']);
+
+        if ($request->download == 1) {
+            $filename = "Data_Checkin_Booth"."-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            $checkins = $check->get();
+
+            return Excel::download(
+                new ExportsBoothCheckin([
+                    'role' => "BOOTH",
+                    'checkins' => $checkins,
+                ]),
+                $filename
+            );
+        }
+
+        $checkins = $check->paginate(25);
+        // $checkins = Scan::with(['user'])->paginate(25);
 
         return view('booth.dashboard', [
             'me' => $me,
