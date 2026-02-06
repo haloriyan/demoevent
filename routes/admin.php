@@ -4,6 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BoothController;
 use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\HandbookController;
+use App\Http\Controllers\RundownController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SpeakerController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +28,24 @@ Route::group(['prefix' => "admin"], function () {
         Route::group(['prefix' => "peserta"], function () {
             Route::post('{id}/update', [AdminController::class, 'updatePeserta'])->name('admin.peserta.update');
             Route::get('/', [AdminController::class, 'peserta'])->name('admin.peserta');
+        });
+
+        Route::group(['prefix' => "speaker"], function () {
+            Route::post('store', [SpeakerController::class, 'store'])->name('admin.speaker.store');
+            Route::post('{id}/update', [SpeakerController::class, 'update'])->name('admin.speaker.update');
+            Route::get('{id}/delete', [SpeakerController::class, 'delete'])->name('admin.speaker.delete');
+            Route::get('/', [AdminController::class, 'speaker'])->name('admin.speaker');
+        });
+        Route::group(['prefix' => "schedule"], function () {
+            Route::post('store', [ScheduleController::class, 'store'])->name('admin.schedule.store');
+            Route::post('{id}/update', [ScheduleController::class, 'update'])->name('admin.schedule.update');
+            Route::get('{id}/delete', [ScheduleController::class, 'delete'])->name('admin.schedule.delete');
+            Route::get('/', [AdminController::class, 'schedule'])->name('admin.schedule');
+        });
+        Route::group(['prefix' => "rundown"], function () {
+            Route::post('{rundownID}/update', [RundownController::class, 'update'])->name('admin.rundown.update');
+            Route::get('{rundownID}/delete', [RundownController::class, 'delete'])->name('admin.rundown.delete');
+            Route::post('store', [RundownController::class, 'store'])->name('admin.rundown.store');
         });
 
         Route::group(['prefix' => "transaksi/{id}"], function () {

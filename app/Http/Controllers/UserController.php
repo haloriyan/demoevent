@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Schedule;
+use App\Models\Speaker;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
+use App\Services\Xendit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +19,33 @@ use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
+    public function xendit(Xendit $xendit) {
+        $pay = $xendit->pay();
+
+        return $pay;
+    }
+    public function contact() {
+        return view('contact');
+    }
+    public function eposter() {
+        return view('eposter');
+    }
+    public function program() {
+        $schedules = Schedule::orderBy('date', 'ASC')->with('rundowns')->get();
+
+        return view('program', [
+            'schedules' => $schedules,
+        ]);
+    }
+    public function index() {
+        $speakers = Speaker::inRandomOrder()->take(4)->get();
+        $schedules = Schedule::orderBy('date', 'ASC')->with('rundowns')->get();
+
+        return view('index', [
+            'speakers' => collect($speakers),
+            'schedules' => $schedules,
+        ]);
+    }
     public function search(Request $request) {
         $u = User::where('name', 'LIKE', "%".$request->q."%");
         if ($request->with != "") {
@@ -70,7 +100,7 @@ class UserController extends Controller
 
         return $transactions;
     }
-    public function index(Request $request, $step = 'welcome') {
+    public function register(Request $request, $step = 'welcome') {
         $payload = json_decode(base64_decode($request->p), true) ?? [];
         $me = me();
 
@@ -85,7 +115,7 @@ class UserController extends Controller
                     }
                 ])->get();
 
-                return view('index', [
+                return view('register', [
                     'step' => $step,
                     'categories' => $categories,
                     'request' => $request,
@@ -96,7 +126,7 @@ class UserController extends Controller
 
                 $payload['ticket'] = $ticket;
 
-                return redirect()->route('index', [
+                return redirect()->route('register', [
                     'step' => "detail",
                     'p' => base64_encode(json_encode($payload)),
                 ]);
@@ -116,7 +146,7 @@ class UserController extends Controller
                 $payload['email'] = $request->email;
                 $payload['whatsapp'] = $request->whatsapp;
 
-                return redirect()->route('index', [
+                return redirect()->route('register', [
                     'step' => "konfirmasi",
                     'p' => base64_encode(json_encode($payload)),
                 ]);
@@ -199,7 +229,7 @@ class UserController extends Controller
                     }
                 }
 
-                return redirect()->route('index', [
+                return redirect()->route('register', [
                     'step' => "done",
                     'p' => base64_encode(json_encode($payload)),
                 ]);

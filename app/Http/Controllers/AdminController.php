@@ -11,6 +11,8 @@ use App\Models\Broadcast;
 use App\Models\Handbook;
 use App\Models\HandbookCategory;
 use App\Models\Scan;
+use App\Models\Schedule;
+use App\Models\Speaker;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
@@ -18,6 +20,7 @@ use App\Models\User;
 use App\Models\WaDevice;
 use App\Notifications\EmailChanged;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -101,6 +104,18 @@ class AdminController extends Controller
             'me' => $me,
             'message' => $message,
             'booths' => $booths,
+        ]);
+    }
+    public function speaker(Request $request) {
+        $me = me('admin');
+        $message = Session::get('message');
+        $speakers = Speaker::orderBy('updated_at', 'DESC')->get();
+
+        return view('admin.speaker.index', [
+            'me' => $me,
+            'message' => $message,
+            'request' => $request,
+            'speakers' => $speakers,
         ]);
     }
     public function peserta(Request $request) {
@@ -350,6 +365,37 @@ class AdminController extends Controller
             'message' => $message,
             'admins' => $admins,
             'me' => $me,
+        ]);
+    }
+    public function schedule(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+
+        $schedules = Schedule::with(['rundowns' => function ($query) {
+            $query->orderBy('start_time', 'ASC');
+        }])
+        ->orderBy('date', 'ASC')
+        ->get();
+
+        // Getting available date slots
+        $availableDates = [];
+        $periods = CarbonPeriod::create(env('START_DATE'), env('END_DATE'));
+        foreach ($periods as $period) {
+            if (
+                !in_array(
+                    $period->format('Y-m-d'),
+                    $schedules->pluck('date')->toArray()
+                )
+            ) {
+                array_push($availableDates, $period->format('Y-m-d'));
+            }
+        }
+
+        return view('admin.schedule.index', [
+            'me' => $me,
+            'message' => $message,
+            'schedules' => $schedules,
+            'availableDates' => $availableDates,
         ]);
     }
 

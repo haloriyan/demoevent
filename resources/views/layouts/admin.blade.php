@@ -71,6 +71,9 @@
     @php
         $routeName = Route::currentRouteName();
         $routes = explode(".", $routeName);
+        $masterRoutes = [
+            'peserta', 'speaker', 'schedule', 'ticket', 'booth'
+        ];
     @endphp
 
     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 {{ $routeName == 'admin.dashboard' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
@@ -78,16 +81,42 @@
         <ion-icon name="home-outline"></ion-icon>
         <div class="text-sm flex">Dashboard</div>
     </a>
-    <a href="{{ route('admin.ticket') }}" class="flex items-center gap-4 {{ $routeName == 'admin.ticket' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
-        <div class="h-12 w-1 {{ $routeName == 'ticket' ? 'bg-primary' : 'bg-white' }}"></div>
-        <ion-icon name="ticket-outline"></ion-icon>
-        <div class="text-sm flex">Tiket</div>
-    </a>
-    <a href="{{ route('admin.peserta') }}" class="flex items-center gap-4 {{ $routeName == 'admin.peserta' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
-        <div class="h-12 w-1 {{ $routeName == 'peserta' ? 'bg-primary' : 'bg-white' }}"></div>
-        <ion-icon name="person-outline"></ion-icon>
-        <div class="text-sm flex">Peserta</div>
-    </a>
+
+    <div class="group relative">
+        <a href="#" class="flex items-center gap-4 text-slate-500 {{ in_array($routes[1], $masterRoutes) ? 'bg-primary-transparent text-primary' : '' }}">
+            <div class="h-12 w-1 {{ in_array($routes[1], $masterRoutes) ? 'bg-primary' : 'bg-white' }}"></div>
+            <ion-icon name="cube-outline" class="{{ in_array($routes[1], $masterRoutes) ? 'text-primary' : '' }}"></ion-icon>
+            <div class="text-sm flex grow {{ in_array($routes[1], $masterRoutes) ? 'text-primary' : '' }}">Master Data</div>
+            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
+        </a>
+        <div class="{{ in_array($routes[1], $masterRoutes) ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+            <a href="{{ route('admin.speaker') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}">Speaker</div>
+            </a>
+            <a href="{{ route('admin.schedule') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}">Jadwal & Rundown</div>
+            </a>
+            <a href="{{ route('admin.ticket') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}">Tiket</div>
+            </a>
+            <a href="{{ route('admin.peserta') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'peserta' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[1] == 'peserta' ? 'text-primary' : '' }}">Peserta</div>
+            </a>
+            <a href="{{ route('admin.booth') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}">Booth</div>
+            </a>
+        </div>
+    </div>
 
     <div class="group relative">
         <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'checkin' ? 'bg-primary-transparent text-primary' : '' }}">
@@ -115,16 +144,12 @@
         <ion-icon name="volume-high-outline"></ion-icon>
         <div class="text-sm flex">Broadcast</div>
     </a>
-    <a href="{{ route('admin.booth') }}" class="flex items-center gap-4 {{ $routeName == 'admin.booth' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
-        <div class="h-12 w-1 {{ $routeName == 'booth' ? 'bg-primary' : 'bg-white' }}"></div>
-        <ion-icon name="storefront-outline"></ion-icon>
-        <div class="text-sm flex">Booth</div>
-    </a>
-    <a href="{{ route('admin.handbook') }}" class="flex items-center gap-4 {{ $routeName == 'admin.handbook' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
+    
+    {{-- <a href="{{ route('admin.handbook') }}" class="flex items-center gap-4 {{ $routeName == 'admin.handbook' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
         <div class="h-12 w-1 {{ $routeName == 'handbook' ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="documents-outline"></ion-icon>
         <div class="text-sm flex">Handbook</div>
-    </a>
+    </a> --}}
 
     <div class="group relative">
         <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'settings' ? 'bg-primary-transparent text-primary' : '' }}">
@@ -325,6 +350,9 @@
     };
 
     const applyImageToDiv = (target, src) => {
+        if (typeof target === "string") {
+            target = select(target);
+        }
         target.style.backgroundImage = `url("${src}")`;
         target.style.backgroundSize = "cover";
         target.style.backgroundPosition = "center center";
