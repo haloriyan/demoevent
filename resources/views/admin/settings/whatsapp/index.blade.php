@@ -9,13 +9,20 @@
     ];
 @endphp
 
+@section('head')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chgibb/css-spinners@2.2.1/css/spinners.min.css">
+@endsection
+
 @section('content')
 <div class="p-8 flex mobile:flex-col gap-8">
     <div class="bg-white rounded-lg shadow-sm p-8 w-4/12 flex flex-col gap-4 {{ $devices->count() > 0 ? 'hidden' : '' }}" id="AddArea">
-        <div class="w-full aspect-square rounded-lg bg-slate-200 flex flex-col gap-2 items-center justify-center" id="QRArea">
+        <div class="w-full aspect-square rounded-lg bg-slate-200 flex flex-col gap-2 items-center justify-center relative" id="QRArea">
             <button class="p-3 px-5 rounded-lg text-xs text-white bg-primary font-bold" onclick="getQR(this)">
                 Generate QR
             </button>
+            <div id="LoadingOverlay" class="hidden absolute top-0 left-0 right-0 bottom-0 backdrop-blur-md bg-white/30 text-white rounded-lg flex flex-col items-center justify-center">
+                <div class="dots-loader"></div>
+            </div>
         </div>
         
         <div class="bg-primary text-white text-sm p-3 rounded-lg flex items-center gap-4 hidden" id="ReloadAlert">
@@ -105,6 +112,8 @@
         if (isGeneratingQR) return;
         isGeneratingQR = true;
 
+        select("#LoadingOverlay").classList.remove('hidden');
+
         console.log('generating qr');
 
         try {
@@ -117,6 +126,7 @@
             console.log(res);
             QRArea.innerHTML = `<img src='${res.qr_url}' class='w-full aspect-square' />`;
             clientID = res.client_id;
+            select("#LoadingOverlay").classList.add('hidden');
             
         } catch (err) {
             console.error(err);
