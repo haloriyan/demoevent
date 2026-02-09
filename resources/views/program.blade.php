@@ -13,25 +13,56 @@
     <div class="font-medium">Jadwal dan Rundown.</div>
 </div>
 
-<section class="p-20 flex flex-col gap-12">
-    @foreach ($schedules as $schedule)
-        <div>
-            <h3 class="text-slate-500 text-4xl font-bold">{{ Carbon::parse($schedule->date)->isoFormat('DD MMMM YYYY') }}</h3>
-            <div class="flex flex-col gap-4 mt-8">
-                @foreach ($schedule->rundowns as $rundown)
-                    <div class="border rounded-lg p-8 flex items-center gap-4">
+<section class="p-20 mobile:p-8 flex flex-col gap-12">
+    <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
+        @foreach ($schedules as $schedule)
+            <div class="rounded-lg border">
+                <div class="p-4 bg-orange-500 rounded-t-lg text-white font-medium">
+                    {{ Carbon::parse($schedule->date)->isoFormat('DD MMMM YYYY') }}
+                </div>
+                <div class="p-4 flex flex-col gap-8">
+                    @foreach ($schedule->rundowns as $rundown)
                         <div class="flex flex-col gap-2">
-                            <h4 class="text-slate-700 font-medium">{{ $rundown->title }}</h4>
-                            <div class="text-sm text-slate-500">
-                                {{ Carbon::parse($rundown->start_time)->format('H:i') }} -
-                                {{ Carbon::parse($rundown->end_time)->format('H:i') }}
+                            <div class="flex items-center gap-8">
+                                <div class="flex flex-col gap-1 grow">
+                                    <div class="text-sm text-slate-600">{{ $rundown->title }}</div>
+                                    <div class="text-xs text-slate-500">
+                                        {{ Carbon::parse($rundown->start_time)->format('H:i') }} -
+                                        {{ Carbon::parse($rundown->end_time)->format('H:i') }}
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500">
+                                    {{ Carbon::parse($rundown->start_time)->diffInMinutes(
+                                        Carbon::parse($rundown->end_time)
+                                    ) }} menit
+                                </div>
                             </div>
+
+                            <div class="flex items-center gap-2">
+                                @if ($rundown->speakers->count() > 0)
+                                    <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ $rundown }}')">
+                                        <img src="{{ asset('storage/speaker_photos/' . $rundown->speakers[0]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full" />
+                                        @isset($rundown->speakers[1])
+                                            <img src="{{ asset('storage/speaker_photos/' . $rundown->speakers[1]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-6" />
+                                        @endisset
+                                        @isset($rundown->speakers[2])
+                                            <img src="{{ asset('storage/speaker_photos/' . $rundown->speakers[2]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-12" />
+                                        @endisset
+
+                                        <div class="flex grow"></div>
+                                        <div class="text-xs text-slate-500">
+                                            {{ $rundown->speakers->count() }} speakers
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
+    </div>
 </section>
 
 @include('partials.footer')

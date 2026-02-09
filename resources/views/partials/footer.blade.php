@@ -1,6 +1,6 @@
 <footer id="footer" class="border-t">
-    <div class="p-20 flex gap-10">
-        <div class="flex flex-col gap-2 w-5/12">
+    <div class="p-20 mobile:p-8 flex mobile:flex-col gap-10">
+        <div class="flex flex-col gap-2 w-5/12 mobile:w-full">
             <a href="#">
                 <img src="/images/logo.png" alt="Footer logo" class="h-16">
             </a>

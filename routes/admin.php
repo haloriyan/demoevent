@@ -43,6 +43,8 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('/', [AdminController::class, 'schedule'])->name('admin.schedule');
         });
         Route::group(['prefix' => "rundown"], function () {
+            Route::post('{rundownID?}/speaker', [RundownController::class, 'addSpeaker'])->name('admin.rundown.addSpeaker');
+            Route::get('{rundownID?}/speaker/{speakerID}/delete', [RundownController::class, 'deleteSpeaker'])->name('admin.rundown.deleteSpeaker');
             Route::post('{rundownID}/update', [RundownController::class, 'update'])->name('admin.rundown.update');
             Route::get('{rundownID}/delete', [RundownController::class, 'delete'])->name('admin.rundown.delete');
             Route::post('store', [RundownController::class, 'store'])->name('admin.rundown.store');

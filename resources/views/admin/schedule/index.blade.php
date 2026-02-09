@@ -27,8 +27,18 @@
                         <ion-icon name="trash-outline" ></ion-icon>
                     </a> --}}
                 </div>
-                <div class="p-4 flex flex-col gap-4">
+                
+                <div class="p-4 flex flex-col gap-8">
+                    @if ($schedule->rundowns->count() > 1)
+                        <button class="text-primary hover:bg-primary-transparent rounded-lg w-full h-10 text-xs font-medium flex items-center justify-center gap-4" onclick="AddRundown('{{ $schedule }}')">
+                            <ion-icon name="add-outline"></ion-icon>
+                            Tambah Rundown
+                        </button>
+                    @endif
                     @foreach ($schedule->rundowns as $rundown)
+                        @php
+                            $speakers = $rundown->speakers;
+                        @endphp
                         <div class="flex flex-col gap-2">
                             <div class="flex items-center gap-4">
                                 <div class="flex flex-col gap-1 grow">
@@ -60,18 +70,25 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-center gap-2">
-                                <div class="text-xs text-slate-500">
-                                    {{ $rundown->speakers->count() }} speaker
-                                </div>
-                            </div>
+                            <div class="flex items-center gap-2">
+                                @if ($speakers->count() > 0)
+                                    <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ $rundown }}')">
+                                        <img src="{{ asset('storage/speaker_photos/' . $speakers[0]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full" />
+                                        @isset($speakers[1])
+                                            <img src="{{ asset('storage/speaker_photos/' . $speakers[1]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-6" />
+                                        @endisset
+                                        @isset($speakers[2])
+                                            <img src="{{ asset('storage/speaker_photos/' . $speakers[2]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-12" />
+                                        @endisset
 
-                            <div class="flex flex-wrap gap-2">
-                                @foreach ($rundown->speakers as $speaker)
-                                    <div class="p-1 px-3 rounded border text-xs text-slate-600">
-                                        {{ $speaker->name }}
+                                        <div class="flex grow"></div>
+                                        <div class="text-xs text-slate-500">
+                                            {{ $speakers->count() }} speakers
+                                        </div>
                                     </div>
-                                @endforeach
+                                @else
+                                    <div class="text-xs text-slate-500 text-center">Tidak ada speaker</div>
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -111,6 +128,7 @@
         enableTime: true,
         time_24hr: true,
     };
+    let excludeSpeakers = [];
 
     const EditSchedule = (event, data) => {
         event.preventDefault();
@@ -204,16 +222,47 @@
         }
     });
 
-    const ManageSpeaker = (e) => {
+    const ManageSpeaker = (e, data) => {
+        data = JSON.parse(data);
         e.preventDefault();
+        select("#ManageSpeaker #AddSpeaker").setAttribute('action', `/admin/rundown/${data.id}/speaker`);
         toggleHidden("#ManageSpeaker");
+
+        const RenderArea = select("#RenderSpeakerList");
+        excludeSpeakers = [];
+        RenderArea.innerHTML = '';
+        data.speakers.map((spk, s) => {
+            let item = document.createElement('div');
+            item.classList.add('flex', 'items-center', 'gap-4');
+            item.innerHTML = `<img src='/storage/speaker_photos/${spk.photo}' class='w-12 h-12 rounded-full object-cover' />
+            <div class='flex flex-col gap-1 grow basis-24'>
+                <h4 class='text-sm text-slate-700 font-medium'>${spk.name}</h4>
+                <div class='text-xs text-slate-500'>${spk.name}</div>
+            </div>
+            <a href='/admin/rundown/${data.id}/speaker/${spk.id}/delete' class='w-8 h-8 rounded-full flex items-center justify-center border border-red-500 text-red-500 hover:bg-red-500 hover:text-white'>
+                <ion-icon name="close-outline"></ion-icon>
+            </a>`;
+
+            excludeSpeakers.push(spk.id);
+            
+            RenderArea.appendChild(item);
+        });
     }
 
     new MultiSelectorAPI('#SpeakerSelector', [], {
         fetchUrl: '/api/speakers/search?q=',
         name: "speaker_ids",
         label: "Cari Speaker untuk ditambahkan",
-        parseResponse: (data) => data.speakers // if the response is { categories: [...] }
+        parseResponse: (data) => {
+            let toReturn = [];
+            data.speakers.forEach(spk => {
+                let i = excludeSpeakers.indexOf(spk.id);
+                if (i < 0) {
+                    toReturn.push(spk);
+                }
+            })
+            return toReturn;
+        }
     });
 
 </script>

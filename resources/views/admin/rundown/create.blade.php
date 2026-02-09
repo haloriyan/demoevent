@@ -18,10 +18,10 @@
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Judul</label>
             <input type="text" name="title" id="title" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ old('title') }}" required />
         </div>
-        <div class="group border focus-within:border-primary rounded-lg p-2 relative">
+        {{-- <div class="group border focus-within:border-primary rounded-lg p-2 relative">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Deskripsi</label>
             <textarea name="description" id="description" class="w-full h-20 pt-6 outline-none bg-transparent text-sm text-slate-700" rows="10">{{ old('description') }}</textarea>
-        </div>
+        </div> --}}
 
         <div class="grid grid-cols-2 gap-6">
             <div class="flex flex-col border rounded-lg p-2">

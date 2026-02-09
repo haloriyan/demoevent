@@ -108,11 +108,14 @@
         console.log('generating qr');
 
         try {
+            console.log("{{ $_SERVER['HTTP_HOST'] }}/api/callback/wa");
+            
             const response = await axios.post(`{{ env('WA_URL') }}/connect`, {
-                callback_url: "{{ $_SERVER['HTTP_HOST'] }}/api/callback/wa"
+                callback_url: "http://{{ $_SERVER['HTTP_HOST'] }}/api/callback/wa"
             });
             const res = await response.data;
             console.log(res);
+            QRArea.innerHTML = `<img src='${res.qr_url}' class='w-full aspect-square' />`;
             clientID = res.client_id;
             
         } catch (err) {
@@ -120,16 +123,16 @@
         }
     }
 
-    setInterval(() => {
-        if (qrData === null && isGeneratingQR && clientID !== null) {
-            axios.get(`{{ env('WA_URL') }}/qr/${clientID}`)
-            .then(response => {
-                let res = response.data;
-                isGeneratingQR = false;
-                qrData = res.qr;
-            });
-        }
-    }, 1000);
+    // setInterval(() => {
+    //     if (qrData === null && isGeneratingQR && clientID !== null) {
+    //         axios.get(`{{ env('WA_URL') }}/qr/${clientID}`)
+    //         .then(response => {
+    //             let res = response.data;
+    //             isGeneratingQR = false;
+    //             qrData = res.qr;
+    //         });
+    //     }
+    // }, 1000);
     
     const getQROri = async (btn) => {
         if (isGeneratingQR) return;
