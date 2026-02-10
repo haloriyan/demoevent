@@ -117,10 +117,10 @@
         console.log('generating qr');
 
         try {
-            console.log("{{ $_SERVER['HTTP_HOST'] }}/api/callback/wa");
+            console.log("{{ request()->getSchemeAndHttpHost() }}/api/callback/wa");
             
             const response = await axios.post(`{{ env('WA_URL') }}/connect`, {
-                callback_url: "http://{{ $_SERVER['HTTP_HOST'] }}/api/callback/wa"
+                callback_url: "{{ request()->getSchemeAndHttpHost() }}/api/callback/wa"
             });
             const res = await response.data;
             console.log(res);
