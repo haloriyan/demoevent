@@ -47,7 +47,7 @@ class PaymentConfirmed extends Notification
         return (new MailMessage)
             ->subject('Pembayaran Berhasil - ' . env('APP_NAME') )
             ->greeting('Yth. ' . $this->trx->user->name)
-            ->line('Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.')
+            ->line('Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk '.env('EVENT_NAME').' telah berhasil.')
             ->line('Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.')
             ->line(new HtmlString('<div style="text-align: center;padding-top: 20px;padding-bottom: 35px;"><img src="https://api.qrserver.com/v1/create-qr-code/?data='.$qrString.'&size=256x256" width="200"></div>'))
             ->line('Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di ' . env('EMAIL') . ' atau ' . env('PHONE') . '.')
@@ -55,7 +55,7 @@ class PaymentConfirmed extends Notification
             ->line('Terima kasih atas partisipasi Anda')
             ->line('')
             ->line('Hormat Kami,')
-            ->line('Panitia PIT PERAMI');
+            ->line('Panitia ' . env('EVENT_NAME'));
     }
 
     /**

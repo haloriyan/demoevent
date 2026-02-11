@@ -90,6 +90,9 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('{id}/delete', [BoothController::class, 'delete'])->name('admin.booth.delete');
             Route::get('/', [AdminController::class, 'booth'])->name('admin.booth');
         });
+        Route::group(['prefix' => "workshop"], function () {
+            Route::get('/', [AdminController::class, 'workshop'])->name('admin.workshop');
+        });
 
         Route::group(['prefix' => "admin"], function () {
             Route::post('store', [AdminController::class, 'store'])->name('admin.admins.store');

@@ -7,6 +7,7 @@
 <form action="{{ route('register', ['step' => "welcome"]) }}" class="SlideItem flex flex-col grow gap-8" method="POST">
     @csrf
     <input type="hidden" name="ticket_id" id="ticket_id">
+    <input type="hidden" name="workshops" id="workshops">
     <div class="flex flex-col gap-1">
         <h2 class="text-xl text-slate-700 font-medium">Paket Registrasi</h2>
         <div class="text-sm text-slate-600">
@@ -41,26 +42,126 @@
             Lanjut
         </button>
     </div>
-</div>
+</form>
+
+@endsection
+
+@section('ModalArea')
+
+@include('WorkshopSelector')
 
 @endsection
 
 @section('javascript')
 <script>
+    let maxWorkshops = 2;
+
+    const getAngka = text => {
+        let texts = text.split(' ');
+        let toReturn = null;
+        
+        texts.forEach((txt, t) => {
+            if (!isNaN(txt)) {
+                toReturn = txt;
+            }
+        });
+
+        return toReturn !== null ? parseInt(toReturn) : null;
+    }
     const ChooseTicket = (data, btn) => {
         data = JSON.parse(data);
         selectAll(".TicketItem").forEach(item => {
             item.classList.remove('border-primary');
         });
         selectAll(".RadioInner").forEach(item => item.classList.remove('bg-primary'));
-
+        let jumlahWS = getAngka(data.name);
         btn.classList.add('border-primary');
-
-        select(`#Ticket_${data.id} .RadioInner`).classList.add('bg-primary')
+        select(`#Ticket_${data.id} .RadioInner`).classList.add('bg-primary');
         select("#PriceArea").innerHTML = Currency(data.price).encode();
         select("#ticket_id").value = data.id;
 
         select("#Bottom").classList.remove('hidden');
+
+        if (jumlahWS !== null) {
+            maxWorkshops = jumlahWS;
+            selectedWorkshops = {};
+            selectAll(".workshop-item").forEach(item => item.classList.remove('border-primary'));
+            select("#WSPickerSubmitArea")?.classList.add('hidden');
+            select("#WorkshopPicker #ModalTitle").innerHTML = `Pilih ${jumlahWS} Workshop`;
+            toggleHidden('#WorkshopPicker');
+        } else {
+            select("#Bottom").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+    }
+
+    let selectedWorkshops = {}
+
+    function ChooseWorkshop(event) {
+
+        const element = event.currentTarget
+        const categoryWrapper = element.parentNode
+
+        const categoryId = categoryWrapper.dataset.category
+        const categoryName = categoryWrapper.dataset.categoryName
+
+        const workshopId = element.dataset.id
+        const workshopTitle = element.dataset.title
+
+        const isSelected = element.classList.contains("border-primary")
+
+        // Unselect
+        if (isSelected) {
+            element.classList.remove("border-primary")
+            delete selectedWorkshops[categoryId]
+            printOutput()
+            return
+        }
+
+        // Max limit
+        if (
+            Object.keys(selectedWorkshops).length >= maxWorkshops &&
+            !selectedWorkshops[categoryId]
+        ) {
+            alert(`Pilih Maksimal ${maxWorkshops} Workshop`)
+            return
+        }
+
+        // Replace selection in same category
+        if (selectedWorkshops[categoryId]) {
+            const previous = categoryWrapper.querySelector(".border-primary")
+            if (previous) {
+                previous.classList.remove("border-primary")
+            }
+        }
+
+        // Select current
+        element.classList.add("border-primary")
+
+        selectedWorkshops[categoryId] = {
+            id: workshopId,
+            title: workshopTitle,
+            category: {
+                id: categoryId,
+                name: categoryName
+            }
+        }
+        
+        if (Object.keys(selectedWorkshops).length === maxWorkshops) {
+            select("#WSPickerSubmitArea")?.classList.remove('hidden');
+            // Do something here
+        }
+    }
+
+    const ConfirmWorkshop = (e) => {
+        e.preventDefault();
+        let output = Object.values(selectedWorkshops)
+        output = JSON.stringify(output, null, 2);
+        output = JSON.parse(output);
+        output = JSON.stringify(output);
+        select("input#workshops").value = output;
+        toggleHidden("#WorkshopPicker");
     }
 </script>
 @endsection

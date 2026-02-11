@@ -47,21 +47,22 @@ class TransactionController extends Controller
                 'user_id' => $user->id,
             ]));
             $qrLink = "https://api.qrserver.com/v1/create-qr-code/?data=$qrString&size=256x256";
-            Log::info($qrLink);
 
             $device = WaDevice::where('is_primary', true)->first();
-            Http::post(env('WA_URL') . "/send", [
-                'client_id' => $device->client_id,
-                'destination' => "62".$user->whatsapp,
-                'image' => $qrLink,
-                'message' => "Yth. " . $user->name . "\n\n" .
-                                'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.'.
-                                'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
-                                "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
-                                "Terima kasih atas partisipasi Anda\n\n".
-                                "Hormat Kami,\n ".
-                                "Panitia PIT PERAMI"
-            ]);
+            if ($device != null) {
+                Http::post(env('WA_URL') . "/send", [
+                    'client_id' => $device->client_id,
+                    'destination' => "62".$user->whatsapp,
+                    'image' => $qrLink,
+                    'message' => "Yth. " . $user->name . "\n\n" .
+                                    'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.'.
+                                    'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
+                                    "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
+                                    "Terima kasih atas partisipasi Anda\n\n".
+                                    "Hormat Kami,\n ".
+                                    "Panitia PIT PERAMI"
+                ]);
+            }
         }
 
         return redirect()->back()->with([

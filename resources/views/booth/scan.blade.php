@@ -51,7 +51,7 @@
 
 <div class="absolute top-6 mobile:top-0 left-0 right-0 h-20 flex items-center justify-end gap-4 text-white px-4">
     @csrf
-    <a href="#" class="flex items-center gap-4">
+    <a href="{{ route('booth.dashboard') }}" class="flex items-center gap-4">
         <ion-icon name="arrow-back-outline" class="text-2xl"></ion-icon>
     </a>
     <div class="flex justify-center grow">

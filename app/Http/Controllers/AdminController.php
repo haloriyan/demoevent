@@ -286,6 +286,15 @@ class AdminController extends Controller
             'checkins' => $checkins,
         ]);
     }
+    public function workshop(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+
+        return view('admin.workshop.index', [
+            'me' => $me,
+            'message' => $message,
+        ]);
+    }
 
     public function scan(Request $request) {
         $p = json_decode(base64_decode($request->p));

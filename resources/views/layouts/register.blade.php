@@ -26,9 +26,9 @@
 <div class="fixed mobile:overflow-y-auto top-10 mobile:top-0 left-10 mobile:left-0 right-10 mobile:right-0 bottom-10 mobile:bottom-0 flex mobile:flex-col bg-white rounded-xl mobile:rounded-none">
     <div class="flex flex-col w-5/12 mobile:w-full mobile:min-h-[500px] bg-[url(/images/doodle.png)] bg-cover relative rounded-s-xl mobile:rounded-s-none">
         <div class="absolute top-0 left-0 right-0 bottom-0 bg-black/20 backdrop-blur-sm text-white flex flex-col gap-2 mobile:gap-4 justify-end p-10 rounded-s-xl mobile:rounded-s-none">
-            <h1 class="text-[42px] mobile:text-[32px] font-bold">PIT PERAMI 2025</h1>
+            <h1 class="text-[42px] mobile:text-[32px] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div class="text-[18px] mobile:text-[14px]">
-                Sheraton Hotel & Towers, 25 - 27 November 2025
+                {{ env('EVENT_PLACE') }}, {{ env('EVENT_DATES')}}
             </div>
         </div>
     </div>
@@ -44,6 +44,9 @@
 <script>
     const select = dom => document.querySelector(dom);
     const selectAll = dom => document.querySelectorAll(dom);
+    const toggleHidden = target => {
+        select(target).classList.toggle('hidden');
+    }
 
     const Currency = (amount) => {
         let props = {};

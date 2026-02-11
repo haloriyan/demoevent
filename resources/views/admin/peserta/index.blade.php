@@ -94,7 +94,7 @@
                                 <ion-icon name="ellipsis-horizontal" class="text-slate-600"></ion-icon>
                                 <div class="absolute top-0 left-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
                                     @if ($user->transaction->payment_status == "PENDING")
-                                        <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ $user }}')">
+                                        <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
                                             <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
                                             Konfirmasi Pembayaran
                                         </a>
@@ -118,7 +118,7 @@
                             <div class="flex items-center gap-3">
                                 #{{ $user->transaction->id }}
                                 @if ($user->transaction->payment_status == "PENDING" && $user->transaction->payment_evidence != null)
-                                    <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="p-1 px-4 border-[0.5px] border-green-500 hover:bg-green-500 rounded-full text-xs text-green-500 hover:text-white" onclick="ConfirmTrx(event, '{{ $user }}')">
+                                    <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="p-1 px-4 border-[0.5px] border-green-500 hover:bg-green-500 rounded-full text-xs text-green-500 hover:text-white" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
                                         Konfirmasi
                                     </a>
                                 @endif
@@ -157,7 +157,7 @@
                                 <ion-icon name="ellipsis-horizontal" class="text-slate-600"></ion-icon>
                                 <div class="absolute top-0 right-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
                                     @if ($user->transaction->payment_status == "PENDING")
-                                        <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ $user }}')">
+                                        <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
                                             <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
                                             Konfirmasi Pembayaran
                                         </a>
@@ -191,6 +191,9 @@
 <script>
     const ConfirmTrx = (event, data) => {
         event.preventDefault();
+        data = atob(data);
+        console.log(data);
+        
         data = JSON.parse(data);
         const link = event.currentTarget;
         let evidence = select("#ConfirmTrx #evidence");

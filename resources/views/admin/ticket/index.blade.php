@@ -72,10 +72,10 @@
                             <ion-icon name="pricetags-outline" class="text-base"></ion-icon>
                             {{ currency_encode($ticket->price) }}
                         </div>
-                        <div class="flex items-center gap-3 text-slate-500 text-xs">
+                        {{-- <div class="flex items-center gap-3 text-slate-500 text-xs">
                             <ion-icon name="calendar-outline" class="text-base"></ion-icon>
                             {{ Carbon::parse($ticket->start_date)->isoFormat('DD MMM Y') }}
-                        </div>
+                        </div> --}}
 
                         <div class="flex bg-slate-200 mt-4">
                             <div class="h-2 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500"></div>

@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\WsCategory;
 use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
 use App\Services\Xendit;
@@ -114,17 +115,20 @@ class UserController extends Controller
                         ]);
                     }
                 ])->get();
+                $workshops = WsCategory::with(['workshops'])->get();
 
                 return view('register', [
                     'step' => $step,
                     'categories' => $categories,
                     'request' => $request,
+                    'workshops' => $workshops,
                 ]);
             } else {
                 $tick = Ticket::where('id', $request->ticket_id);
                 $ticket = $tick->first();
 
                 $payload['ticket'] = $ticket;
+                $payload['workshops'] = json_decode($request->workshops);
 
                 return redirect()->route('register', [
                     'step' => "detail",
@@ -145,6 +149,7 @@ class UserController extends Controller
                 $payload['name'] = $request->name;
                 $payload['email'] = $request->email;
                 $payload['whatsapp'] = $request->whatsapp;
+                $payload['instansi'] = $request->instansi;
 
                 return redirect()->route('register', [
                     'step' => "konfirmasi",
@@ -178,6 +183,7 @@ class UserController extends Controller
                 $trx = Transaction::create([
                     'user_id' => $user->id,
                     'ticket_id' => $ticketID,
+                    'workshops' => json_encode($payload['workshops']),
                     'payment_status' => "PENDING",
                     'payment_amount' => $payload['ticket']['price'],
                     'expired_at' => Carbon::now()->addMinutes((int)env('PAYMENT_EXPIRATION'))->format('Y-m-d H:i:s'),

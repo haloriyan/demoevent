@@ -22,7 +22,7 @@
 
     @include('partials.flash_message')
 
-    <div class="grid grid-cols-4 gap-8">
+    <div class="grid grid-cols-4 gap-4">
         @foreach ($booths as $boo)
             <div class="bg-white rounded-lg shadow p-8 flex flex-col gap-2 relative">
                 <img src="{{ asset('storage/booth_icons/' . $boo->icon) }}" alt="{{ $boo->name }}" class="w-full aspect-square object-cover">

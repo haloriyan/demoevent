@@ -47,7 +47,7 @@ class EmailChanged extends Notification
             ->line('Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di ' . env('EMAIL') . ' atau ' . env('PHONE') . '.')
             ->line('')
             ->line('Hormat Kami,')
-            ->line('Panitia PIT PERAMI');
+            ->line('Panitia ' . env('EVENT_NAME'));
     }
 
     /**

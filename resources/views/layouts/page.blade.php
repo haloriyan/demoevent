@@ -49,10 +49,10 @@
         </a>
     </div>
     <div class="flex grow desktop:basis-24 justify-end">
-        <a href="#" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 mobile:hidden">
+        <a href="{{ route('register') }}" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 mobile:hidden">
             Daftar Sekarang
         </a>
-        <a href="#" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 desktop:hidden">
+        <a href="{{ route('register') }}" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 desktop:hidden">
             Daftar
         </a>
         <div class="desktop:hidden w-10 h-10 flex items-center justify-center" onclick="toggleMobileNav()">

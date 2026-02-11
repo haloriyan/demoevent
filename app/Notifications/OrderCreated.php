@@ -43,7 +43,7 @@ class OrderCreated extends Notification
         return (new MailMessage)
             ->subject('Pendaftaran Berhasil - ' . env('APP_NAME') )
             ->greeting('Yth. ' . $this->user->name)
-            ->line('Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.')
+            ->line('Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk '.env('EVENT_NAME').' telah berhasil.')
             ->line('')
             ->line('Berikut adalah detail pendaftaran Anda :')
             ->line('- NIK : ' . $this->user->nik)
@@ -53,7 +53,7 @@ class OrderCreated extends Notification
             ->line('- Kepesertaan : ' . $this->trx->ticket->name)
             ->line('- No. Pendaftaran : #' . $this->trx->id)
             ->line('')
-            ->line('Pertemuan Ilmiah Tahunan PERAMI akan diselenggarakan pada :')
+            ->line(env('EVENT_NAME') .' akan diselenggarakan pada :')
             ->line('- Tanggal : ' . Carbon::parse($this->trx->ticket->start_date)->isoFormat('DD MMMM Y'))
             ->line('')
             ->line('Pembayaran dapat dilakukan dengan transfer ke rekening PERAMI')
@@ -70,7 +70,7 @@ class OrderCreated extends Notification
             ->line('Terima kasih atas partisipasi Anda')
             ->line('')
             ->line('Hormat Kami,')
-            ->line('Panitia PIT PERAMI');
+            ->line('Panitia ' . env('EVENT_NAME'));
     }
 
     /**

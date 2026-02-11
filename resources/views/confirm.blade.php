@@ -8,7 +8,7 @@
     use Carbon\Carbon;
 @endphp
 
-<form action="{{ route('index', ['step' => "konfirmasi"]) }}" class="SlideItem flex flex-col grow gap-4" method="POST">
+<form action="{{ route('register', ['step' => "konfirmasi"]) }}" class="SlideItem flex flex-col grow gap-4" method="POST">
     @csrf
     <input type="hidden" name="p" value="{{ $request->p }}">
 
@@ -49,6 +49,16 @@
                 <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
                 {{ Carbon::parse($payload['ticket']['start_date'])->isoFormat('DD MMMM Y') }}
             </div>
+            @if ($payload['workshops'])
+                <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <ion-icon name="clipboard-outline" class="text-lg"></ion-icon>
+                    @foreach ($payload['workshops'] as $ws)
+                        <div class="p-1 px-3 rounded-full border-[0.5px] border-primary text-primary">
+                            {{ $ws['title'] }}
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
         <div class="flex flex-col gap-1">
             <div class="text-xs text-slate-500">Total Pembayaran :</div>
@@ -59,7 +69,7 @@
     </div>
 
     <div class="flex items-center gap-4 mt-4">
-        <a href="{{ route('index', ['step' => 'detail', 'p' => base64_encode( json_encode($payload) ) ]) }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
+        <a href="{{ route('register', ['step' => 'detail', 'p' => base64_encode( json_encode($payload) ) ]) }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
             Ada yang Salah
         </a>
         <div class="flex grow"></div>
