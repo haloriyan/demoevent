@@ -21,10 +21,10 @@
             <input type="text" name="price_type" id="price_type" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" value="{{ old('price_type') }}" oninput="TypePrice(this, '#AddTicket #price')" required>
         </div>
 
-        <div>
+        {{-- <div>
             <div class="text-xs text-slate-500 mb-2">Tanggal Acara</div>
             <input type="text" name="date" id="date" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" value="{{ old('date') }}" placeholder="Untuk Validasi Scan QR" required>
-        </div>
+        </div> --}}
 
         <div>
             <div class="text-xs text-slate-500 mb-2">Jumlah Tiket Tersedia</div>

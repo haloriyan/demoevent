@@ -120,12 +120,23 @@
         }
 
         // Max limit
-        if (
-            Object.keys(selectedWorkshops).length >= maxWorkshops &&
-            !selectedWorkshops[categoryId]
-        ) {
-            alert(`Pilih Maksimal ${maxWorkshops} Workshop`)
-            return
+        const totalSelected = Object.keys(selectedWorkshops).length
+        const isReplacingSameCategory = !!selectedWorkshops[categoryId]
+
+        if (totalSelected >= maxWorkshops && !isReplacingSameCategory) {
+
+            // Remove previous selection (since max = 1 or full)
+            const previousCategoryId = Object.keys(selectedWorkshops)[0]
+
+            const previousSelectedElement = document.querySelector(
+                `[data-category="${previousCategoryId}"] .border-primary`
+            )
+
+            if (previousSelectedElement) {
+                previousSelectedElement.classList.remove("border-primary")
+            }
+
+            delete selectedWorkshops[previousCategoryId]
         }
 
         // Replace selection in same category
@@ -150,7 +161,6 @@
         
         if (Object.keys(selectedWorkshops).length === maxWorkshops) {
             select("#WSPickerSubmitArea")?.classList.remove('hidden');
-            // Do something here
         }
     }
 

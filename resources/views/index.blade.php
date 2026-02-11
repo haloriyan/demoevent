@@ -27,10 +27,10 @@
             <h1 class="text-[7vh] mobile:text-[4vh] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div>{{ env('EVENT_DATES') }}, {{ env('EVENT_PLACE') }}</div>
             <div class="flex items-center gap-4 mt-4">
-                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium bg-orange-500 text-white">
+                <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-orange-500 text-white">
                     Daftar Sekarang
                 </a>
-                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-white text-white hover:bg-orange-500 hover:border-orange-500">
+                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-white text-white hover:bg-orange-500 hover:border-orange-500" onclick="selengkapnya(event)">
                     Selengkapnya
                 </a>
             </div>
@@ -243,6 +243,12 @@
 <script>
     const toggleDate = theDate => {
         alert(theDate)
+    }
+    const selengkapnya = e => {
+        e.preventDefault();
+        select("section#about").scrollIntoView({
+            behavior: 'smooth'
+        })
     }
 </script>
 @endsection

@@ -16,8 +16,8 @@ class TicketController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
             'start_quantity' => $request->quantity,
-            'start_date' => $request->date,
-            'end_date' => $request->date,
+            'start_date' => "2026-10-08",
+            'end_date' => "2026-10-08",
             'visible' => true,
         ]);
 
