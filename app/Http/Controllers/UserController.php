@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use App\Models\Speaker;
+use App\Models\Submission;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
@@ -11,12 +12,15 @@ use App\Models\User;
 use App\Models\WsCategory;
 use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
+use App\Notifications\SubmissionNotifySystem;
+use App\Notifications\SubmissionNotifyUser;
 use App\Services\Xendit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -24,6 +28,83 @@ class UserController extends Controller
         $pay = $xendit->pay();
 
         return $pay;
+    }
+    public function submission($type = 'abstract') {
+        $message = Session::get('message');
+        return view('submission', [
+            'type' => $type,
+            'message' => $message,
+        ]);
+    }
+    public function submissionSubmit(Request $request) {
+        $email = $request->email;
+        $type = $request->type;
+        $user = User::where('email', $email)->with(['transaction.ticket'])->first();
+        $eligible = true;
+        $maxSize = 5;
+        $maxSizeInKB = $maxSize * 1024;
+        $mimeTypes = $type === "abstract" ? 
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" : 
+            "application/pdf";
+
+        $request->validate([
+            'file' => [
+                'required', 
+                "mimetypes:{$mimeTypes}",
+                "max:{$maxSizeInKB}"
+            ]
+        ], [
+            'file.required' => "Lampiran tidak boleh kosong",
+            'file.mimetypes' => "File harus berformat PDF",
+            'file.max' => "Ukuran file tidak boleh melebihi " . $maxSize . " MB"
+        ]);
+
+        if ($user == null && $type == "poster") {
+            $eligible = false;
+        } else {
+            if ($type == "poster" && ($user->transaction == null || @$user->transaction->payment_status != "PAID")) {
+                $eligible = false;
+            }
+        }
+
+        if (!$eligible) {
+            return redirect()->back()->withErrors([
+                'Anda harus terdaftar sebagai peserta Simposium untuk mengirimkan poster'
+            ]);
+        }
+
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+
+        $submission = Submission::create([
+            'user_id' => @$user->id ?? null,
+            'name' => $request->name,
+            'email' => $email,
+            'type' => $type,
+            'file' => $fileName,
+        ]);
+
+        $file->move(
+            public_path('storage/submission_' . $type),
+            $fileName
+        );
+
+        Notification::route('mail', $email)
+        ->notify(
+            new SubmissionNotifyUser([
+                'submission' => $submission
+            ])
+        );
+        Notification::route('mail', 'riyan.satria.619@gmail.com')
+        ->notify(
+            new SubmissionNotifySystem([
+                'submission' => $submission
+            ])
+        );
+
+        return redirect()->back()->with([
+            'message' => "Berhasil mengirim submission " . ucwords($type)
+        ]);
     }
     public function contact() {
         return view('contact');

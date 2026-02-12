@@ -17,8 +17,8 @@
     <div class="font-medium text-sm">Panduan</div>
     <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
     <div class="flex items-center gap-4">
-        <a href="#" class="p-3 px-8 rounded-full font-medium text-sm border border-orange-500 bg-orange-500 hover:bg-orange-800 hover:border-orange-500 text-white">
-            Submit Abstrak
+        <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-orange-500 bg-orange-500 hover:bg-orange-800 hover:border-orange-500 text-white">
+            Submission Form
         </a>
         <a href="#" class="p-3 px-8 rounded-full font-medium text-sm border border-white hover:bg-white hover:text-orange-500">
             Baca Panduan

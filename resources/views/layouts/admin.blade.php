@@ -72,7 +72,7 @@
         $routeName = Route::currentRouteName();
         $routes = explode(".", $routeName);
         $masterRoutes = [
-            'peserta', 'speaker', 'schedule', 'ticket', 'booth', 'workshop'
+            'peserta', 'speaker', 'schedule', 'ticket', 'booth'
         ];
     @endphp
 
@@ -115,11 +115,6 @@
                 <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}"></ion-icon>
                 <div class="text-sm flex grow {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}">Booth</div>
             </a>
-            <a href="{{ route('admin.workshop') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'workshop' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[1] == 'workshop' ? 'text-primary' : '' }}">Workshop</div>
-            </a>
         </div>
     </div>
 
@@ -148,6 +143,11 @@
         <div class="h-12 w-1 {{ in_array('broadcast', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="volume-high-outline"></ion-icon>
         <div class="text-sm flex">Broadcast</div>
+    </a>
+    <a href="{{ route('admin.submission') }}" class="flex items-center gap-4 {{ in_array('submission', $routes) ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
+        <div class="h-12 w-1 {{ in_array('submission', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
+        <ion-icon name="file-tray-full-outline"></ion-icon>
+        <div class="text-sm flex">Submission</div>
     </a>
     
     {{-- <a href="{{ route('admin.handbook') }}" class="flex items-center gap-4 {{ $routeName == 'admin.handbook' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">

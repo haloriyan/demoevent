@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Exports\PesertaExport;
+use App\Exports\SubmissionExport;
 use App\Models\Admin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
@@ -13,6 +14,7 @@ use App\Models\HandbookCategory;
 use App\Models\Scan;
 use App\Models\Schedule;
 use App\Models\Speaker;
+use App\Models\Submission;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
@@ -286,13 +288,38 @@ class AdminController extends Controller
             'checkins' => $checkins,
         ]);
     }
-    public function workshop(Request $request) {
+    public function submission(Request $request, $type = '') {
         $me = me();
         $message = Session::get('message');
+        $filter = [];
 
-        return view('admin.workshop.index', [
+        if ($type != "") {
+            array_push($filter, ['type', $type]);
+        }
+        if ($request->name != "") {
+            array_push($filter, ['name', 'LIKE', '%'.$request->name.'%']);
+        }
+
+        $subm = Submission::where($filter)->orderBy('created_at', 'DESC');
+        if ($request->is_download == 1) {
+            $submissions = $subm->get();
+            $filename = "Submission-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            return Excel::download(
+                new SubmissionExport([
+                    'submissions' => $submissions
+                ]),
+                $filename
+            );
+            return $submissions;
+        }
+        $submissions = $subm->paginate(2);
+
+        return view('admin.submission.index', [
             'me' => $me,
             'message' => $message,
+            'request' => $request,
+            'type' => $type,
+            'submissions' => $submissions,
         ]);
     }
 

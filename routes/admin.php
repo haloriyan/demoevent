@@ -90,8 +90,8 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('{id}/delete', [BoothController::class, 'delete'])->name('admin.booth.delete');
             Route::get('/', [AdminController::class, 'booth'])->name('admin.booth');
         });
-        Route::group(['prefix' => "workshop"], function () {
-            Route::get('/', [AdminController::class, 'workshop'])->name('admin.workshop');
+        Route::group(['prefix' => "submission"], function () {
+            Route::get('{type?}', [AdminController::class, 'submission'])->name('admin.submission');
         });
 
         Route::group(['prefix' => "admin"], function () {
