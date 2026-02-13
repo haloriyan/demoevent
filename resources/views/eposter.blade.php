@@ -101,6 +101,55 @@
     </div>
 </section>
 
+<section class="p-20 mobile:p-8 bg-slate-100">
+    <div class="rounded-xl text-white bg-gradient-to-br from-blue-900 to-blue-500 w-full flex flex-col gap-8 p-20 mobile:p-8">
+        <div class="flex mobile:flex-col items-center gap-8">
+            <div class="flex flex-col gap-4 grow">
+                <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
+                <div class="font-medium mobile:text-xs">Ikuti kompetisi karya tulis ilmiah dalam topik Kesehatan dan buat poster kampanye</div>
+            </div>
+            <a href="{{ route('submission') }}" class="bg-orange-500 text-white rounded-full p-3 px-8 font-medium text-sm">
+                SUBMIT ABSTRAK
+            </a>
+        </div>
+
+        <div class="overflow-x-scroll flex mt-4">
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengiriman Abstrak</h4>
+                <div class="text-xs">25 Juli 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengumuman Penerimaan Abstrak</h4>
+                <div class="text-xs">15 Agustus 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengiriman E-Poster</h4>
+                <div class="text-xs">15 Agustus 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white bg-opacity-0"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengumuman Pemenang</h4>
+                <div class="text-xs">10 Oktober 2026</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 @include('partials.footer')
 @endsection
 

@@ -38,7 +38,16 @@
 
             <div>
                 <div class="text-xs text-slate-500 mb-2">TIKET</div>
-                <div class="text-slate-600 font-bold">{{ $trx->ticket->name }}</div>
+                <div class="text-slate-600 font-bold mb-2">{{ $trx->ticket->name }}</div>
+                @if (preg_match('/\d/', $trx->ticket->name) && strpos($trx->ticket->name, 'WS') >= 0)
+                    <div class="flex items-center gap-3">
+                        @foreach (json_decode($trx->workshops) as $ws)
+                            <div class="text-xs text-primary border border-primary p-1 px-3 rounded-full">
+                                {{ $ws->title }}
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             <div class="text-xs text-slate-500">Pastikan data di atas sudah benar sebelum mengkonfirmasi</div>

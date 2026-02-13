@@ -6,6 +6,7 @@
 
 <form action="{{ route('register', ['step' => "welcome"]) }}" class="SlideItem flex flex-col grow gap-8" method="POST">
     @csrf
+    <input type="hidden" name="p" value="{{ $request->p }}">
     <input type="hidden" name="ticket_id" id="ticket_id">
     <input type="hidden" name="workshops" id="workshops">
     <div class="flex flex-col gap-1">

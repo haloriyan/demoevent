@@ -8,10 +8,10 @@
     @csrf
     <input type="hidden" name="p" value="{{ $request->p }}">
     <div class="flex flex-col gap-3">
-        <a href="{{ url()->previous() }}" class="flex items-center gap-2 text-xs text-slate-500">
+        {{-- <a href="{{ url()->previous() }}" class="flex items-center gap-2 text-xs text-slate-500">
             <ion-icon name="arrow-back-outline"></ion-icon>
             Kembali
-        </a>
+        </a> --}}
         <div class="flex flex-col gap-1 mb-3">
             <h2 class="text-xl text-slate-700 font-medium">Informasi Pribadi</h2>
             <div class="text-sm text-slate-600">

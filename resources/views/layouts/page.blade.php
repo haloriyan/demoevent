@@ -88,6 +88,8 @@
     @yield('content')
 </div>
 
+@yield('ModalArea')
+
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script>
@@ -95,6 +97,10 @@
     const selectAll = dom => document.querySelectorAll(dom);
     let header = select("#header");
     let mobileNav = select("#MobileNav");
+
+    const toggleHidden = target => {
+        select(target).classList.toggle('hidden');
+    }
 
     const activateHeader = () => {
         if (!header.classList.contains('default')) {

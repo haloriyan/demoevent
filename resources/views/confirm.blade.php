@@ -6,6 +6,7 @@
 
 @php
     use Carbon\Carbon;
+    $ticketName = $payload['ticket']['name'];
 @endphp
 
 <form action="{{ route('register', ['step' => "konfirmasi"]) }}" class="SlideItem flex flex-col grow gap-4" method="POST">
@@ -26,12 +27,12 @@
     </div>
 
     <div>
-        <div class="text-xs text-slate-500 mb-2">Nomor Induk Kependudukan</div>
-        <input type="text" class="w-full h-14 rounded-lg bg-slate-200 text-slate-700 text-sm px-4" value="{{ $payload['nik'] }}" readonly>
-    </div>
-    <div>
         <div class="text-xs text-slate-500 mb-2">Nama Lengkap</div>
         <input type="text" class="w-full h-14 rounded-lg bg-slate-200 text-slate-700 text-sm px-4" value="{{ $payload['name'] }}" readonly>
+    </div>
+    <div>
+        <div class="text-xs text-slate-500 mb-2">Nomor Induk Kependudukan</div>
+        <input type="text" class="w-full h-14 rounded-lg bg-slate-200 text-slate-700 text-sm px-4" value="{{ $payload['nik'] }}" readonly>
     </div>
     <div>
         <div class="text-xs text-slate-500 mb-2">Email</div>
@@ -41,13 +42,21 @@
         <div class="text-xs text-slate-500 mb-2">No. WhatsApp</div>
         <input type="text" class="w-full h-14 rounded-lg bg-slate-200 text-slate-700 text-sm px-4" value="+62{{ $payload['whatsapp'] }}" readonly>
     </div>
+    <div>
+        <div class="text-xs text-slate-500 mb-2">Asal Rumah Sakit / Instansi</div>
+        <input type="text" class="w-full h-14 rounded-lg bg-slate-200 text-slate-700 text-sm px-4" value="{{ $payload['instansi'] }}" readonly>
+    </div>
 
     <div class="border border-primary rounded-lg p-4 mt-4 flex items-center gap-4">
         <div class="flex flex-col gap-2 basis-32 grow">
             <h3 class="text-slate-600 font-medium">{{ $payload['ticket']['name'] }}</h3>
             <div class="flex items-center gap-2 text-xs text-slate-500">
                 <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
-                {{ Carbon::parse($payload['ticket']['start_date'])->isoFormat('DD MMMM Y') }}
+                @if (preg_match('/\d/', $ticketName) && strpos($ticketName, 'WS') >= 0)
+                    8 - 10 Oktober 2026
+                @else
+                    9 - 10 Oktober 2026
+                @endif
             </div>
             @if ($payload['workshops'])
                 <div class="flex items-center gap-2 text-xs text-slate-500">
@@ -69,8 +78,8 @@
     </div>
 
     <div class="flex items-center gap-4 mt-4">
-        <a href="{{ route('register', ['step' => 'detail', 'p' => base64_encode( json_encode($payload) ) ]) }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
-            Ada yang Salah
+        <a href="{{ route('register') }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
+            Ada yang Salah. Ulangi dari Awal
         </a>
         <div class="flex grow"></div>
         <button class="p-3 px-5 rounded-lg bg-primary text-white font-medium text-sm">

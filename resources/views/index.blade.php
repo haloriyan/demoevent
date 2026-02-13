@@ -151,92 +151,54 @@
     </div>
 </section>
 
+<section class="p-20 mobile:p-8 py-8">
+    <div class="flex items-center gap-8">
+        <h3 class="flex grow text-4xl text-slate-700 font-bold">Unduh Guideline Acara</h3>
+        <div class="cursor-pointer p-4 px-5 rounded-full text-sm font-medium text-white bg-orange-500 flex items-center gap-3" onclick="toggleHidden('#GuidelineDownload')">
+            <ion-icon name="book-outline" class="text-lg"></ion-icon>
+            Unduh Guidebook
+        </div>
+    </div>
+</section>
+
 <section class="p-20 mobile:p-8">
     <div class="rounded-xl text-white bg-gradient-to-br from-blue-900 to-blue-500 w-full flex flex-col gap-8 p-20 mobile:p-8">
         <div class="flex mobile:flex-col items-center gap-8">
             <div class="flex flex-col gap-4 grow">
                 <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
-                <div class="font-medium mobile:text-xs">Ikuti kompetisi karya tulis ilmiah dalam topik Kesehatan dan buat poster kampanye</div>
             </div>
             <a href="{{ route('eposter') }}" class="bg-orange-500 text-white rounded-full p-3 px-8 font-medium text-sm">
                 SUBMIT ABSTRAK
             </a>
         </div>
-
-        <div class="overflow-x-scroll flex mt-4">
-            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
-                <div class="flex items-center">
-                    <div class="w-4 h-4 rounded-full bg-white"></div>
-                    <div class="flex grow h-1 bg-white"></div>
-                </div>
-                <h4 class="mt-4 mobile:text-sm">Pengiriman Abstrak</h4>
-                <div class="text-xs">25 Juli 2026</div>
-            </div>
-            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
-                <div class="flex items-center">
-                    <div class="w-4 h-4 rounded-full bg-white"></div>
-                    <div class="flex grow h-1 bg-white"></div>
-                </div>
-                <h4 class="mt-4 mobile:text-sm">Pengumuman Penerimaan Abstrak</h4>
-                <div class="text-xs">15 Agustus 2026</div>
-            </div>
-            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
-                <div class="flex items-center">
-                    <div class="w-4 h-4 rounded-full bg-white"></div>
-                    <div class="flex grow h-1 bg-white"></div>
-                </div>
-                <h4 class="mt-4 mobile:text-sm">Pengiriman E-Poster</h4>
-                <div class="text-xs">15 Agustus 2026</div>
-            </div>
-            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
-                <div class="flex items-center">
-                    <div class="w-4 h-4 rounded-full bg-white"></div>
-                    <div class="flex grow h-1 bg-white bg-opacity-0"></div>
-                </div>
-                <h4 class="mt-4 mobile:text-sm">Pengumuman Pemenang</h4>
-                <div class="text-xs">10 Oktober 2026</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="programs" class="p-20 flex flex-col gap-8 items-center hidden">
-    <h3 class="text-4xl font-bold">Amankan <span class="text-orange-500 underline">Tiket</span> Anda!</h3>
-    <div class="text-sm text-slate-500">
-        Beli Tiket dan Daftar sebagai...
-    </div>
-    <div class="flex items-center gap-4 w-full">
-        <div class="p-8 rounded-lg cursor-pointer flex flex-col gap-2 basis-32 grow bg-orange-500 text-white border border-[#ffffff00]">
-            <div class="w-16 h-16 border border-white text-orange-500 bg-white rounded-full flex items-center justify-center">
-                <ion-icon name="medkit-outline" class="text-xl"></ion-icon>
-            </div>
-            <h4 class="text-lg font-medium mt-4">Spesialis Radiologi</h4>
-            <div class="text-sm">
-                Simposium + Full Day Workshop
-            </div>
-        </div>
-        <div class="p-8 rounded-lg cursor-pointer flex flex-col gap-2 basis-32 grow bg-orange-100 text-orange-500 border border-[#ffffff00]">
-            <div class="w-16 h-16 border border-orange-500 rounded-full flex items-center justify-center">
-                <ion-icon name="id-card-outline" class="text-xl"></ion-icon>
-            </div>
-            <h4 class="text-lg font-medium mt-4">Residen Radiologi</h4>
-            <div class="text-sm">
-                Simposium + Workshop Oncology Report
-            </div>
-        </div>
-        <div class="p-8 rounded-lg cursor-pointer flex flex-col gap-2 basis-32 grow text-orange-500 border border-orange-500">
-            <div class="w-16 h-16 border border-orange-500 rounded-full flex items-center justify-center">
-                <ion-icon name="people-outline" class="text-xl"></ion-icon>
-            </div>
-            <h4 class="text-lg font-medium mt-4">Lainnya</h4>
-            <div class="text-sm">
-                Simposium
-            </div>
+        <div class="font-medium mobile:text-xs">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus provident suscipit tempora ad impedit eius quam, aperiam sint architecto sequi deleniti quisquam iste, tempore quae praesentium possimus voluptatibus exercitationem delectus.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde adipisci odio aperiam ut eligendi minima nihil. Rerum dolorum ratione, at voluptatibus voluptas nobis. Optio mollitia voluptates, nemo cum ducimus dolore?
         </div>
     </div>
 </section>
 
 @include('partials.footer')
+@endsection
+
+@section('ModalArea')
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-30" id="GuidelineDownload">
+    <form method="GET" class="bg-white shadow-lg rounded-lg p-10 w-4/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
+        <div class="flex items-center gap-4 mb-4">
+            <h3 class="text-lg text-slate-700 font-medium flex grow">Unduh Guideline Acara</h3>
+            <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#GuidelineDownload')"></ion-icon>
+        </div>
+
+        <a href="#" class="flex items-center gap-4 border rounded-lg text-sm p-4 px-5 border-primary text-primary hover:bg-primary hover:text-white">
+            <ion-icon name="download-outline" class="text-lg"></ion-icon>
+            Second Announcement
+        </a>
+        <a href="#" class="flex items-center gap-4 border rounded-lg text-sm p-4 px-5 border-primary text-primary hover:bg-primary hover:text-white">
+            <ion-icon name="download-outline" class="text-lg"></ion-icon>
+            Final Announcement
+        </a>
+    </form>
+</div>
 @endsection
 
 @section('javascript')

@@ -182,7 +182,7 @@ class UserController extends Controller
 
         return $transactions;
     }
-    public function register(Request $request, $step = 'welcome') {
+    public function register(Request $request, $step = 'detail') {
         $payload = json_decode(base64_decode($request->p), true) ?? [];
         $me = me();
 
@@ -203,6 +203,7 @@ class UserController extends Controller
                     'categories' => $categories,
                     'request' => $request,
                     'workshops' => $workshops,
+                    'payload' => $payload,
                 ]);
             } else {
                 $tick = Ticket::where('id', $request->ticket_id);
@@ -212,7 +213,7 @@ class UserController extends Controller
                 $payload['workshops'] = json_decode($request->workshops);
 
                 return redirect()->route('register', [
-                    'step' => "detail",
+                    'step' => "konfirmasi",
                     'p' => base64_encode(json_encode($payload)),
                 ]);
             }
@@ -233,7 +234,7 @@ class UserController extends Controller
                 $payload['instansi'] = $request->instansi;
 
                 return redirect()->route('register', [
-                    'step' => "konfirmasi",
+                    'step' => "welcome",
                     'p' => base64_encode(json_encode($payload)),
                 ]);
             }
