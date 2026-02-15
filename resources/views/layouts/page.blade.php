@@ -10,11 +10,11 @@
         tailwind.config = {!! json_encode(config('tailwind')) !!}
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
         div, aside, header, a, nav { transition: 0.4s; }
         body {
-            font-family: "Poppins", sans-serif;
+            font-family: "Open Sans", sans-serif;
             font-style: normal;
             font-weight: 400;
         }
@@ -49,10 +49,10 @@
         </a>
     </div>
     <div class="flex grow desktop:basis-24 justify-end">
-        <a href="{{ route('register') }}" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 mobile:hidden">
+        <a href="{{ route('register') }}" class="bg-secondary text-white text-xs font-bold rounded-full p-3 px-6 mobile:hidden">
             Daftar Sekarang
         </a>
-        <a href="{{ route('register') }}" class="bg-orange-500 text-white text-xs font-bold rounded-full p-3 px-6 desktop:hidden">
+        <a href="{{ route('register') }}" class="bg-secondary text-white text-xs font-bold rounded-full p-3 px-6 desktop:hidden">
             Daftar
         </a>
         <div class="desktop:hidden w-10 h-10 flex items-center justify-center" onclick="toggleMobileNav()">
@@ -106,9 +106,9 @@
         if (!header.classList.contains('default')) {
             header.classList.add('default');
 
-            header.classList.remove('top-12', 'text-white');
+            header.classList.remove('top-12', 'text-primary');
             header.classList.add('bg-white', 'border-b', 'text-slate-700');
-            mobileNav.classList.remove('top-32', 'bg-primary', 'text-white');
+            mobileNav.classList.remove('top-32', 'bg-primary', 'text-primary');
             mobileNav.classList.add('top-20', 'bg-white', 'text-slate-800');
         }
     }
@@ -116,10 +116,10 @@
         if (header.classList.contains('default')) {
             header.classList.remove('default');
 
-            header.classList.add('top-12', 'text-white');
+            header.classList.add('top-12', 'text-primary');
             header.classList.remove('bg-white', 'border-b', 'text-slate-700');
             mobileNav.classList.remove('top-20', 'bg-white', 'text-slate-800');
-            mobileNav.classList.add('top-32', 'bg-primary', 'text-white');
+            mobileNav.classList.add('top-32', 'bg-primary', 'text-primary');
         }
     }
 

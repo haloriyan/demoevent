@@ -7,7 +7,7 @@
 @endphp
     
 @section('content')
-<div class="w-full bg-primary text-white flex flex-col gap-8 justify-end p-20 py-24">
+<div class="w-full bg-coklat-muda text-white flex flex-col gap-8 justify-end p-20 py-24 text-primary">
     <div class="h-[10vh]"></div>
     <h2 class="text-4xl font-bold">Programs</h2>
     <div class="font-medium">Jadwal dan Rundown.</div>
@@ -17,7 +17,7 @@
     <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
         @foreach ($schedules as $schedule)
             <div class="rounded-lg border">
-                <div class="p-4 bg-orange-500 rounded-t-lg text-white font-medium">
+                <div class="p-4 bg-secondary rounded-t-lg text-white font-medium">
                     {{ Carbon::parse($schedule->date)->isoFormat('DD MMMM YYYY') }}
                 </div>
                 <div class="p-4 flex flex-col gap-8">

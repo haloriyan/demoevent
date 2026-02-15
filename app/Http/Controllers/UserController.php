@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailChanged;
+use App\Mail\Expiring as MailExpiring;
+use App\Mail\OrderCreated as MailOrderCreated;
+use App\Mail\PaymentConfirmed;
+use App\Mail\SubmissionNotifySystem as MailSubmissionNotifySystem;
+use App\Mail\SubmissionNotifyUser as MailSubmissionNotifyUser;
 use App\Models\Schedule;
 use App\Models\Speaker;
 use App\Models\Submission;
@@ -14,20 +20,33 @@ use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
 use App\Notifications\SubmissionNotifySystem;
 use App\Notifications\SubmissionNotifyUser;
+use App\Services\Midtrans;
+use App\Services\MidtransService;
 use App\Services\Xendit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    public function xendit(Xendit $xendit) {
-        $pay = $xendit->pay();
+    public $midtrans;
 
-        return $pay;
+    public function __construct(Midtrans $mid)
+    {
+        $this->midtrans = $mid;
+    }
+    public function xendit(Xendit $xendit) {
+        // return (new MailOrderCreated(['hehe']))->render();
+        $user = User::where('name', 'LIKE', '%riyan%')->with(['transaction.ticket'])->first();
+        $transaction = Transaction::where('id', 11)->with(['user'])->first();
+        Mail::to('riyan.satria.619@gmail.com')->send(new MailExpiring([
+            'trx' => $transaction,
+        ]));
     }
     public function submission($type = 'abstract') {
         $message = Session::get('message');
@@ -89,16 +108,14 @@ class UserController extends Controller
             $fileName
         );
 
-        Notification::route('mail', $email)
-        ->notify(
-            new SubmissionNotifyUser([
-                'submission' => $submission
+        Mail::to($email)->send(
+            new MailSubmissionNotifyUser([
+                'submission' => $submission,
             ])
         );
-        Notification::route('mail', 'riyan.satria.619@gmail.com')
-        ->notify(
-            new SubmissionNotifySystem([
-                'submission' => $submission
+        Mail::to('riyan.satria.619@gmail.com')->send(
+            new MailSubmissionNotifySystem([
+                'submission' => $submission,
             ])
         );
 
@@ -168,7 +185,7 @@ class UserController extends Controller
 
         foreach ($transactions as $trx) {
             if (env('DO_BROADCAST') == 1) {
-                $trx->user->notify(new Expiring([
+                Mail::to($trx->user->email)->send(new MailExpiring([
                     'trx' => $trx,
                 ]));
             }
@@ -260,6 +277,8 @@ class UserController extends Controller
                         'password' => bcrypt("default")
                     ]
                 );
+                
+                $names = explode(" ", $user->name);
 
                 // Create Transaction
                 $trx = Transaction::create([
@@ -271,8 +290,25 @@ class UserController extends Controller
                     'expired_at' => Carbon::now()->addMinutes((int)env('PAYMENT_EXPIRATION'))->format('Y-m-d H:i:s'),
                 ]);
 
-                $trx = Transaction::where('id', $trx->id)
-                ->with(['ticket', 'user'])
+                $midtrans = $this->midtrans->snap([
+                    'transaction' => [
+                        'order_id' => "PIT_" . date('Ymd') . $trx->id,
+                        'gross_amount' => $payload['ticket']['price'],
+                    ],
+                    'customer' => [
+                        'first_name' => $names[0],
+                        'last_name' => @$names[count($names) - 1] ?? "",
+                        'email' => $user->email,
+                        'phone' => $user->whatsapp,
+                    ]
+                ]);
+
+                $trx = Transaction::where('id', $trx->id);
+                $trx->update([
+                    'payment_payload' => json_encode($midtrans),
+                ]);
+
+                $trx = $trx->with(['ticket', 'user'])
                 ->first();
 
                 $payload['transaction'] = $trx;
@@ -281,12 +317,10 @@ class UserController extends Controller
 
                 // DO NOTIF
                 if (env('DO_BROADCAST') == 1) {
-                    $user->notify(
-                        new OrderCreated([
-                            'user' => $user,
-                            'trx' => $trx,
-                        ])
-                    );
+                    Mail::to($user->email)->send(new MailOrderCreated([
+                        'user' => $user,
+                        'trx' => $trx,
+                    ]));
 
                     if ($user->whatsapp != null) {
                         Http::post(env('WA_URL') . "/send", [
@@ -307,8 +341,10 @@ class UserController extends Controller
                                          "- Nominal : " . currency_encode($trx->payment_amount). "\n". 
                                          "- No. Rekening : " . env('BANK_NUMBER') . "\n". 
                                          "- Bank : " . env('BANK_NAME'). "\n\n".
-                                         "Kemudian mohon kirim foto bukti pembayaran melalui link berikut \n".
+                                         "Kemudian mohon kirim foto bukti pembayaran melalui link berikut :\n".
                                          route('pembayaran', $trx->id) . "\n\n" .
+                                         "Anda juga dapat melakukan pembayaran instan melalui link ini :\n" .
+                                         route('pembayaran.instan', $trx->id) . "\n\n" .
                                          "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
                                          "Terima kasih atas partisipasi Anda\n\n".
                                          "Hormat Kami,\n ".
@@ -332,6 +368,13 @@ class UserController extends Controller
                 'mailDomain' => $mailDomain,
             ]);
         }
+    }
+    public function pembayaranInstan($trxID) {
+        $trx = Transaction::where('id', $trxID);
+        $transaction = $trx->with(['user', 'ticket'])->first();
+        $payload = json_decode($transaction->payment_payload, false);
+
+        return redirect($payload->redirect_url);
     }
     public function pembayaran(Request $request, $trxID) {
         $trx = Transaction::where('id', $trxID);

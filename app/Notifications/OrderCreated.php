@@ -61,10 +61,11 @@ class OrderCreated extends Notification
             ->line('- Bank : ' . env('BANK_NAME'))
             ->line('- No. Rekening : ' . env('BANK_NUMBER'))
             ->line('')
-            // ->line('Kemudian, mohon kirim foto bukti pembayaran beserta nomor pendaftaran kepada panitia melalui email mail@mail.com dan tunggu email konfirmasi pembayaran dari panitia')
             ->line('Kemudian mohon kirim foto bukti pembayaran melalui link berikut')
 
             ->action('Upload Bukti Pembayaran', route('pembayaran', $this->trx->id))
+            ->line('Anda juga dapat melakukan pembayaran instan melalui tautan berikut')
+            ->action('Pembayaran Instan', route('pembayaran.instan', $this->trx->id))
             ->line('Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di ' . env('EMAIL') . ' atau ' . env('PHONE') . '.')
             ->line('')
             ->line('Terima kasih atas partisipasi Anda')

@@ -21,6 +21,7 @@ Route::group(['middleware' => "Cors"], function () {
 
 Route::group(['prefix' => "callback"], function () {
     Route::post('wa', [AdminController::class, 'callbackWa']);
+    Route::post('midtrans', [AdminController::class, 'callbackMidtrans']);
 });
 
 Route::group(['prefix' => "v2"], function () {

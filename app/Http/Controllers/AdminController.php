@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Exports\PesertaExport;
 use App\Exports\SubmissionExport;
+use App\Mail\EmailChanged as MailEmailChanged;
 use App\Models\Admin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
@@ -27,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -183,7 +185,7 @@ class AdminController extends Controller
 
         if ($request->email != $user->email) {
             // Send notif
-            $user->notify(new EmailChanged([
+            Mail::to($user->email)->send(new MailEmailChanged([
                 'user' => $user,
                 'email' => $request->email,
             ]));
@@ -558,6 +560,23 @@ class AdminController extends Controller
         return redirect()->back()->with([
             'message' => "Berhasil menjadikan perangkat " . $device->name . " sebagai utama",
         ]);
+    }
+    public function callbackMidtrans(Request $request) {
+        $status = strtoupper($request->transaction_status);
+        $orderID = $request->order_id;
+        Log::info($status);
+        if ($status == "SETTLEMENT") {
+            $trxID = substr($orderID, 12);
+            Log::info($trxID);
+            $trx = Transaction::where('id', $trxID);
+            $transaction = $trx->first();
+
+            $trx->update([
+                'payment_status' => "PAID"
+            ]);
+        }
+
+        return $status;
     }
     public function callbackWa(Request $request) {
         $devices = WaDevice::all(['id']);

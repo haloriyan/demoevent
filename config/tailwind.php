@@ -19,8 +19,17 @@ return [
                 'desktop' => ['min' => '1024px'],
             ],
             'colors' => [
-                'primary' => "#1f3989",
-                'primary-transparent' => "#1f398930",
+                // 'primary' => "#F0E0CB",
+                // 'primary-end-gradient' => "#F0E0CB80",
+                // 'primary-transparent' => "#F0E0CB30",
+                'primary' => "#89251c",
+                'primary-end-gradient' => "#89251c80",
+                'primary-transparent' => "#89251c30",
+                'secondary' => "#B84F26",
+                'secondary-transparent' => "#B84F2630",
+                'coklat-tua' => "#89251c",
+                'coklat-muda' => "#F0E0CB",
+                'coklat-muda-gradient' => "#F0E0CB80",
             ]
         ]
     ],

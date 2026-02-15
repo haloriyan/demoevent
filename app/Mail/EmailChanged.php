@@ -9,17 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SubmissionNotifyUser extends Mailable
+class EmailChanged extends Mailable
 {
     use Queueable, SerializesModels;
-    public $submission;
+    public $user;
+    public $email;
 
     /**
      * Create a new message instance.
      */
     public function __construct($props)
     {
-        $this->submission = $props['submission'];
+        $this->user = $props['user'];
+        $this->email = $props['email'];
     }
 
     /**
@@ -28,7 +30,7 @@ class SubmissionNotifyUser extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Kami Telah Menerima Submission ' . ucwords($this->submission->type) . ' Anda! - ' . env('EVENT_NAME'),
+            subject: 'Email Berubah - ' . env('EVENT_NAME'),
         );
     }
 
@@ -38,9 +40,10 @@ class SubmissionNotifyUser extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.submission_notify_user',
+            view: 'emails.email_changed',
             with: [
-                'submission' => $this->submission
+                'user' => $this->user,
+                'email' => $this->email,
             ]
         );
     }

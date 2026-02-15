@@ -22,15 +22,15 @@
     
 @section('content')
 <div class="w-full h-[100vh] relative bg-[url(/images/hero.jpg)] bg-cover bg-center">
-    <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-r from-primary via-primary-50 to-transparent text-white">
+    <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-r from-coklat-muda via-coklat-muda to-coklat-muda-gradient text-slate-800">
         <div class="flex flex-col gap-4 w-7/12 mobile:w-full">
             <h1 class="text-[7vh] mobile:text-[4vh] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div>{{ env('EVENT_DATES') }}, {{ env('EVENT_PLACE') }}</div>
             <div class="flex items-center gap-4 mt-4">
-                <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-orange-500 text-white">
+                <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-secondary text-white">
                     Daftar Sekarang
                 </a>
-                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-white text-white hover:bg-orange-500 hover:border-orange-500" onclick="selengkapnya(event)">
+                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-slate-800 text-slate-800 hover:bg-slate-800 hover:border-slate-800 hover:text-white" onclick="selengkapnya(event)">
                     Selengkapnya
                 </a>
             </div>
@@ -61,10 +61,10 @@
     <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
     <div class="flex flex-col gap-4 grow">
         <h3 class="text-2xl text-slate-800 font-bold flex items-center gap-4">
-            <span class="bg-blue-100 text-blue-500 rounded-full p-2 px-5 text-3xl">About</span> 
+            <span class="bg-coklat-muda text-primary rounded-full p-2 px-5 text-3xl">About</span> 
             This Event
             <div></div><div></div>
-            <div class="flex grow h-[2px] bg-blue-500"></div>
+            <div class="flex grow h-[2px] bg-primary"></div>
         </h3>
         
         <div class="text-slate-600 mobile:text-sm leading-8 mt-4">
@@ -79,7 +79,7 @@
 
 <section id="spakers" class="bg-primary p-20 mobile:p-8 flex flex-col gap-8">
     <div class="flex items-center gap-10 text-white">
-        <h3 class="text-4xl font-bold">OUR AMAZING <span class="text-orange-500 underline">SPEAKERS</span></h3>
+        <h3 class="text-4xl font-bold">OUR AMAZING <span class="text-coklat-muda underline">SPEAKERS</span></h3>
     </div>
 
     <div class="grid grid-cols-4 mobile:grid-cols-2 gap-8 mobile:gap-4">
@@ -96,14 +96,14 @@
 </section>
 
 <section id="schedules" class="p-20 mobile:p-8 flex flex-col gap-8 items-center">
-    <h3 class="text-4xl font-bold">Event <span class="text-orange-500 underline">Programs & Schedule</span> Plan</h3>
+    <h3 class="text-4xl font-bold">Event <span class="text-secondary underline">Programs & Schedule</span> Plan</h3>
     <div class="text-sm text-slate-500">
         We are arranging the best medical summit. Don't ever miss it!
     </div>
     <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
         @foreach ($schedules as $schedule)
             <div class="rounded-lg border">
-                <div class="p-4 bg-orange-500 rounded-t-lg text-white font-medium">
+                <div class="p-4 bg-secondary rounded-t-lg text-white font-medium">
                     {{ Carbon::parse($schedule->date)->isoFormat('DD MMMM YYYY') }}
                 </div>
                 <div class="p-4 flex flex-col gap-8">
@@ -154,7 +154,7 @@
 <section class="p-20 mobile:p-8 py-8">
     <div class="flex items-center gap-8">
         <h3 class="flex grow text-4xl text-slate-700 font-bold">Unduh Guideline Acara</h3>
-        <div class="cursor-pointer p-4 px-5 rounded-full text-sm font-medium text-white bg-orange-500 flex items-center gap-3" onclick="toggleHidden('#GuidelineDownload')">
+        <div class="cursor-pointer p-4 px-5 rounded-full text-sm font-medium text-white bg-secondary flex items-center gap-3" onclick="toggleHidden('#GuidelineDownload')">
             <ion-icon name="book-outline" class="text-lg"></ion-icon>
             Unduh Guidebook
         </div>
@@ -162,12 +162,12 @@
 </section>
 
 <section class="p-20 mobile:p-8">
-    <div class="rounded-xl text-white bg-gradient-to-br from-blue-900 to-blue-500 w-full flex flex-col gap-8 p-20 mobile:p-8">
+    <div class="rounded-xl text-primary bg-gradient-to-br from-coklat-muda to-coklat-muda-gradient w-full flex flex-col gap-8 p-20 mobile:p-8">
         <div class="flex mobile:flex-col items-center gap-8">
             <div class="flex flex-col gap-4 grow">
                 <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
             </div>
-            <a href="{{ route('eposter') }}" class="bg-orange-500 text-white rounded-full p-3 px-8 font-medium text-sm">
+            <a href="{{ route('eposter') }}" class="bg-secondary text-white rounded-full p-3 px-8 font-medium text-sm">
                 SUBMIT ABSTRAK
             </a>
         </div>

@@ -11,7 +11,7 @@
         <a href="{{ route('admin.submission', 'abstract') }}" class="p-3 px-5 rounded-lg font-medium text-sm {{ $type == 'abstract' ? 'bg-primary text-white' : 'text-slate-600' }}">
             Abstrak
         </a>
-        <a href="{{ route('admin.submission', 'poster') }}" class="p-3 px-5 rounded-lg font-medium text-sm {{ $type == 'poster' ? 'bg-orange-500 text-white' : 'text-slate-600' }}">
+        <a href="{{ route('admin.submission', 'poster') }}" class="p-3 px-5 rounded-lg font-medium text-sm {{ $type == 'poster' ? 'bg-secondary text-white' : 'text-slate-600' }}">
             E-Poster
         </a>
         <div class="flex grow"></div>
@@ -55,7 +55,7 @@
                             {{ $sub->email }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600 flex">
-                            <div class="p-2 px-4 rounded text-sm font-medium bg-opacity-20 {{ $type == 'abstract' ? 'bg-primary text-primary' : 'bg-orange-500 text-orange-500' }}">
+                            <div class="p-2 px-4 rounded text-sm font-medium bg-opacity-20 {{ $type == 'abstract' ? 'bg-primary text-primary' : 'bg-secondary text-secondary' }}">
                                 {{ strtoupper($type) }}
                             </div>
                         </td>

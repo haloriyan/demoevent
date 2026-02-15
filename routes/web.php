@@ -14,6 +14,7 @@ Route::group(['middleware' => "Construction"], function () {
     Route::get('expiring', [UserController::class, 'expiring']);
     Route::match(['get', 'post'], '/register/{step?}', [UserController::class, 'register'])->name('register');
     Route::match(['get', 'post'], 'pembayaran/{id}', [UserController::class, 'pembayaran'])->name('pembayaran');
+    Route::match(['get', 'post'], 'pembayaran-instan/{id}', [UserController::class, 'pembayaranInstan'])->name('pembayaran.instan');
 });
 
 include __DIR__ . "/admin.php";

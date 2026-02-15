@@ -5,13 +5,15 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SubmissionNotifyUser extends Mailable
+class SubmissionNotifySystem extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $submission;
 
     /**
@@ -28,7 +30,7 @@ class SubmissionNotifyUser extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Kami Telah Menerima Submission ' . ucwords($this->submission->type) . ' Anda! - ' . env('EVENT_NAME'),
+            subject: 'Submission ' . $this->submission->type . " - " . env('EVENT_NAME'),
         );
     }
 
@@ -38,10 +40,7 @@ class SubmissionNotifyUser extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.submission_notify_user',
-            with: [
-                'submission' => $this->submission
-            ]
+            view: 'emails.submission_notify_system',
         );
     }
 
@@ -52,6 +51,10 @@ class SubmissionNotifyUser extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromPath(
+                public_path('storage/submission_' . $this->submission->type . '/' . $this->submission->file),
+            )->as($this->submission->file)
+        ];
     }
 }

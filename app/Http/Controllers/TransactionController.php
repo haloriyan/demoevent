@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentConfirmed as MailPaymentConfirmed;
 use App\Models\Transaction;
 use App\Models\WaDevice;
 use App\Notifications\PaymentConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -38,8 +40,8 @@ class TransactionController extends Controller
 
         if (env('DO_BROADCAST') == 1) {
             $user = $transaction->user;
-            $user->notify(new PaymentConfirmed([
-                'trx' => $transaction,
+            Mail::to($user->email)->send(new MailPaymentConfirmed([
+                'trx' => $transaction
             ]));
 
             $qrString = base64_encode(json_encode([

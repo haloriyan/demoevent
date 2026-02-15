@@ -5,29 +5,29 @@
 @section('head')
 <style>
     .active {
-        background-color: #1f3989;
+        background-color: #89251c;
         color: #fff;
     }
 </style>
 @endsection
     
 @section('content')
-<div class="w-full bg-primary text-white flex flex-col gap-8 justify-end p-20 py-24">
+<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 py-24">
     <div class="h-[10vh]"></div>
     <div class="font-medium text-sm">Panduan</div>
     <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
     <div class="flex items-center gap-4">
-        <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-orange-500 bg-orange-500 hover:bg-orange-800 hover:border-orange-500 text-white">
+        <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-secondary bg-secondary hover:bg-orange-800 hover:border-secondary text-white">
             Submission Form
         </a>
-        <a href="#" class="p-3 px-8 rounded-full font-medium text-sm border border-white hover:bg-white hover:text-orange-500">
+        <a href="#" class="p-3 px-8 rounded-full font-medium text-sm border border-primary hover:bg-primary hover:text-white">
             Baca Panduan
         </a>
     </div>
 </div>
 
 <section class="p-20 bg-slate-100 flex flex-col gap-8 items-center">
-    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-orange-500 underline">Abstrak</span></h3>
+    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-secondary underline">Abstrak</span></h3>
     <div class="w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
         <div class="w-3/12 flex flex-col">
             <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">
@@ -80,7 +80,7 @@
 </section>
 
 <section class="p-20 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
-    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-orange-500 underline">E-Poster</span></h3>
+    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-secondary underline">E-Poster</span></h3>
     <div class="w-8/12 mobile:w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
         <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
             <li>Lomba poster terbuka bagi individu yang telah terdaftar sebagai peserta simposium.</li>
@@ -108,7 +108,7 @@
                 <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
                 <div class="font-medium mobile:text-xs">Ikuti kompetisi karya tulis ilmiah dalam topik Kesehatan dan buat poster kampanye</div>
             </div>
-            <a href="{{ route('submission') }}" class="bg-orange-500 text-white rounded-full p-3 px-8 font-medium text-sm">
+            <a href="{{ route('submission') }}" class="bg-secondary text-white rounded-full p-3 px-8 font-medium text-sm">
                 SUBMIT ABSTRAK
             </a>
         </div>
