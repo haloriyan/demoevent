@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MidtransCheckerX;
 use App\Mail\EmailChanged;
 use App\Mail\Expiring as MailExpiring;
 use App\Mail\OrderCreated as MailOrderCreated;
@@ -41,12 +42,14 @@ class UserController extends Controller
         $this->midtrans = $mid;
     }
     public function xendit(Xendit $xendit) {
-        // return (new MailOrderCreated(['hehe']))->render();
-        $user = User::where('name', 'LIKE', '%riyan%')->with(['transaction.ticket'])->first();
-        $transaction = Transaction::where('id', 11)->with(['user'])->first();
-        Mail::to('riyan.satria.619@gmail.com')->send(new MailExpiring([
-            'trx' => $transaction,
-        ]));
+        // // return (new MailOrderCreated(['hehe']))->render();
+        // $user = User::where('name', 'LIKE', '%riyan%')->with(['transaction.ticket'])->first();
+        // $transaction = Transaction::where('id', 11)->with(['user'])->first();
+        // Mail::to('riyan.satria.619@gmail.com')->send(new MailExpiring([
+        //     'trx' => $transaction,
+        // ]));
+
+        MidtransCheckerX::dispatch();
     }
     public function submission($type = 'abstract') {
         $message = Session::get('message');
@@ -244,6 +247,14 @@ class UserController extends Controller
                     'request' => $request,
                 ]);
             } else {
+                $request->validate([
+                    'email' => "unique:users",
+                    'whatsapp' => "unique:users"
+                ], [
+                    'email.unique' => "Alamat email telah digunakan. Mohon gunakan yang lain",
+                    'whatsapp.unique' => "No. Whatsapp telah digunakan. Mohon gunakan yang lain",
+                ]);
+
                 $payload['nik'] = $request->nik;
                 $payload['name'] = $request->name;
                 $payload['email'] = $request->email;
@@ -290,9 +301,10 @@ class UserController extends Controller
                     'expired_at' => Carbon::now()->addMinutes((int)env('PAYMENT_EXPIRATION'))->format('Y-m-d H:i:s'),
                 ]);
 
+                $orderID = "PIT_" . date('Ymd') . $trx->id;
                 $midtrans = $this->midtrans->snap([
                     'transaction' => [
-                        'order_id' => "PIT_" . date('Ymd') . $trx->id,
+                        'order_id' => $orderID,
                         'gross_amount' => $payload['ticket']['price'],
                     ],
                     'customer' => [
@@ -302,6 +314,7 @@ class UserController extends Controller
                         'phone' => $user->whatsapp,
                     ]
                 ]);
+                $midtrans['order_id'] = $orderID;
 
                 $trx = Transaction::where('id', $trx->id);
                 $trx->update([
@@ -352,6 +365,10 @@ class UserController extends Controller
                         ]);
                     }
                 }
+
+                return redirect(
+                    $midtrans['redirect_url']
+                );
 
                 return redirect()->route('register', [
                     'step' => "done",

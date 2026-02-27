@@ -74,6 +74,8 @@
         $masterRoutes = [
             'peserta', 'speaker', 'schedule', 'ticket', 'booth'
         ];
+        $me = me('admin');
+        $role = $me->role;
     @endphp
 
     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 {{ $routeName == 'admin.dashboard' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
@@ -90,31 +92,33 @@
             <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
         </a>
         <div class="{{ in_array($routes[1], $masterRoutes) ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
-            <a href="{{ route('admin.speaker') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}">Speaker</div>
-            </a>
-            <a href="{{ route('admin.schedule') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}">Jadwal & Rundown</div>
-            </a>
-            <a href="{{ route('admin.ticket') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}">Tiket</div>
-            </a>
             <a href="{{ route('admin.peserta') }}" class="flex items-center gap-4 text-slate-500">
                 <div class="h-10 w-1 bg-white"></div>
                 <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'peserta' ? 'text-primary' : '' }}"></ion-icon>
                 <div class="text-sm flex grow {{ @$routes[1] == 'peserta' ? 'text-primary' : '' }}">Peserta</div>
             </a>
-            <a href="{{ route('admin.booth') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}">Booth</div>
-            </a>
+            @if (in_array($role, ['admin']))
+                <a href="{{ route('admin.speaker') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[1] == 'speaker' ? 'text-primary' : '' }}">Speaker</div>
+                </a>
+                <a href="{{ route('admin.schedule') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[1] == 'schedule' ? 'text-primary' : '' }}">Jadwal & Rundown</div>
+                </a>
+                <a href="{{ route('admin.ticket') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[1] == 'ticket' ? 'text-primary' : '' }}">Tiket</div>
+                </a>
+                <a href="{{ route('admin.booth') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[1] == 'booth' ? 'text-primary' : '' }}">Booth</div>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -149,61 +153,39 @@
         <ion-icon name="file-tray-full-outline"></ion-icon>
         <div class="text-sm flex">Submission</div>
     </a>
-    
-    {{-- <a href="{{ route('admin.handbook') }}" class="flex items-center gap-4 {{ $routeName == 'admin.handbook' ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
-        <div class="h-12 w-1 {{ $routeName == 'handbook' ? 'bg-primary' : 'bg-white' }}"></div>
-        <ion-icon name="documents-outline"></ion-icon>
-        <div class="text-sm flex">Handbook</div>
-    </a> --}}
 
-    <div class="group relative">
-        <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'settings' ? 'bg-primary-transparent text-primary' : '' }}">
-            <div class="h-12 w-1 {{ $routes[1] == 'settings' ? 'bg-primary' : 'bg-white' }}"></div>
-            <ion-icon name="cog-outline" class="{{ $routes[1] == 'settings' ? 'text-primary' : '' }}"></ion-icon>
-            <div class="text-sm flex grow {{ $routes[1] == 'settings' ? 'text-primary' : '' }}">Pengaturan</div>
-            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
-        </a>
-        <div class="{{ $routes[1] == 'settings' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
-            <a href="{{ route('admin.settings.general') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'general' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'general' ? 'text-primary' : '' }}">Umum</div>
+    @if (in_array($role, ['admin']))
+        <div class="group relative">
+            <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'settings' ? 'bg-primary-transparent text-primary' : '' }}">
+                <div class="h-12 w-1 {{ $routes[1] == 'settings' ? 'bg-primary' : 'bg-white' }}"></div>
+                <ion-icon name="cog-outline" class="{{ $routes[1] == 'settings' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ $routes[1] == 'settings' ? 'text-primary' : '' }}">Pengaturan</div>
+                <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
             </a>
-            <a href="{{ route('admin.settings.email') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'email' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'email' ? 'text-primary' : '' }}">Email</div>
-            </a>
-            <a href="{{ route('admin.settings.whatsapp') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}">WhatsApp</div>
-            </a>
-            <a href="{{ route('admin.settings.admin') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'admin' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'admin' ? 'text-primary' : '' }}">Administrator</div>
-            </a>
+            <div class="{{ $routes[1] == 'settings' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+                <a href="{{ route('admin.settings.general') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'general' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'general' ? 'text-primary' : '' }}">Umum</div>
+                </a>
+                <a href="{{ route('admin.settings.email') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'email' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'email' ? 'text-primary' : '' }}">Email</div>
+                </a>
+                <a href="{{ route('admin.settings.whatsapp') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}">WhatsApp</div>
+                </a>
+                <a href="{{ route('admin.settings.admin') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'admin' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'admin' ? 'text-primary' : '' }}">Administrator</div>
+                </a>
+            </div>
         </div>
-    </div>
-
-    {{-- <div class="group relative">
-        <a href="#" class="flex items-center gap-4 text-slate-500 {{ in_array(@$routes[0], ['product', 'inventory', 'stock_request']) ? 'bg-primary-transparent text-primary' : '' }}">
-            <div class="h-12 w-1 {{ in_array(@$routes[0], ['product', 'inventory', 'stock_request']) ? 'bg-primary' : 'bg-white' }}"></div>
-            <ion-icon name="cube-outline" class="{{ in_array(@$routes[0], ['product', 'inventory', 'stock_request']) ? 'text-primary' : '' }}"></ion-icon>
-            <div class="text-sm flex grow {{ in_array(@$routes[0], ['product', 'inventory', 'stock_request']) ? 'text-primary' : '' }}">Produk & Inventori</div>
-            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
-        </a>
-        <div class="{{ in_array(@$routes[0], ['product', 'inventory', 'stock_request']) ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
-            <a href="{{ route('product') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[0] == 'product' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[0] == 'product' ? 'text-primary' : '' }}">Produk</div>
-            </a>
-        </div>
-    </div> --}}
-
-    
+    @endif
 </div>
 
 <div class="absolute top-16 left-72 mobile:left-0 right-0 z-10" id="content">

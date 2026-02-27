@@ -20,6 +20,14 @@
         </div>
     </div>
 
+    @if ($errors->count() > 0)
+        @foreach ($errors->all() as $err)
+            <div class="bg-red-500 p-4 px-5 rounded-lg text-sm text-white font-medium">
+                {{ $err }}
+            </div>
+        @endforeach
+    @endif
+
     <div>
         <div class="group border focus-within:border-primary rounded-lg p-1 relative">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama</label>

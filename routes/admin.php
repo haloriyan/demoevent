@@ -21,8 +21,8 @@ Route::group(['prefix' => "admin"], function () {
         Route::post('scan', [AdminController::class, 'scan'])->name('admin.scan');
     });
 
+    Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::group(['middleware' => "Admin"], function () {
-        Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         Route::group(['prefix' => "peserta"], function () {

@@ -114,9 +114,9 @@
 
         // Unselect
         if (isSelected) {
-            element.classList.remove("border-primary")
+            element.classList.remove("border-primary", "bg-primary", "text-white")
             delete selectedWorkshops[categoryId]
-            printOutput()
+            printOutput?.()
             return
         }
 
@@ -126,7 +126,6 @@
 
         if (totalSelected >= maxWorkshops && !isReplacingSameCategory) {
 
-            // Remove previous selection (since max = 1 or full)
             const previousCategoryId = Object.keys(selectedWorkshops)[0]
 
             const previousSelectedElement = document.querySelector(
@@ -134,7 +133,7 @@
             )
 
             if (previousSelectedElement) {
-                previousSelectedElement.classList.remove("border-primary")
+                previousSelectedElement.classList.remove("border-primary", "bg-primary", "text-white")
             }
 
             delete selectedWorkshops[previousCategoryId]
@@ -144,12 +143,12 @@
         if (selectedWorkshops[categoryId]) {
             const previous = categoryWrapper.querySelector(".border-primary")
             if (previous) {
-                previous.classList.remove("border-primary")
+                previous.classList.remove("border-primary", "bg-primary", "text-white")
             }
         }
 
         // Select current
-        element.classList.add("border-primary")
+        element.classList.add("border-primary", "bg-primary", "text-white")
 
         selectedWorkshops[categoryId] = {
             id: workshopId,
@@ -164,6 +163,7 @@
             select("#WSPickerSubmitArea")?.classList.remove('hidden');
         }
     }
+
 
     const ConfirmWorkshop = (e) => {
         e.preventDefault();
