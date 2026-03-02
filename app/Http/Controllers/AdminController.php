@@ -507,13 +507,35 @@ class AdminController extends Controller
             ]);
         }
     }
-    public function midtransSettings($mode) {
-        $currentMode = env('MIDTRANS_MODE');
-        changeEnv('MIDTRANS_MODE', $currentMode == "LIVE" ? "SANDBOX" : "LIVE");
+    public function midtransMode($mode) {
+        changeEnv('MIDTRANS_MODE', $mode);
         
         return redirect()->back()->with([
-            'message' => "Berhasil menyimpan pengaturan"
+            'message' => "Berhasil mengubah mode Midtrans"
         ]);
+    }
+    public function midtransSettings(Request $request) {
+        if ($request->method() == "GET") {
+            $message = Session::get('message');
+            return view('admin.settings.midtrans', [
+                'message' => $message,
+            ]);
+        } else {
+            $mode = env('MIDTRANS_MODE');
+            $keysToChange = [
+                'MIDTRANS_MERCHANT_ID',
+                'MIDTRANS_SERVER_KEY_' . $mode,
+                'MIDTRANS_CLIENT_KEY_' . $mode,
+            ];
+
+            foreach ($keysToChange as $key) {
+                changeEnv($key, $request->{$key});
+            }
+
+            return redirect()->back()->with([
+                'message' => "Berhasil menyimpan pengaturan Midtrans"
+            ]);
+        }
     }
     public function emailSettings(Request $request) {
         if ($request->method() == "GET") {

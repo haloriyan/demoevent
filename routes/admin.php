@@ -110,7 +110,8 @@ Route::group(['prefix' => "admin"], function () {
             Route::match(['get', 'post'], 'email', [AdminController::class, 'emailSettings'])->name('admin.settings.email');
             Route::get('admin', [AdminController::class, 'admins'])->name('admin.settings.admin');
             Route::match(['get', 'post'], '/', [AdminController::class, 'generalSettings'])->name('admin.settings.general');
-            Route::get('midtrans/{mode}', [AdminController::class, 'midtransSettings'])->name('admin.settings.midtrans');
+            Route::match(['get', 'post'], 'midtrans', [AdminController::class, 'midtransSettings'])->name('admin.settings.midtrans');
+            Route::get('midtrans-mode/{mode}', [AdminController::class, 'midtransMode'])->name('admin.settings.midtrans.mode');
         });
 
         Route::group(['prefix' => "broadcast"], function () {

@@ -178,6 +178,11 @@
                     <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}"></ion-icon>
                     <div class="text-sm flex grow {{ @$routes[2] == 'whatsapp' ? 'text-primary' : '' }}">WhatsApp</div>
                 </a>
+                <a href="{{ route('admin.settings.midtrans') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'midtrans' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'midtrans' ? 'text-primary' : '' }}">Midtrans</div>
+                </a>
                 <a href="{{ route('admin.settings.admin') }}" class="flex items-center gap-4 text-slate-500">
                     <div class="h-10 w-1 bg-white"></div>
                     <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'admin' ? 'text-primary' : '' }}"></ion-icon>
