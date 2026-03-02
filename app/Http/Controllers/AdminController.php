@@ -507,6 +507,14 @@ class AdminController extends Controller
             ]);
         }
     }
+    public function midtransSettings($mode) {
+        $currentMode = env('MIDTRANS_MODE');
+        changeEnv('MIDTRANS_MODE', $currentMode == "LIVE" ? "SANDBOX" : "LIVE");
+        
+        return redirect()->back()->with([
+            'message' => "Berhasil menyimpan pengaturan"
+        ]);
+    }
     public function emailSettings(Request $request) {
         if ($request->method() == "GET") {
             $message = Session::get('message');

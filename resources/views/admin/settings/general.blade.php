@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 
 @section('title', "Pengaturan Umum")
+
+@php
+    $isMidtransLive = env('MIDTRANS_MODE') == "LIVE";
+@endphp
     
 @section('content')
 <form action="#" class="p-10 mobile:p-6 flex flex-col gap-8 bg-white rounded-lg shadow m-8" method="POST">
@@ -11,6 +15,18 @@
     <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
         <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama Aplikasi / Situs / Event :</label>
         <input type="text" name="APP_NAME" id="APP_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('APP_NAME') }}" required />
+    </div>
+
+    <div class="flex items-center gap-4">
+        <div class="text-sm text-slate-500 flex grow">Midtrans Mode</div>
+        <div class="bg-slate-200 rounded-lg p-2 flex items-center">
+            <a href="{{ route('admin.settings.midtrans', ['LIVE']) }}" class="p-2 px-5 rounded-lg text-xs {{ $isMidtransLive ? 'bg-white font-medium text-primary' : 'text-slate-700' }}">
+                LIVE
+            </a>
+            <a href="{{ route('admin.settings.midtrans', ['SANDBOX']) }}" class="p-2 px-5 rounded-lg text-xs {{ !$isMidtransLive ? 'bg-white font-medium text-primary' : 'text-slate-700' }}">
+                SANDBOX
+            </a>
+        </div>
     </div>
 
     <div class="flex justify-center my-4">
