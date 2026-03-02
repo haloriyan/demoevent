@@ -281,6 +281,7 @@ class UserController extends Controller
                     [
                         'nik' =>  $payload['nik'],
                         'email' =>  $payload['email'],
+                        'instansi' =>  $payload['instansi'],
                     ],
                     [
                         'name' =>  $payload['name'],
