@@ -41,15 +41,41 @@ class UserController extends Controller
     {
         $this->midtrans = $mid;
     }
+    public function generateSignature($merchantCode, $merchantRef, $amount, $privateKey) {
+        $signature = hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey);
+        return $signature;
+    }
     public function xendit(Xendit $xendit) {
-        // // return (new MailOrderCreated(['hehe']))->render();
-        // $user = User::where('name', 'LIKE', '%riyan%')->with(['transaction.ticket'])->first();
-        // $transaction = Transaction::where('id', 11)->with(['user'])->first();
-        // Mail::to('riyan.satria.619@gmail.com')->send(new MailExpiring([
-        //     'trx' => $transaction,
-        // ]));
+        // $merchantCode = "T48935"; // Live
+        $merchantCode = "T38502";
+        $privateKey = env('TRIPAY_PRIVATE_SANDBOX');
+        $merchantRef = "INV124";
+        $amountWithoutFee = 5000;
+        $amount = $amountWithoutFee + (700 + (5 / 100 * $amountWithoutFee));
+        Log::info($amount);
+        $signature = hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey);
 
-        MidtransCheckerX::dispatch();
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer " . env('TRIPAY_API_SANDBOX')
+        ])
+        ->post("https://tripay.co.id/api-sandbox/transaction/create", [
+            'signature' => $signature,
+            'method' => "QRISC",
+            'merchant_ref' => $merchantRef,
+            'amount' => $amount,
+            'customer_name' => "John Doe",
+            'customer_email' => "john@doe.com",
+            'customer_phone' => "085159772902",
+            'order_items' => [
+                [
+                    'name' => "Produk digital",
+                    'price' => $amount,
+                    'quantity' => 1,
+                ]
+            ]
+        ]);
+
+        return $response->json();
     }
     public function submission($type = 'abstract') {
         $message = Session::get('message');

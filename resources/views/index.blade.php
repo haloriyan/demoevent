@@ -38,25 +38,24 @@
     </div>
 </div>
 
-<section class="p-14 mobile:p-8 px-20 mobile:px-8 flex mobile:flex-col items-center gap-20 mobile:gap-8 justify-center">
-    <div class="flex flex-col gap-4">
-        <div class="text-xs text-slate-500">Supported by</div>
+<section class="p-14 mobile:p-8 px-20 mobile:px-8 flex justify-center gap-20 mobile:gap-8">
+    <div class="flex flex-col items-center gap-4 w-4/12">
+        <div class="text-xs text-slate-500">Diselenggarakan oleh</div>
         <div class="flex items-center gap-4">
             <a href="#">
-                <img src="/images/logo-sponsor.png" alt="Sponsor" class="h-20">
+                <img src="/images/supporter.png" alt="Sponsor" class="h-64">
             </a>
         </div>
     </div>
-    <div class="flex flex-col gap-4">
-        <div class="text-xs text-slate-500">In collaboration with</div>
+    <div class="flex flex-col items-center gap-4 w-4/12">
+        <div class="text-xs text-slate-500">Berkolaborasi dengan</div>
         <div class="flex items-center gap-4">
             <a href="#">
-                <img src="/images/logo-sponsor.png" alt="Sponsor" class="h-20">
+                <img src="/images/kolaborator.png" alt="Sponsor" class="h-64">
             </a>
         </div>
     </div>
 </section>
-
 <section class="p-20 mobile:p-8 flex mobile:flex-col gap-10" id="about">
     <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
     <div class="flex flex-col gap-4 grow">

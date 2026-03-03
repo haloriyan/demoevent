@@ -6,6 +6,7 @@ use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Exports\PesertaExport;
 use App\Exports\SubmissionExport;
 use App\Mail\EmailChanged as MailEmailChanged;
+use App\Mail\PaymentConfirmed;
 use App\Models\Admin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
@@ -594,12 +595,16 @@ class AdminController extends Controller
     public function callbackMidtrans(Request $request) {
         $status = strtoupper($request->transaction_status);
         $orderID = $request->order_id;
-        Log::info($status);
+
         if ($status == "SETTLEMENT") {
             $trxID = substr($orderID, 12);
-            Log::info($trxID);
+
             $trx = Transaction::where('id', $trxID);
-            $transaction = $trx->first();
+            $transaction = $trx->with(['user'])->first();
+
+            Mail::to($transaction->user->email)->send(new PaymentConfirmed([
+                'trx' => $transaction
+            ]));
 
             $trx->update([
                 'payment_status' => "PAID"

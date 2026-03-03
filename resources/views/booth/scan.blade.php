@@ -130,9 +130,6 @@
         select("#ScanCheck #LoadingContainer").classList.remove('hidden');
         selectAll(".Response").forEach(item => item.classList.add('hidden'));
 
-        console.log(data);
-        
-        
         const response = await fetch("/booth/scan/check", {
             method: "POST",
             headers: {
@@ -143,18 +140,36 @@
         });
         const res = await response.json();
         const user = res.user;
-
-        console.log(user);
+        const transaction = res.transaction;
 
         select("#ScanCheck #LoadingContainer").classList.add('hidden');
 
         if (user === null) {
             toggleHidden('#ScanCheck #Error');
         } else {
+            console.log(transaction);
+            
             select("#ScanCheck #user_id").value = user.id;
             select("#ScanCheck #name").innerHTML = user.name;
             select("#ScanCheck #instansi").innerHTML = user.instansi ?? "-";
             select("#ScanCheck #initial").innerHTML = Initial(user.name);
+            select("#ScanCheck #TicketName").innerHTML = transaction.ticket.name;
+
+            if (/\d/.test(transaction.ticket.name) && transaction.ticket.name.includes('WS')) {
+                select("#ScanCheck #WorkshopArea").classList.remove('hidden');
+                let workshops = JSON.parse(transaction.workshops);
+                console.log(workshops);
+                workshops.map((work, w) => {
+                    let item = document.createElement('div');
+                    item.classList.add('flex', 'items-center', 'gap-4');
+                    item.innerHTML = `<div class='text-sm text-slate-700 font-medium flex grow'>${work.title}</div>
+                    <div class="flex">
+                        <div class="flex text-xs rounded-full border border-primary text-primary p-1 px-3">${work.category.name}</div>
+                    </div>`;
+
+                    select("#ScanCheck #WorkshopRender").appendChild(item);
+                })
+            }
 
             toggleHidden('#ScanCheck #Result');
         }

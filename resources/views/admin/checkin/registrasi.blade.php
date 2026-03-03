@@ -30,7 +30,7 @@
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Nama</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Instansi</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Keikutsertaan</th>
-                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Actions</th>
+                    {{-- <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Actions</th> --}}
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200">
@@ -48,11 +48,11 @@
                         <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $check->ticket->name }}
                         </td>
-                        <td class="py-3 px-4 text-sm text-slate-600">
+                        {{-- <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="w-8 h-8 flex items-center justify-center bg-white border rounded cursor-pointer group relative">
                                 <ion-icon name="eye-outline" class="text-primary"></ion-icon>
                             </div>
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </tbody>

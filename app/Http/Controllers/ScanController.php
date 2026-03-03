@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
 class ScanController extends Controller
 {
     public function check(Request $request) {
-        $transaction = Transaction::where('id', $request->trx_id)->with(['ticket', 'user'])->first();
+        $transaction = Transaction::where('id', $request->trx_id)->with(['ticket', 'user'])
+        ->first();
         $user = null;
 
         if ($transaction && $transaction->payment_status == "PAID") {
@@ -18,6 +19,7 @@ class ScanController extends Controller
         
         return response()->json([
             'user' => $user,
+            'transaction' => $transaction,
         ]);
     }
 }

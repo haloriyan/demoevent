@@ -22,14 +22,24 @@
         </div>
         <div id="Result" class="flex flex-col gap-4 hidden Response">
             <div class="flex justify-center">
-                <div class="w-6/12 aspect-square rounded-full bg-slate-200 text-3xl font-medium text-primary flex items-center justify-center" id="initial">
+                <div class="w-4/12 aspect-square rounded-full bg-slate-200 text-3xl font-medium text-primary flex items-center justify-center" id="initial">
                     RS
                 </div>
             </div>
 
             <div>
                 <div class="text-lg text-slate-700 text-center font-medium" id="name">Riyan Satria</div>
-                <div class="text-slate-500 text-sm text-center mt-1" id="instansi">Agendakota</div>
+                <div class="text-slate-500 text-sm text-center mt-1" id="instansi">-</div>
+            </div>
+
+            <div class="flex items-center gap-4 border rounded-lg p-4">
+                <div class="text-xs text-slate-500 flex grow">Tiket :</div>
+                <div class="text-sm text-primary font-medium" id="TicketName"></div>
+            </div>
+
+            <div id="WorkshopArea" class="hidden">
+                <div class="text-xs text-slate-500 mb-2">Workshop :</div>
+                <div id="WorkshopRender" class="flex flex-col gap-2"></div>
             </div>
 
             <button class="w-full h-12 bg-green-500 text-white text-sm font-bold mt-3 rounded-lg">
