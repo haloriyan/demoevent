@@ -22,12 +22,14 @@
                     <div class="bg-white rounded-lg p-8 shadow flex flex-col gap-4">
                         <div class="flex items-center gap-4">
                             <h4 class="flex grow text-lg text-slate-700">{{ $ws->title }}</h4>
-                            <a href="{{ route('admin.workshop.update', $ws->id) }}" class="w-8 h-8 bg-green-500 text-white flex items-center justify-center rounded-lg" onclick="Edit('{{ $ws }}', event)">
-                                <ion-icon name="create-outline" class="text-lg"></ion-icon>
-                            </a>
-                            <a href="{{ route('admin.workshop.delete', $ws->id) }}" class="w-8 h-8 bg-red-500 text-white flex items-center justify-center rounded-lg" onclick="Del('{{ $ws }}', event)">
-                                <ion-icon name="trash-outline" class="text-lg"></ion-icon>
-                            </a>
+                            @if ($me->role == "admin")
+                                <a href="{{ route('admin.workshop.update', $ws->id) }}" class="w-8 h-8 bg-green-500 text-white flex items-center justify-center rounded-lg" onclick="Edit('{{ $ws }}', event)">
+                                    <ion-icon name="create-outline" class="text-lg"></ion-icon>
+                                </a>
+                                <a href="{{ route('admin.workshop.delete', $ws->id) }}" class="w-8 h-8 bg-red-500 text-white flex items-center justify-center rounded-lg" onclick="Del('{{ $ws }}', event)">
+                                    <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+                                </a>
+                            @endif
                         </div>
                         <div class="text-xs text-slate-500">Kapastas : {{ $ws->count }} dari {{ $totalSales }}</div>
                         <div class="flex bg-slate-200">

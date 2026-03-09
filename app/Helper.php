@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
-function me($guard = null) {
+function me($guard = 'admin') {
     $user = Auth::guard($guard)->user();
 	return $user;
 }
