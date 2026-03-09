@@ -9,6 +9,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SpeakerController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WorkshopController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => "fo"], function () {
@@ -28,6 +29,13 @@ Route::group(['prefix' => "admin"], function () {
         Route::group(['prefix' => "peserta"], function () {
             Route::post('{id}/update', [AdminController::class, 'updatePeserta'])->name('admin.peserta.update');
             Route::get('/', [AdminController::class, 'peserta'])->name('admin.peserta');
+        });
+
+        Route::group(['prefix' => "workshop"], function () {
+            Route::post('store', [WorkshopController::class, 'store'])->name('admin.workshop.store');
+            Route::post('{id}/update', [WorkshopController::class, 'update'])->name('admin.workshop.update');
+            Route::get('{id}/delete', [WorkshopController::class, 'delete'])->name('admin.workshop.delete');
+            Route::get('/', [AdminController::class, 'workshop'])->name('admin.workshop');
         });
 
         Route::group(['prefix' => "speaker"], function () {

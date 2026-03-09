@@ -16,6 +16,7 @@ use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Workshop;
 use App\Models\WsCategory;
 use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
@@ -242,7 +243,9 @@ class UserController extends Controller
                         ]);
                     }
                 ])->get();
-                $workshops = WsCategory::with(['workshops'])->get();
+                $workshops = WsCategory::with(['workshops' => function ($query) {
+                    $query->where('quantity', '>', 0);
+                }])->get();
 
                 return view('register', [
                     'step' => $step,
@@ -303,6 +306,17 @@ class UserController extends Controller
                 ]);
             } else {
                 $ticketID = $payload['ticket']['id'];
+
+                foreach ($payload['workshops'] as $ws) {
+                    $work = Workshop::where('id', $ws['id']);
+                    $workshop = $work->first();
+
+                    $work->update([
+                        'count' => $workshop->count + 1,
+                        'quantity' => $workshop->quantity - 1,
+                    ]);
+                }
+
                 $user = User::firstOrCreate(
                     [
                         'nik' =>  $payload['nik'],

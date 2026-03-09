@@ -22,6 +22,7 @@ use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\WaDevice;
+use App\Models\WsCategory;
 use App\Notifications\EmailChanged;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -241,6 +242,18 @@ class AdminController extends Controller
             'request' => $request,
             'devices' => $devices,
             'broadcasts' => $broadcasts,
+        ]);
+    }
+    public function workshop(Request $request) {
+        $me = me();
+        $message = Session::get('message');
+        $categories = WsCategory::with('workshops')->get();
+
+        return view('admin.workshop.index', [
+            'me' => $me,
+            'message' => $message,
+            'request' => $request,
+            'categories' => $categories,
         ]);
     }
     public function registrasiCheckin(Request $request) {
