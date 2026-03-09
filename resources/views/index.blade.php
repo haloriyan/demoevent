@@ -125,7 +125,12 @@
 
                             <div class="flex items-center gap-2">
                                 @if ($rundown->speakers->count() > 0)
-                                    <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ $rundown }}')">
+                                    <div class="flex flex-col gap-2 list-disc ps-4">
+                                        @foreach ($rundown->speakers as $speak)
+                                            <li class="text-xs text-primary font-medium">{{ $speak->name }}</li>
+                                        @endforeach
+                                    </div>
+                                    {{-- <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ $rundown }}')">
                                         <img src="{{ asset('storage/speaker_photos/' . $rundown->speakers[0]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full" />
                                         @isset($rundown->speakers[1])
                                             <img src="{{ asset('storage/speaker_photos/' . $rundown->speakers[1]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-6" />
@@ -138,7 +143,7 @@
                                         <div class="text-xs text-slate-500">
                                             {{ $rundown->speakers->count() }} speakers
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 @endif
                             </div>
 
