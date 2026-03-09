@@ -27,7 +27,9 @@
                 <td>{{ $user->whatsapp ?? '-' }}</td>
                 <td>{{ $user->instansi ?? '-' }}</td>
                 <td>{{ $user->nik }}</td>
-                <td>{{ $user->transaction->ticket->name }}</td>
+                <td>
+                    {{ $user->transaction->ticket->name }}
+                </td>
                 <td>{{ Carbon::parse($user->created_at)->isoFormat('DD MMM YYYY, HH:mm') }}</td>
             </tr>
         @endforeach

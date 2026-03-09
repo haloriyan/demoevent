@@ -329,12 +329,28 @@ class AdminController extends Controller
     public function scan(Request $request) {
         $p = json_decode(base64_decode($request->p));
 
-        $trx = Transaction::where('id', $p->trx_id);
-        $transaction = $trx->with(['user', 'ticket'])->first();
+        $trx = null;
+        $transaction = null;
         $scan = null;
+        $user = null;
+
+        if ($request->name != "") {
+            $user = User::where('name', 'LIKE', '%'.$request->name.'%')->first();
+            $trx = Transaction::where('user_id', @$user->id);
+            $transaction = $trx->with(['user', 'ticket'])->first();
+        } else {
+            $user = User::where('id', $p->user_id)->first();
+            $trx = Transaction::where('id', $p->trx_id);
+            $transaction = $trx->with(['user', 'ticket'])->first();
+        }
+
+        if ($user == null || $transaction == null) {
+            return redirect()->back()->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
+        }
+        
         $check = Scan::where([
-            ['user_id', $p->user_id],
-            ['transaction_id', $p->trx_id],
+            ['user_id', $user->id],
+            ['transaction_id', $transaction->id],
         ])->first();
 
         if (
@@ -371,7 +387,7 @@ class AdminController extends Controller
             $message = "Gagal melakukan scan";
             if ($check != null) {
                 $message = "Sudah cek-in dengan QR ini.";
-            } else if ($transaction == null || $transaction->payment_status != "PAID" || $transaction->user_id != $p->user_id) {
+            } else if ($transaction == null || $transaction->payment_status != "PAID") {
                 $message = "Transaksi tidak valid";
             }
 

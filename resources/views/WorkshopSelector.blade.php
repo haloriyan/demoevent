@@ -37,7 +37,7 @@
         </div>
 
         <div class="flex items-center justify-end gap-4 mt-4 hidden" id="WSPickerSubmitArea">
-            <button class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">Konfirmasi</button>
+            <button type="submit" class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">Konfirmasi</button>
         </div>
     </form>
 </div>

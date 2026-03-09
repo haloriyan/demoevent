@@ -36,6 +36,11 @@
             </div>
         </div>
 
+        <div class="group border focus-within:border-primary rounded-lg p-1 relative">
+            <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">atau Cari berdasarkan nama :</label>
+            <input type="text" name="name" class="w-full h-12 px-1 mt-3 outline-none bg-transparent text-sm text-slate-700" />
+        </div>
+
         <div class="flex items-center justify-end gap-4 mt-4">
             <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#ScanModal')">Batal</button>
             <button class="p-3 px-6 rounded-lg text-sm bg-red-500 text-white font-medium">Hapus</button>

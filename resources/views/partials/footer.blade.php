@@ -9,33 +9,33 @@
             <div class="text-sm text-slate-500">{{ env('EVENT_PLACE') }}</div>
         </div>
         <div class="flex flex-col gap-4 grow basis-32">
-            <h3 class="text-lg text-slate-700 font-medium mb-4">Pages</h3>
+            <h3 class="text-lg text-slate-700 font-medium mb-4">Laman</h3>
             <a href="/" class="text-sm text-slate-500 hover:underline">
-                Home
+                Beranda
             </a>
             <a href="{{ route('program') }}" class="text-sm text-slate-500 hover:underline">
-                Programs
+                Program
             </a>
             <a href="{{ route('eposter') }}" class="text-sm text-slate-500 hover:underline">
-                E-Poster
+                Kompetisi E-Poster
             </a>
             <a href="{{ route('contact') }}" class="text-sm text-slate-500 hover:underline">
                 Hubungi Kami
             </a>
         </div>
         <div class="flex flex-col gap-4 grow basis-32">
-            <h3 class="text-lg text-slate-700 font-medium mb-4">Contact</h3>
-            <a href="mailto:halo@pitperabdinasarelc2026.com" class="flex items-center gap-4">
+            <h3 class="text-lg text-slate-700 font-medium mb-4">Narahubung</h3>
+            <a href="mailto:{{ env('EMAIL') }}" class="flex items-center gap-4">
                 <div class="w-10 h-10 flex items-center justify-center border rounded-lg">
                     <ion-icon name="mail-outline" class="text-lg text-slate-700"></ion-icon>
                 </div>
-                <div class="text-sm text-slate-500">halo@pitperabdinasarelc2026.com</div>
+                <div class="text-sm text-slate-500">{{ env('EMAIL') }}</div>
             </a>
             <a href="https://wa.me/6281234567890" class="flex items-center gap-4" target="_blank">
                 <div class="w-10 h-10 flex items-center justify-center border rounded-lg">
                     <ion-icon name="logo-whatsapp" class="text-lg text-slate-700"></ion-icon>
                 </div>
-                <div class="text-sm text-slate-500">+62 812 3456 7890</div>
+                <div class="text-sm text-slate-500">{{ env('PHONE') }}</div>
             </a>
         </div>
     </div>

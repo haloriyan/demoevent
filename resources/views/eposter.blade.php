@@ -14,73 +14,16 @@
 @section('content')
 <div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 py-24">
     <div class="h-[10vh]"></div>
-    <div class="font-medium text-sm">Panduan</div>
     <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
     <div class="flex items-center gap-4">
         <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-secondary bg-secondary hover:bg-orange-800 hover:border-secondary text-white">
-            Submission Form
-        </a>
-        <a href="#" class="p-3 px-8 rounded-full font-medium text-sm border border-primary hover:bg-primary hover:text-white">
-            Baca Panduan
+            KIRIM ABSTRAK
         </a>
     </div>
 </div>
 
 <section class="p-20 bg-slate-100 flex flex-col gap-8 items-center">
-    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-secondary underline">Abstrak</span></h3>
-    <div class="w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
-        <div class="w-3/12 flex flex-col">
-            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">
-                Panduan Umum
-            </div>
-            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_Research" onclick="switchAbstrak('Research')">
-                Research Abstract
-            </div>
-            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_CaseReport" onclick="switchAbstrak('CaseReport')">
-                Case Report
-            </div>
-        </div>
-        <div class="flex flex-col gap-4 basis-32 grow">
-            <div class="AbstrakContent hidden" id="AbstrakContent_PanduanUmum">
-                <h4 class="text-xl text-slate-700 font-medium">Panduan Pengiriman Abstrak</h4>
-                <div class="ps-4 text-sm text-slate-600 leading-8 mt-4">
-                    <li>Ditulis dalam bahasa Inggris, menggunakan font Arial ukuran 11pt dan spasi tunggal.</li>
-                    <li>Batas kata: 20 kata untuk judul, dan 300 kata untuk isi teks.</li>
-                    <li>Penulis utama dicantumkan pertama kali dan diberi garis bawah sebagai presenter (pemapar).</li>
-                    <li>Detail afiliasi meliputi departemen, institusi/rumah sakit, kota/provinsi, dan negara.</li>
-                    <li>Abstrak hanya boleh berisi teks. Tabel, grafik, atau diagram TIDAK diperbolehkan untuk dimasukkan ke dalam abstrak.</li>
-                    <li>Abstrak dikirim melalui website registrasi PIT PERABDIN - ASAR ELC 2026.</li>
-                </div>
-            </div>
-            <div class="AbstrakContent hidden" id="AbstrakContent_Research">
-                <h4 class="text-xl text-slate-700 font-medium">Panduan Research</h4>
-                <div class="text-sm text-slate-600 leading-8 mt-2">
-                    Isi Research Abstract terdiri dari empat paragraf utama yang menjelaskan secara singkat hal-hal berikut :
-                </div>
-                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
-                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Nyatakan secara singkat mengapa penelitian ini dilakukan</li>
-                    <li><span class="font-medium text-slate-800">METHOD</span> : Sebutkan lokasi, jumlah sampel, pengujian utama yang dilakukan, dan jenis analisis statistik yang digunakan.</li>
-                    <li><span class="font-medium text-slate-800">RESULT</span> : Konfirmasi atau bantah hipotesis yang ada, didukung dengan data statistik jika diperlukan.</li>
-                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Nyatakan dampak dari studi ini terhadap tata laksana pasien di masa depan atau pemahaman terhadap proses-proses dasar.</li>
-                </div>
-            </div>
-            <div class="AbstrakContent hidden" id="AbstrakContent_CaseReport">
-                <h4 class="text-xl text-slate-700 font-medium">Panduan Case Report</h4>
-                <div class="text-sm text-slate-600 leading-8 mt-2">
-                    Isi Case Report Abstract harus terdiri dari :
-                </div>
-                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
-                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Nyatakan secara singkat mengapa kasus ini penting untuk dilaporkan, sisi kebaruannya (novelty), serta implikasi klinisnya.</li>
-                    <li><span class="font-medium text-slate-800">CASE</span> : Deskripsi atau gambaran kasus.</li>
-                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Ringkasan implikasi klinis dari kasus ini, saran untuk penerapan klinis, tindakan pencegahan yang perlu diambil, atau topik penelitian lebih lanjut yang diperlukan.</li>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="p-20 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
-    <h3 class="text-2xl text-slate-700 font-medium">Pengiriman <span class="text-secondary underline">E-Poster</span></h3>
+    <h3 class="text-2xl text-slate-700 font-medium">Panduan <span class="text-secondary underline">Umum</span></h3>
     <div class="w-8/12 mobile:w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
         <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
             <li>Lomba poster terbuka bagi individu yang telah terdaftar sebagai peserta simposium.</li>
@@ -101,15 +44,69 @@
     </div>
 </section>
 
+<section class="p-20 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
+    <h3 class="text-2xl text-slate-700 font-medium">Panduan Penulisan <span class="text-secondary underline">Abstrak</span> dan <span class="text-secondary underline">E-Poster</span></h3>
+    <div class="w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
+        <div class="w-3/12 flex flex-col">
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">
+                Panduan Umum
+            </div>
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_Research" onclick="switchAbstrak('Research')">
+                Research Abstract
+            </div>
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_CaseReport" onclick="switchAbstrak('CaseReport')">
+                Case Report
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 basis-32 grow">
+            <div class="AbstrakContent hidden" id="AbstrakContent_PanduanUmum">
+                <h4 class="text-xl text-slate-700 font-medium">Pedoman Penulisan Abstrak</h4>
+                <ol type="1" class="ps-4 text-sm text-slate-700 leading-8 mt-4 list-decimal">
+                    <li>Ditulis dalam bahasa Inggris, menggunakan font Arial ukuran 11pt dan spasi tunggal.</li>
+                    <li>Judul abstrak maksimal 20 kata. Isi abstrak maksimal 300 kata.</li>
+                    <li>Penulis utama dicantumkan pertama dan digarisbawahi sebagai presenter.</li>
+                    <li>Detail afiliasi mencakup departemen, institusi/rumah sakit, kota/provinsi, dan negara.</li>
+                    <li>Abstrak hanya boleh berisi teks. Tabel, grafik, atau diagram TIDAK diperkenankan untuk dimasukkan ke dalam abstrak.</li>
+                    <li>Abstrak yang dikirimkan dapat berupa Research abstract (penelitian) atau Case Report (laporan kasus).</li>
+                    <li>Abstrak akan ditinjau oleh Komite Ilmiah berdasarkan kriteria berikut: kualitas, kejelasan, relevansi, dan signifikansi.</li>
+                </ol>
+            </div>
+            <div class="AbstrakContent hidden" id="AbstrakContent_Research">
+                <h4 class="text-xl text-slate-700 font-medium">Research Abstract (Penelitian)</h4>
+                <div class="text-sm text-slate-600 leading-8 mt-2">
+                    terdiri dari empat paragraf utama yang menjelaskan secara singkat hal berikut :
+                </div>
+                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
+                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Menyatakan secara singkat mengapa penelitian ini dilakukan.</li>
+                    <li><span class="font-medium text-slate-800">METHOD</span> : Sebutkan lokasi, jumlah sampel, tes utama yang dilakukan, dan jenis analisis statistik yang digunakan..</li>
+                    <li><span class="font-medium text-slate-800">RESULT</span> : Konfirmasi atau bantah hipotesis yang ada, didukung dengan data statistik jika diperlukan.</li>
+                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Nyatakan dampak dari studi ini terhadap manajemen pasien di masa depan atau pemahaman terhadap proses dasar.</li>
+                </div>
+            </div>
+            <div class="AbstrakContent hidden" id="AbstrakContent_CaseReport">
+                <h4 class="text-xl text-slate-700 font-medium">Case Report Abstract (Laporan Kasus)</h4>
+                <div class="text-sm text-slate-600 leading-8 mt-2">
+                    Isi Case Report Abstract harus terdiri dari :
+                </div>
+                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
+                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Menyatakan secara singkat mengapa kasus ini penting untuk dilaporkan, kebaruan (novelty) kasus ini, serta implikasi klinisnya.</li>
+                    <li><span class="font-medium text-slate-800">CASE</span> : Deskripsi atau gambaran kasus.</li>
+                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Ringkasan implikasi klinis dari kasus ini, saran untuk aplikasi klinis, tindakan pencegahan yang perlu diambil, atau topik penelitian lebih lanjut yang diperlukan.</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="p-20 mobile:p-8 bg-slate-100">
-    <div class="rounded-xl text-white bg-gradient-to-br from-blue-900 to-blue-500 w-full flex flex-col gap-8 p-20 mobile:p-8">
+    <div class="rounded-xl text-primary bg-alpha w-full flex flex-col gap-8 p-20 mobile:p-8">
         <div class="flex mobile:flex-col items-center gap-8">
             <div class="flex flex-col gap-4 grow">
                 <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
                 <div class="font-medium mobile:text-xs">Ikuti kompetisi karya tulis ilmiah dalam topik Kesehatan dan buat poster kampanye</div>
             </div>
             <a href="{{ route('submission') }}" class="bg-secondary text-white rounded-full p-3 px-8 font-medium text-sm">
-                SUBMIT ABSTRAK
+                KIRIM ABSTRAK
             </a>
         </div>
 
@@ -119,8 +116,8 @@
                     <div class="w-4 h-4 rounded-full bg-white"></div>
                     <div class="flex grow h-1 bg-white"></div>
                 </div>
-                <h4 class="mt-4 mobile:text-sm">Pengiriman Abstrak</h4>
-                <div class="text-xs">25 Juli 2026</div>
+                <h4 class="mt-4 mobile:text-sm">Batas Pengiriman Abstrak</h4>
+                <div class="text-xs">1 Agustus 2026</div>
             </div>
             <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
                 <div class="flex items-center">
@@ -128,15 +125,15 @@
                     <div class="flex grow h-1 bg-white"></div>
                 </div>
                 <h4 class="mt-4 mobile:text-sm">Pengumuman Penerimaan Abstrak</h4>
-                <div class="text-xs">15 Agustus 2026</div>
+                <div class="text-xs">10 Agustus 2026</div>
             </div>
             <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
                 <div class="flex items-center">
                     <div class="w-4 h-4 rounded-full bg-white"></div>
                     <div class="flex grow h-1 bg-white"></div>
                 </div>
-                <h4 class="mt-4 mobile:text-sm">Pengiriman E-Poster</h4>
-                <div class="text-xs">15 Agustus 2026</div>
+                <h4 class="mt-4 mobile:text-sm">Batas Pengiriman E-Poster</h4>
+                <div class="text-xs">10 September 2026</div>
             </div>
             <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
                 <div class="flex items-center">

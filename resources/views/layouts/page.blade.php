@@ -33,15 +33,15 @@
     <div class="flex items-center justify-center gap-8 w-6/12 mobile:hidden">
         <a href="/" class="flex items-center gap-3 p-2 px-4">
             <ion-icon name="home-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Home</div>
+            <div class="text-xs">Beranda</div>
         </a>
         <a href="{{ route('program') }}" class="flex items-center gap-3 p-2 px-4">
             <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Programs</div>
+            <div class="text-xs">Program</div>
         </a>
         <a href="{{ route('eposter') }}" class="flex items-center gap-3 p-2 px-4">
             <ion-icon name="images-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">E-Poster</div>
+            <div class="text-xs">Kompetisi E-Poster</div>
         </a>
         <a href="{{ route('contact') }}" class="flex items-center gap-3 p-2 px-4">
             <ion-icon name="call-outline" class="text-lg"></ion-icon>

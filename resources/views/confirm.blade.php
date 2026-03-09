@@ -78,7 +78,7 @@
     </div>
 
     <div class="flex items-center gap-4 mt-4">
-        <a href="{{ route('register') }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
+        <a href="{{ route('register', ['p' => $request->p]) }}" class="p-3 px-5 rounded-lg bg-slate-200 text-slate-600 text-sm">
             Ada yang Salah. Ulangi dari Awal
         </a>
         <div class="flex grow"></div>

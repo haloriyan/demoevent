@@ -7,7 +7,7 @@
 @endphp
     
 @section('content')
-<div class="w-full bg-coklat-muda text-white flex flex-col gap-8 justify-end p-20 py-24 text-primary">
+<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 py-24 text-primary">
     <div class="h-[10vh]"></div>
     <h2 class="text-4xl font-bold">Programs</h2>
     <div class="font-medium">Jadwal dan Rundown.</div>

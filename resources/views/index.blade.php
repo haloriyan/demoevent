@@ -60,25 +60,27 @@
     <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
     <div class="flex flex-col gap-4 grow">
         <h3 class="text-2xl text-slate-800 font-bold flex items-center gap-4">
-            <span class="bg-coklat-muda text-primary rounded-full p-2 px-5 text-3xl">About</span> 
-            This Event
+            <span class="bg-coklat-muda text-primary rounded-full p-2 px-5 text-3xl">Sugeng</span> 
+            Rawuh
             <div></div><div></div>
             <div class="flex grow h-[2px] bg-primary"></div>
         </h3>
         
-        <div class="text-slate-600 mobile:text-sm leading-8 mt-4">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque accusantium obcaecati assumenda doloribus accusamus qui a molestias sequi consequuntur, beatae cumque architecto perspiciatis nulla at aspernatur, suscipit eligendi quaerat porro.
+        <div class="text-slate-600 text-sm leading-7 mt-4">
+            Di tahun 2026,  PERABDIN bekerjasama dengan Asian Society of Abdominal Radiology (ASAR) dengan bangga akan menyelenggarakan pertemuan ilmiah Radiologi Abdomen bergengsi di tingkat Asia yaitu ASAR Educational Lecture Course yang yang dikolaborasikan dengan Pertemuan Ilmiah PERABDIN di Kota Budaya Yogyakarta. Tema yang diangkat adalah "<i>Harmonizing the knowledge, art, and wisdom in abdominal radiology</i>", harapannya kegiatan ini dapat mewujudkan suatu harmonisasi antara ilmu radiologi, ketrampilan medis, seni dan kearifan dalam mencapai ketepatan diagnosis imaging.
         </div>
-        <div class="text-slate-600 mobile:text-sm leading-8">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque accusantium obcaecati assumenda doloribus accusamus qui a molestias sequi consequuntur, beatae cumque architecto perspiciatis nulla at aspernatur, suscipit eligendi quaerat porro.
+        <div class="text-slate-600 text-sm leading-7">
+            Kehadiran para pembicara dari ASAR dengan serangkaian kapasitas expert subspesialistik radiologi abdomen, akan semakin menambah nilai pada kegiatan ini. Kami mengajak seluruh teman sejawat untuk hadir dan belajar bersama di kota Yogyakarta yang sangat kaya akan keindahan alam serta nilai kebudayaan nya.
         </div>
-        
+        <div class="text-slate-600 text-sm leading-7 mt-4">
+            Matur nuwun, sugeng pepanggihan ing pawiwahan
+        </div>
     </div>
 </section>
 
 <section id="spakers" class="bg-primary p-20 mobile:p-8 flex flex-col gap-8">
     <div class="flex items-center gap-10 text-white">
-        <h3 class="text-4xl font-bold">OUR AMAZING <span class="text-coklat-muda underline">SPEAKERS</span></h3>
+        <h3 class="text-4xl font-bold"><span class="text-coklat-muda underline">PEMBICARA</span> SPEKTAKULER ACARA INI</h3>
     </div>
 
     <div class="grid grid-cols-4 mobile:grid-cols-2 gap-8 mobile:gap-4">
@@ -95,15 +97,13 @@
 </section>
 
 <section id="schedules" class="p-20 mobile:p-8 flex flex-col gap-8 items-center">
-    <h3 class="text-4xl font-bold">Event <span class="text-secondary underline">Programs & Schedule</span> Plan</h3>
-    <div class="text-sm text-slate-500">
-        We are arranging the best medical summit. Don't ever miss it!
-    </div>
+    <h3 class="text-4xl font-bold"><span class="text-secondary underline">Programs</span> Acara</h3>
     <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
         @foreach ($schedules as $schedule)
             <div class="rounded-lg border">
                 <div class="p-4 bg-secondary rounded-t-lg text-white font-medium">
-                    {{ Carbon::parse($schedule->date)->isoFormat('DD MMMM YYYY') }}
+                    <div>{{ Carbon::parse($schedule->date)->isoFormat('dddd, DD MMMM YYYY') }}</div>
+                    <div class="text-xs">{{ $schedule->description }}</div>
                 </div>
                 <div class="p-4 flex flex-col gap-8">
                     @foreach ($schedule->rundowns as $rundown)
@@ -152,27 +152,40 @@
 
 <section class="p-20 mobile:p-8 py-8">
     <div class="flex items-center gap-8">
-        <h3 class="flex grow text-4xl text-slate-700 font-bold">Unduh Guideline Acara</h3>
+        <h3 class="flex grow text-4xl text-slate-700 font-bold">Unduh Panduan Acara</h3>
         <div class="cursor-pointer p-4 px-5 rounded-full text-sm font-medium text-white bg-secondary flex items-center gap-3" onclick="toggleHidden('#GuidelineDownload')">
             <ion-icon name="book-outline" class="text-lg"></ion-icon>
-            Unduh Guidebook
+            Unduh Panduan
         </div>
     </div>
 </section>
 
 <section class="p-20 mobile:p-8">
-    <div class="rounded-xl text-primary bg-gradient-to-br from-coklat-muda to-coklat-muda-gradient w-full flex flex-col gap-8 p-20 mobile:p-8">
+    <div class="rounded-xl text-primary bg-gradient-to-br from-coklat-muda to-coklat-muda-gradient w-full flex flex-col gap-4 p-20 mobile:p-8">
         <div class="flex mobile:flex-col items-center gap-8">
             <div class="flex flex-col gap-4 grow">
-                <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
+                <h3 class="text-4xl mobile:text-xl font-bold">Ikutilah Kompetisi E-Poster</h3>
             </div>
             <a href="{{ route('eposter') }}" class="bg-secondary text-white rounded-full p-3 px-8 font-medium text-sm">
                 SUBMIT ABSTRAK
             </a>
         </div>
         <div class="font-medium mobile:text-xs">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus provident suscipit tempora ad impedit eius quam, aperiam sint architecto sequi deleniti quisquam iste, tempore quae praesentium possimus voluptatibus exercitationem delectus.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde adipisci odio aperiam ut eligendi minima nihil. Rerum dolorum ratione, at voluptatibus voluptas nobis. Optio mollitia voluptates, nemo cum ducimus dolore?
+            Terbuka bagi seluruh peserta dengan hadiah menarik berupa :
+            <table class="mt-4">
+                <tr>
+                    <td>Juara I </td>
+                    <td> : Rp 5.000.000</td>
+                </tr>
+                <tr>
+                    <td>Juara II </td>
+                    <td> : Rp 3.000.000</td>
+                </tr>
+                <tr>
+                    <td>Juara III </td>
+                    <td> : Rp 2.000.000</td>
+                </tr>
+            </table>
         </div>
     </div>
 </section>

@@ -6,13 +6,13 @@
 
 <form action="{{ route('register', ['step' => "welcome"]) }}" class="SlideItem flex flex-col grow gap-8" method="POST">
     @csrf
-    <input type="hidden" name="p" value="{{ $request->p }}">
+    <input type="hidden" name="p" id="payload" value="{{ $request->p }}">
     <input type="hidden" name="ticket_id" id="ticket_id">
     <input type="hidden" name="workshops" id="workshops">
     <div class="flex flex-col gap-1">
         <h2 class="text-xl text-slate-700 font-medium">Paket Registrasi</h2>
         <div class="text-sm text-slate-600">
-            Pilih paket pendaftaran yang ingin Anda ikuti.
+            Pilih paket registrasi yang ingin Anda ikuti.
         </div>
     </div>
 
@@ -69,24 +69,28 @@
 
         return toReturn !== null ? parseInt(toReturn) : null;
     }
-    const ChooseTicket = (data, btn) => {
+    const ChooseTicket = (data, btn = null) => {
         data = JSON.parse(data);
+        if (btn == null) {
+            btn = select(`#Ticket_${data.id}`);
+        }
+        
         selectAll(".TicketItem").forEach(item => {
             item.classList.remove('border-primary');
         });
         selectAll(".RadioInner").forEach(item => item.classList.remove('bg-primary'));
         let jumlahWS = getAngka(data.name);
         btn.classList.add('border-primary');
-        select(`#Ticket_${data.id} .RadioInner`).classList.add('bg-primary');
+        select(`#Ticket_${data.id} .RadioInner`).classList.add('bg-primary', 'text-white');
         select("#PriceArea").innerHTML = Currency(data.price).encode();
         select("#ticket_id").value = data.id;
 
         select("#Bottom").classList.remove('hidden');
 
+        selectAll(".workshop-item").forEach(item => item.classList.remove('bg-primary', 'text-white', 'border-primary'));
         if (jumlahWS !== null) {
             maxWorkshops = jumlahWS;
             selectedWorkshops = {};
-            selectAll(".workshop-item").forEach(item => item.classList.remove('border-primary'));
             select("#WSPickerSubmitArea")?.classList.add('hidden');
             select("#WorkshopPicker #ModalTitle").innerHTML = `Pilih ${jumlahWS} Workshop`;
             toggleHidden('#WorkshopPicker');
@@ -174,5 +178,19 @@
         select("input#workshops").value = output;
         toggleHidden("#WorkshopPicker");
     }
+
+    const payload = JSON.parse(atob(select("#payload").value));
+
+    if (payload.ticket) {
+        ChooseTicket(JSON.stringify(payload.ticket));
+        console.log(payload.workshops);
+        selectedWorkshops = payload.workshops;
+        payload.workshops.forEach(work => {
+            select(`.workshop-item[data-id='${work.id}']`).click();
+        });
+        // select("#WorkshopPicker form").submit();
+        select("#WorkshopPicker button[type='submit']").click();
+    }
+    
 </script>
 @endsection

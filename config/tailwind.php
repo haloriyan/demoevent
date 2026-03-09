@@ -22,6 +22,7 @@ return [
                 // 'primary' => "#F0E0CB",
                 // 'primary-end-gradient' => "#F0E0CB80",
                 // 'primary-transparent' => "#F0E0CB30",
+                'alpha' => "#ede0cd",
                 'primary' => "#89251c",
                 'primary-end-gradient' => "#89251c80",
                 'primary-transparent' => "#89251c30",

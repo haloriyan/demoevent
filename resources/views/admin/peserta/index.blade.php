@@ -87,6 +87,7 @@
                 @foreach ($users as $user)
                     @php
                         $color = $statusColors[strtoupper($user->transaction->payment_status)];
+                        $workshops = $user->transaction->workshops;
                     @endphp
                     <tr class="hover:bg-slate-100 transition-colors">
                         <td class="py-3 px-4 text-sm text-slate-600">
@@ -144,6 +145,15 @@
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $user->transaction->ticket->name }}
+                            @if ($workshops)
+                                <div class="flex items-center gap-2 mt-1">
+                                    @foreach (json_decode($workshops) as $ws)
+                                        <div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">
+                                            {{ $ws->title }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="flex">
