@@ -38,20 +38,20 @@
     </div>
 </div>
 
-<section class="p-14 mobile:p-8 px-20 mobile:px-8 flex justify-center gap-20 mobile:gap-8">
-    <div class="flex flex-col items-center gap-4 w-4/12">
+<section class="p-14 bg-white mobile:p-8 px-20 mobile:px-8 flex flex-wrap justify-center gap-20 mobile:gap-8">
+    <div class="flex flex-col gap-4 grow mobile:w-full">
         <div class="text-xs text-slate-500">Diselenggarakan oleh</div>
         <div class="flex items-center gap-4">
             <a href="#">
-                <img src="/images/supporter.png" alt="Sponsor" class="h-64">
+                <img src="/images/penyelenggara.png" alt="Sponsor" class="h-64 mobile:h-auto mobile:w-full">
             </a>
         </div>
     </div>
-    <div class="flex flex-col items-center gap-4 w-4/12">
+    <div class="flex flex-col items-center gap-4 grow mobile:w-full">
         <div class="text-xs text-slate-500">Berkolaborasi dengan</div>
         <div class="flex items-center gap-4">
             <a href="#">
-                <img src="/images/kolaborator.png" alt="Sponsor" class="h-64">
+                <img src="/images/kolaborator.png" alt="Sponsor" class="h-64 mobile:h-32">
             </a>
         </div>
     </div>

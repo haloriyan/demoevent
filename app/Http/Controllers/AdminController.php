@@ -527,8 +527,9 @@ class AdminController extends Controller
                 'message' => $message,
             ]);
         } else {
-            $toChange = ['APP_NAME', 'EMAIL', 'PHONE'];
+            $toChange = ['EVENT_NAME', 'EVENT_DATES', 'EVENT_PLACE', 'EMAIL', 'PHONE'];
             foreach ($toChange as $item) {
+                Log::info($item . " changed to " . $request->{$item});
                 changeEnv($item, $request->{$item});
             }
 

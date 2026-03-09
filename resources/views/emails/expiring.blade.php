@@ -15,7 +15,7 @@
 </p>
 
 <div style="text-align: center;padding: 10px;margin: 15px 0;">
-    <a href="{{ url('/') }}" style="background: #B84F26;color: #fff;padding: 15px 25px;border-radius: 8px;text-decoration: none;">
+    <a href="{{ route('register') }}" style="background: #B84F26;color: #fff;padding: 15px 25px;border-radius: 8px;text-decoration: none;">
         Ulangi Pendaftaran
     </a>
 </div>

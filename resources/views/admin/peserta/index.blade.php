@@ -147,7 +147,7 @@
                             {{ $user->transaction->ticket->name }}
                             @if ($workshops)
                                 <div class="flex items-center gap-2 mt-1">
-                                    @foreach (json_decode($workshops) as $ws)
+                                    @foreach (json_decode($workshops) ?? [] as $ws)
                                         <div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">
                                             {{ $ws->title }}
                                         </div>

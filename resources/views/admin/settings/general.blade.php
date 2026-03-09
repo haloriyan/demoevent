@@ -10,7 +10,15 @@
 
     <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
         <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama Aplikasi / Situs / Event :</label>
-        <input type="text" name="APP_NAME" id="APP_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('APP_NAME') }}" required />
+        <input type="text" name="EVENT_NAME" id="EVENT_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EVENT_NAME') }}" required />
+    </div>
+    <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
+        <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Tanggal Event :</label>
+        <input type="text" name="EVENT_DATES" id="EVENT_DATES" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EVENT_DATES') }}" required />
+    </div>
+    <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
+        <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Lokasi :</label>
+        <input type="text" name="EVENT_PLACE" id="EVENT_PLACE" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EVENT_PLACE') }}" required />
     </div>
 
     <div class="flex justify-center my-4">
@@ -20,11 +28,11 @@
     <div class="flex items-center gap-4">
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Kontak Email :</label>
-            <input type="text" name="MAIL_FROM_NAME" id="MAIL_FROM_NAME" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EMAIL') }}" required />
+            <input type="text" name="EMAIL" id="EMAIL" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EMAIL') }}" required />
         </div>
         <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Kontak No. Telepon :</label>
-            <input type="text" name="MAIL_FROM_ADDRESS" id="MAIL_FROM_ADDRESS" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('PHONE') }}" required />
+            <input type="text" name="PHONE" id="PHONE" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('PHONE') }}" required />
         </div>
     </div>
 
