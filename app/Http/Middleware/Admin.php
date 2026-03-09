@@ -32,26 +32,6 @@ class Admin
             ]);
         }
 
-        $pendingOrders = Transaction::where('payment_status', 'PENDING')
-        ->with(['user', 'ticket'])->get();
-        
-        foreach ($pendingOrders as $order) {
-            $expired = Carbon::parse($order->expired_at)->isPast();
-            if ($expired) {
-                $u = User::where('id', $order->user_id);
-                $user = $u->first();
-
-                Transaction::where('id', $order->id)->delete();
-                $u->delete();
-                
-                Mail::to($user->email)->send(
-                    new Expiring([
-                        'trx' => $order
-                    ])
-                );
-            }
-        }
-
         if ($me->role == "frontliner" && !in_array('fo', $routes)) {
             return redirect()->route('fo.home');
         }
