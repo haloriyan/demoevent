@@ -12,17 +12,18 @@
 @endsection
     
 @section('content')
-<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 py-24">
-    <div class="h-[10vh]"></div>
+<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 mobile:p-8 py-24">
+    <div class="h-[10vh] mobile:h-[20vh]"></div>
     <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
     <div class="flex items-center gap-4">
         <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-secondary bg-secondary hover:bg-orange-800 hover:border-secondary text-white">
             KIRIM ABSTRAK
         </a>
     </div>
+    <div class="mobile:h-[10vh]"></div>
 </div>
 
-<section class="p-20 bg-slate-100 flex flex-col gap-8 items-center">
+<section class="p-20 mobile:p-8 bg-slate-100 flex flex-col gap-8 items-center">
     <h3 class="text-2xl text-slate-700 font-medium">Panduan <span class="text-secondary underline">Umum</span></h3>
     <div class="w-8/12 mobile:w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
         <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
@@ -44,10 +45,10 @@
     </div>
 </section>
 
-<section class="p-20 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
+<section class="p-20 mobile:p-8 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
     <h3 class="text-2xl text-slate-700 font-medium">Panduan Penulisan <span class="text-secondary underline">Abstrak</span> dan <span class="text-secondary underline">E-Poster</span></h3>
-    <div class="w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
-        <div class="w-3/12 flex flex-col">
+    <div class="w-full bg-white shadow-md rounded-lg p-10 flex mobile:flex-col gap-10">
+        <div class="w-3/12 mobile:w-full flex flex-col">
             <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">
                 Panduan Umum
             </div>
