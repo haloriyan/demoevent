@@ -23,6 +23,11 @@
 </head>
 <body>
 
+@php
+    $route = Route::currentRouteName();
+    $routes = explode(".", $route);
+@endphp
+
 <header id="header" class="fixed top-0 left-0 right-0 h-20 px-20 mobile:px-8 flex items-center gap-4 mobile:gap-6 z-20 default">
     <div class="flex grow desktop:basis-24">
         <a href="/">
@@ -30,22 +35,24 @@
         </a>
     </div>
     <div class="desktop:hidden flex grow"></div>
-    <div class="flex items-center justify-center gap-8 w-6/12 mobile:hidden">
+    <div class="flex items-center justify-center gap-6 w-8/12 mobile:hidden">
         <a href="/" class="flex items-center gap-3 p-2 px-4">
-            <ion-icon name="home-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Beranda</div>
+            <div class="text-sm {{ $route == 'index' ? 'text-primary' : '' }}">Beranda</div>
         </a>
-        <a href="{{ route('program') }}" class="flex items-center gap-3 p-2 px-4">
-            <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Program</div>
+        <a href="{{ route('program') }}" class="flex items-center gap-3 p-2 px-3">
+            <div class="text-sm {{ $route == 'program' ? 'text-primary' : '' }}">Program</div>
         </a>
-        <a href="{{ route('eposter') }}" class="flex items-center gap-3 p-2 px-4">
-            <ion-icon name="images-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Kompetisi E-Poster</div>
+        <a href="{{ route('eposter') }}" class="flex items-center gap-3 p-2 px-3">
+            <div class="text-sm {{ $route == 'eposter' ? 'text-primary' : '' }}">Kompetisi E-Poster</div>
         </a>
-        <a href="{{ route('contact') }}" class="flex items-center gap-3 p-2 px-4">
-            <ion-icon name="call-outline" class="text-lg"></ion-icon>
-            <div class="text-xs">Hubungi Kami</div>
+        <a href="{{ route('ramayana') }}" class="flex items-center gap-3 p-2 px-3">
+            <div class="text-sm {{ $route == 'ramayana' ? 'text-primary' : '' }}">Tiket Ramayana</div>
+        </a>
+        <a href="{{ env('HOTEL_LINK') }}" class="flex items-center gap-3 p-2 px-3" target="_blank">
+            <div class="text-sm">Reservasi Hotel</div>
+        </a>
+        <a href="{{ route('contact') }}" class="flex items-center gap-3 p-2 px-3">
+            <div class="text-sm {{ $route == 'contact' ? 'text-primary' : '' }}">Hubungi Kami</div>
         </a>
     </div>
     <div class="flex grow desktop:basis-24 justify-end">
@@ -64,17 +71,27 @@
 <nav class="desktop:hidden fixed top-32 left-[100%] w-full bottom-0 z-20 overflow-y-auto p-8 bg-white flex flex-col gap-10 py-10" id="MobileNav">
     <a href="/" class="flex items-center gap-4">
         <ion-icon name="home-outline" class="text-2xl"></ion-icon>
-        <div class="text-lg flex grow">Home</div>
+        <div class="text-lg flex grow">Beranda</div>
         <ion-icon name="arrow-forward-outline" class="text-xl"></ion-icon>
     </a>
     <a href="{{ route('program') }}" class="flex items-center gap-4">
         <ion-icon name="calendar-outline" class="text-2xl"></ion-icon>
-        <div class="text-lg flex grow">Programs</div>
+        <div class="text-lg flex grow">Program</div>
         <ion-icon name="arrow-forward-outline" class="text-xl"></ion-icon>
     </a>
     <a href="{{ route('eposter') }}" class="flex items-center gap-4">
         <ion-icon name="images-outline" class="text-2xl"></ion-icon>
-        <div class="text-lg flex grow">E-Poster</div>
+        <div class="text-lg flex grow">Kompetisi E-Poster</div>
+        <ion-icon name="arrow-forward-outline" class="text-xl"></ion-icon>
+    </a>
+    <a href="{{ route('ramayana') }}" class="flex items-center gap-4">
+        <ion-icon name="ticket-outline" class="text-2xl"></ion-icon>
+        <div class="text-lg flex grow">Tiket Ramayana</div>
+        <ion-icon name="arrow-forward-outline" class="text-xl"></ion-icon>
+    </a>
+    <a href="{{ env('HOTEL_LINK') }}" class="flex items-center gap-4" target="_blank">
+        <ion-icon name="bed-outline" class="text-2xl"></ion-icon>
+        <div class="text-lg flex grow">Reservasi Hotel</div>
         <ion-icon name="arrow-forward-outline" class="text-xl"></ion-icon>
     </a>
     <a href="{{ route('contact') }}" class="flex items-center gap-4">
@@ -108,8 +125,8 @@
 
             header.classList.remove('top-12', 'text-primary');
             header.classList.add('bg-white', 'border-b', 'text-slate-700');
-            mobileNav.classList.remove('top-32', 'bg-primary', 'text-primary');
-            mobileNav.classList.add('top-20', 'bg-white', 'text-slate-800');
+            mobileNav.classList.remove('top-32');
+            mobileNav.classList.add('top-20');
         }
     }
     const muteHeader = () => {
@@ -118,8 +135,8 @@
 
             header.classList.add('top-12', 'text-primary');
             header.classList.remove('bg-white', 'border-b', 'text-slate-700');
-            mobileNav.classList.remove('top-20', 'bg-white', 'text-slate-800');
-            mobileNav.classList.add('top-32', 'bg-primary', 'text-primary');
+            mobileNav.classList.remove('top-20');
+            mobileNav.classList.add('top-32');
         }
     }
 

@@ -148,6 +148,27 @@
         </div>
     </div>
 
+    <div class="group relative">
+        <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'ramayana' ? 'bg-primary-transparent text-primary' : '' }}">
+            <div class="h-12 w-1 {{ $routes[1] == 'ramayana' ? 'bg-primary' : 'bg-white' }}"></div>
+            <ion-icon name="ticket-outline" class="{{ $routes[1] == 'ramayana' ? 'text-primary' : '' }}"></ion-icon>
+            <div class="text-sm flex grow {{ $routes[1] == 'ramayana' ? 'text-primary' : '' }}">Tiket Ramayana</div>
+            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
+        </a>
+        <div class="{{ $routes[1] == 'ramayana' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+            <a href="{{ route('admin.ramayana.index') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'index' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'index' ? 'text-primary' : '' }}">Transaksi</div>
+            </a>
+            <a href="{{ route('admin.ramayana.settings') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'settings' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'settings' ? 'text-primary' : '' }}">Pengaturan</div>
+            </a>
+        </div>
+    </div>
+
     <a href="{{ route('admin.broadcast') }}" class="flex items-center gap-4 {{ in_array('broadcast', $routes) ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
         <div class="h-12 w-1 {{ in_array('broadcast', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="volume-high-outline"></ion-icon>

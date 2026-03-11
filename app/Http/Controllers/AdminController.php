@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Exports\BoothCheckin as ExportsBoothCheckin;
 use App\Exports\PesertaExport;
+use App\Exports\RamayanaPurchase;
+use App\Exports\RegistrasiCheckin;
 use App\Exports\SubmissionExport;
 use App\Mail\EmailChanged as MailEmailChanged;
 use App\Mail\PaymentConfirmed;
+use App\Mail\RamayanaCreated;
 use App\Models\Admin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
 use App\Models\Broadcast;
 use App\Models\Handbook;
 use App\Models\HandbookCategory;
+use App\Models\Ramayana;
 use App\Models\Scan;
 use App\Models\Schedule;
 use App\Models\Speaker;
@@ -261,6 +265,17 @@ class AdminController extends Controller
         $message = Session::get('message');
 
         $check = Scan::orderBy('created_at', 'DESC')->with(['user', 'transaction', 'ticket']);
+        if ($request->download == 1) {
+            $filename = "Data_Checkin_Registrasi-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            $checkins = $check->get();
+
+            return Excel::download(
+                new RegistrasiCheckin([
+                    'checkins' => $checkins
+                ]),
+                $filename
+            );
+        }
         $checkins = $check->paginate(25);
 
         return view('admin.checkin.registrasi', [
@@ -466,6 +481,50 @@ class AdminController extends Controller
             'availableDates' => $availableDates,
         ]);
     }
+    public function ramayana(Request $request) {
+        $me = me('admin');
+        $trans = Ramayana::orderBy('created_at', 'DESC');
+
+        if ($request->download == 1) {
+            $filename = "Tiket_Ramayana-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            $transactions = $trans->get();
+
+            return Excel::download(
+                new RamayanaPurchase([
+                    'transactions' => $transactions
+                ]),
+                $filename
+            );
+        }
+
+        $transactions = $trans->paginate(25);
+
+        return view('admin.ramayana.index', [
+            'me' => $me,
+            'transactions' => $transactions,
+        ]);
+    }
+    public function ramayanaSettings(Request $request) {
+        $me = me('admin');
+
+        if ($request->method() == "GET") {
+            $message = Session::get('message');
+
+            return view('admin.ramayana.settings', [
+                'me' => $me,
+                'message' => $message,
+            ]);
+        } else {
+            $toChange = ['RAMAYANA_PRICE', 'RAMAYANA_PLACE', 'RAMAYANA_TIME'];
+            foreach ($toChange as $item) {
+                changeEnv($item, $request->{$item});
+            }
+
+            return redirect()->back()->with([
+                'message' => "Berhasil menyimpan perubahan"
+            ]);
+        }
+    }
 
     public function store(Request $request) {
         $admin = Admin::create([
@@ -529,7 +588,6 @@ class AdminController extends Controller
         } else {
             $toChange = ['EVENT_NAME', 'EVENT_DATES', 'EVENT_PLACE', 'EMAIL', 'PHONE'];
             foreach ($toChange as $item) {
-                Log::info($item . " changed to " . $request->{$item});
                 changeEnv($item, $request->{$item});
             }
 
@@ -625,20 +683,34 @@ class AdminController extends Controller
     public function callbackMidtrans(Request $request) {
         $status = strtoupper($request->transaction_status);
         $orderID = $request->order_id;
+        $ords = explode("_", $orderID);
 
         if ($status == "SETTLEMENT") {
-            $trxID = substr($orderID, 12);
+            if ($ords[0] == "RMY") {
+                $trx = Ramayana::where('ref', $orderID);
+                $transaction = $trx->first();
 
-            $trx = Transaction::where('id', $trxID);
-            $transaction = $trx->with(['user'])->first();
+                Mail::to($transaction->email)->send(new RamayanaCreated([
+                    'data' => $transaction,
+                ]));
 
-            Mail::to($transaction->user->email)->send(new PaymentConfirmed([
-                'trx' => $transaction
-            ]));
+                $trx->update([
+                    'payment_status' => "PAID",
+                ]);
+            } else {
+                $trxID = substr($orderID, 12);
 
-            $trx->update([
-                'payment_status' => "PAID"
-            ]);
+                $trx = Transaction::where('id', $trxID);
+                $transaction = $trx->with(['user'])->first();
+
+                Mail::to($transaction->user->email)->send(new PaymentConfirmed([
+                    'trx' => $transaction
+                ]));
+
+                $trx->update([
+                    'payment_status' => "PAID"
+                ]);
+            }
         }
 
         return $status;

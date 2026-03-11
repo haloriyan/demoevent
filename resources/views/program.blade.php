@@ -7,10 +7,12 @@
 @endphp
     
 @section('content')
-<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 py-24 text-primary">
-    <div class="h-[10vh]"></div>
-    <h2 class="text-4xl font-bold">Programs</h2>
+
+<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 mobile:p-8 py-24 text-primary">
+    <div class="h-[10vh] mobile:h-[20vh]"></div>
+    <h2 class="text-4xl font-bold">Program.</h2>
     <div class="font-medium">Jadwal dan Rundown.</div>
+    <div class="mobile:h-[10vh]"></div>
 </div>
 
 <section class="p-20 mobile:p-8 flex flex-col gap-12">

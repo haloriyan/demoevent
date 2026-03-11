@@ -3,27 +3,8 @@
 @section('title', "Check-in Booth")
     
 @section('content')
+@include('admin.checkin.tab')
 <div class="p-8 flex flex-col gap-8">
-    <div class="bg-white rounded-lg shadow p-4 flex items-center gap-4">
-        <a href="{{ route('admin.checkin.registrasi') }}" class="p-3 px-5 rounded-lg text-sm text-slate-600">
-            Registrasi
-        </a>
-        <a href="{{ route('admin.checkin.booth') }}" class="p-3 px-5 rounded-lg font-medium text-sm bg-primary text-white">
-            Booth
-        </a>
-        <div class="flex grow"></div>
-        <select name="booth_id" id="booth_id" class="text-xs text-slate-600 border rounded-lg outline-0 px-4 h-12" onchange="addFilter('booth_id', this.value)">
-            <option value="">Semua Booth</option>
-            @foreach ($booths as $boo)
-                <option value="{{ $boo->id }}" {{ $request->booth_id == $boo->id ? "selected='selected'" : "" }}>{{ $boo->name }}</option>
-            @endforeach
-        </select>
-        <button class="p-3 px-5 rounded-lg font-medium text-xs bg-green-500 text-white flex items-center gap-3" onclick="addFilter({download: 1})">
-            <ion-icon name="download-outline" class="text-lg"></ion-icon>
-            Download Excel
-        </button>
-    </div>
-
     <div class="overflow-x-auto scrollbar-hide bg-white p-4 shadow-sm rounded-lg">
         <table class="w-full table-auto border-collapse">
             <thead>

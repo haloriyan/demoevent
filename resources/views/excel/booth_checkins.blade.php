@@ -37,7 +37,7 @@
                     <td>{{ $check->user->whatsapp ?? '-' }}</td>
                     <td>{{ $check->user->transaction->ticket->name }}</td>
                 @endif
-                <td>{{ Carbon::parse($check->created_at)->isoFormat('DD MMM YYYY, HH:mm') }}</td>
+                <td>{{ Carbon::parse($check->created_at)->isoFormat('DD MMM YYYY, HH:mm:ss') }}</td>
             </tr>
         @endforeach
     </tbody>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\HandbookController;
+use App\Http\Controllers\RamayanaController;
 use App\Http\Controllers\SpeakerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ Route::group(['middleware' => "Cors"], function () {
 Route::group(['prefix' => "callback"], function () {
     Route::post('wa', [AdminController::class, 'callbackWa']);
     Route::post('midtrans', [AdminController::class, 'callbackMidtrans']);
+    Route::post('ramayana', [RamayanaController::class, 'callback']);
 });
 
 Route::group(['prefix' => "v2"], function () {

@@ -19,6 +19,12 @@
             <a href="{{ route('eposter') }}" class="text-sm text-slate-500 hover:underline">
                 Kompetisi E-Poster
             </a>
+            <a href="{{ route('ramayana') }}" class="text-sm text-slate-500 hover:underline">
+                Ramayana
+            </a>
+            <a href="{{ env('HOTEL_LINK') }}" class="text-sm text-slate-500 hover:underline" target="_blank">
+                Reservasi Hotel
+            </a>
             <a href="{{ route('contact') }}" class="text-sm text-slate-500 hover:underline">
                 Hubungi Kami
             </a>

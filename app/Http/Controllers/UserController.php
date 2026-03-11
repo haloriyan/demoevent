@@ -53,7 +53,6 @@ class UserController extends Controller
         $merchantRef = "INV124";
         $amountWithoutFee = 5000;
         $amount = $amountWithoutFee + (700 + (5 / 100 * $amountWithoutFee));
-        Log::info($amount);
         $signature = hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey);
 
         $response = Http::withHeaders([
@@ -158,6 +157,9 @@ class UserController extends Controller
     }
     public function eposter() {
         return view('eposter');
+    }
+    public function ramayana() {
+        return view('ramayana.index');
     }
     public function program() {
         $schedules = Schedule::orderBy('date', 'ASC')->with('rundowns')->get();

@@ -195,6 +195,20 @@
     </div>
 </section>
 
+<section class="bg-[url(/images/mariott-2.jpeg)] bg-top bg-center relative desktop:aspect-[5/2]">
+    <div class="desktop:absolute top-0 left-0 right-0 bottom-0 p-20 mobile:p-8 flex flex-col items-center justify-center">
+        <div class="p-20 mobile:p-8 rounded-xl bg-white/15 backdrop-blur-md border border-[#ccc] text-white text-center flex flex-col items-center gap-6">
+            <h3 class="text-4xl mobile:text-lg font-bold">Penawaran Eksklusif Yogyakarta Mariott Hotel untuk Peserta {{ env('EVENT_NAME') }}</h3>
+            <div class="text-sm mb-2">
+                Dapatkan penginapan di Yogyakarta Mariott Hotel dengan harga dan penawaran khusus untuk Peserta {{ env('EVENT_NAME') }}
+            </div>
+            <a href="{{ env('HOTEL_LINK') }}" class="p-4 px-8 rounded-full bg-secondary text-white text-sm font-bold" target="_blank">
+                Cek Ketersediaan
+            </a>
+        </div>
+    </div>
+</section>
+
 @include('partials.footer')
 @endsection
 

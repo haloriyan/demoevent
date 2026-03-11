@@ -38,6 +38,11 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('/', [AdminController::class, 'workshop'])->name('admin.workshop');
         });
 
+        Route::group(['prefix' => "ramayana"], function () {
+            Route::match(['get', 'post'], 'settings', [AdminController::class, 'ramayanaSettings'])->name('admin.ramayana.settings');
+            Route::get('/', [AdminController::class, 'ramayana'])->name('admin.ramayana.index');
+        });
+
         Route::group(['prefix' => "speaker"], function () {
             Route::post('store', [SpeakerController::class, 'store'])->name('admin.speaker.store');
             Route::post('{id}/update', [SpeakerController::class, 'update'])->name('admin.speaker.update');

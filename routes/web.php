@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\RamayanaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => "Construction"], function () {
-    Route::get('/', [UserController::class, 'index']);
+    Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('program', [UserController::class, 'program'])->name('program');
     Route::get('submission/{type?}', [UserController::class, 'submission'])->name('submission');
     Route::post('submission', [UserController::class, 'submissionSubmit'])->name('submission.submit');
@@ -15,6 +16,10 @@ Route::group(['middleware' => "Construction"], function () {
     Route::match(['get', 'post'], '/register/{step?}', [UserController::class, 'register'])->name('register');
     Route::match(['get', 'post'], 'pembayaran/{id}', [UserController::class, 'pembayaran'])->name('pembayaran');
     Route::match(['get', 'post'], 'pembayaran-instan/{id}', [UserController::class, 'pembayaranInstan'])->name('pembayaran.instan');
+    Route::group(['prefix' => "ramayana"], function () {
+        Route::post('purchase', [RamayanaController::class, 'purchase'])->name('ramayana.purchase');
+        Route::get('/', [UserController::class, 'ramayana'])->name('ramayana');
+    });
 });
 
 include __DIR__ . "/admin.php";
