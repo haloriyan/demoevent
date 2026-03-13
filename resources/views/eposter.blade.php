@@ -27,26 +27,25 @@
     <h3 class="text-2xl text-slate-700 font-medium">Panduan <span class="text-secondary underline">Umum</span></h3>
     <div class="w-8/12 mobile:w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
         <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
-            <li>Lomba poster terbuka bagi individu yang telah terdaftar sebagai peserta simposium.</li>
-            <li>Tema abstrak adalah “Imaging of Abdominal Oncology” (Pencitraan Onkologi Abdomen).</li>
-            <li>Abstrak yang dikirimkan tidak boleh pernah dipresentasikan sebelumnya di acara ilmiah lainnya.</li>
-            <li>Batas waktu pengiriman abstrak: 25 Juli 2026.</li>
-            <li>Abstrak yang diterima setelah batas waktu tidak akan diproses.</li>
-            <li>Abstrak yang dikirimkan dapat berupa laporan kasus (case report) atau penelitian.</li>
-            <li>Abstrak akan ditinjau oleh Komite Ilmiah berdasarkan kriteria berikut: kualitas, kejelasan, relevansi, dan signifikansi.</li>
-            <li>Pengumuman penerimaan abstrak: 15 Agustus 2026.</li>
-            <li>Konfirmasi penerimaan akan dikirim melalui email peserta (mohon hubungi panitia jika Anda belum menerima konfirmasi).</li>
-            <li>Tidak ada pengembalian biaya pendaftaran bagi abstrak yang tidak diterima.</li>
-            <li>Semua abstrak yang diterima akan mendapatkan Sertifikat Partisipasi E-Poster.</li>
+            <li>Tema abstrak adalah <b>“ABDOMINAL IMAGING”</b>.</li>
+            <li>Abstrak yang dikirim tidak pernah dipublikasikan di acara ilmiah lainnya.</li>
+            <li>Penulis utama abstrak harus terdaftar sebagai peserta dan telah membayar. </li>
+            <li>Format abstrak : <b>file format DOCX</b>.</li>
+            <li>Batas waktu pengiriman abstrak melalui <b>website registrasi : 1 AGUSTUS 2026</b>. Abstrak yang dikirim setelah batas waktu tidak akan diproses.</li>
+            <li>Panitia akan menseleksi abstrak yang sesuai dengan tema acara.</li>
+            <li>Pengumuman penerimaan abstrak: <b>10 AGUSTUS 2026</b>. Akan dikirim melalui email peserta (mohon hubungi panitia jika Anda belum menerima konfirmasi).</li>
+            <li>Batas akhir pengiriman e-poster : <b>10 SEPTEMBER 2026</b>.</li>
+            <li>Format e-poster : ukuran <b>A4 dengan file format PDF</b>.</li>
+            <li>Peserta e-poster akan mendapatkan Sertifikat Partisipasi E-Poster.</li>
             <li>Pemenang kompetisi E-Poster akan ditentukan berdasarkan Rapat Dewan Juri. Keputusan Juri bersifat mutlak dan tidak dapat diganggu gugat.</li>
-            <li>Pemenang akan diumumkan pada hari Sabtu, 10 Oktober 2026, saat Acara Penutupan</li>
-            <li>E-Poster dikirim langsung melalui email ke Alamat : asarelcposter2026@gmail.com</li>
+            <li>Pemenang e-poster akan diumumkan pada hari Sabtu, <b>10 OKTOBER 2026</b>, saat Acara Penutupan.</li>
+            <li>E-Poster dikirim melalui <b>website registrasi</b>.</li>
         </div>
     </div>
 </section>
 
 <section class="p-20 mobile:p-8 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
-    <h3 class="text-2xl text-slate-700 font-medium">Panduan Penulisan <span class="text-secondary underline">Abstrak</span> dan <span class="text-secondary underline">E-Poster</span></h3>
+    <h3 class="text-2xl text-slate-700 font-medium">Panduan Penulisan <span class="text-secondary underline">Abstrak</span></h3>
     <div class="w-full bg-white shadow-md rounded-lg p-10 flex mobile:flex-col gap-10">
         <div class="w-3/12 mobile:w-full flex flex-col">
             <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">

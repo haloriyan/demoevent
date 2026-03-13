@@ -88,7 +88,10 @@
         select("#Bottom").classList.remove('hidden');
 
         selectAll(".workshop-item").forEach(item => item.classList.remove('bg-primary', 'text-white', 'border-primary'));
-        if (jumlahWS !== null) {
+
+        let parentCategory = data.category.name;
+        
+        if (jumlahWS !== null && parentCategory != "Residen") {
             maxWorkshops = jumlahWS;
             selectedWorkshops = {};
             select("#WSPickerSubmitArea")?.classList.add('hidden');

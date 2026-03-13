@@ -6,6 +6,7 @@
 @include('admin.checkin.tab')
 
 <div class="p-8 flex flex-col gap-8">
+    @include('partials.flash_message')
     <div class="overflow-x-auto scrollbar-hide bg-white p-4 shadow-sm rounded-lg">
         <table class="w-full table-auto border-collapse">
             <thead>

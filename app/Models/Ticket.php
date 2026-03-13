@@ -11,4 +11,8 @@ class Ticket extends Model
         'name', 'price', 'start_date', 'end_date',
         'start_quantity', 'quantity', 'visible',
     ];
+
+    public function category() {
+        return $this->belongsTo(TicketCategory::class, 'category_id');
+    }
 }

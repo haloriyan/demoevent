@@ -2,6 +2,13 @@
 
 @section('title', "Peserta")
 
+@section('head')
+<!-- Basic Icons -->
+<link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet">
+<link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet"> --}}
+@endsection
+
 @php
     use Carbon\Carbon;
 
@@ -57,6 +64,46 @@
                     </a>
                 </div>
             @endif
+        </div>
+
+        <div class="group relative">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full border cursor-pointer">
+                <ion-icon name="download-outline" class="text-xl text-green-500"></ion-icon>
+            </div>
+
+            <div class="absolute -top-2 right-0 bg-white rounded-lg border py-3 z-40 whitespace-nowrap hidden group-hover:flex flex-col">
+
+                <!-- ITEM WITH SUBMENU -->
+                <div class="relative group/item">
+                    <button class="flex items-center gap-3 p-2 px-4 w-full text-sm text-slate-600 hover:bg-slate-100" onclick="addFilter({download: 1})">
+                        <i class="bx bx-table text-lg text-green-500"></i>
+                        Unduh Excel
+                    </button>
+
+                    @if ($request->q != "" || $request->payment_status != "" || $request->ticket_id != "")
+                    <div class="absolute top-0 right-full ml-2 bg-white p-4 border rounded-lg hidden group-hover/item:flex flex-col z-50 whitespace-nowrap">
+                        <div class="text-sm text-slate-600">Download dengan Filter?</div>
+                        <div class="text-xs text-slate-500">Data yang diunduh akan terbatas pada filter yang diterapkan.</div>
+
+                        <button class="w-full h-10 bg-green-600 text-xs text-center text-white font-bold rounded-lg mb-2 mt-4"
+                            onclick="addFilter({download: 1})">
+                            Tetap Unduh
+                        </button>
+
+                        <a href="?" class="w-full h-10 bg-slate-200 rounded-lg flex items-center justify-center text-xs text-slate-700">
+                            Bersihkan Filter
+                        </a>
+                    </div>
+                    @endif
+                </div>
+
+                <!-- NORMAL ITEM -->
+                <button class="flex items-center gap-3 p-2 px-4 w-full text-sm text-slate-600 hover:bg-slate-100" onclick="addFilter({ qr: 1 })">
+                    <i class="bx bx-qr text-lg text-green-500"></i>
+                    Unduh QR Peserta
+                </button>
+
+            </div>
         </div>
     </div>
 

@@ -22,7 +22,7 @@
     
 @section('content')
 <div class="w-full h-[100vh] relative bg-[url(/images/hero.jpg)] bg-cover bg-center">
-    <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-r from-coklat-muda via-coklat-muda to-coklat-muda-gradient text-slate-800">
+    <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-b from-coklat-muda-transparent via-coklat-muda to-coklat-muda-gradient text-slate-800">
         <div class="flex flex-col gap-4 w-7/12 mobile:w-full">
             <h1 class="text-[7vh] mobile:text-[4vh] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div>{{ env('EVENT_DATES') }}, {{ env('EVENT_PLACE') }}</div>
@@ -38,16 +38,16 @@
     </div>
 </div>
 
-<section class="p-14 bg-white mobile:p-8 px-20 mobile:px-8 flex flex-wrap justify-center gap-20 mobile:gap-8">
-    <div class="flex flex-col gap-4 grow mobile:w-full">
-        <div class="text-xs text-slate-500">Diselenggarakan oleh</div>
+<section class="p-14 bg-white mobile:p-8 px-20 mobile:px-8 flex flex-wrap justify-center gap-8 mobile:gap-8">
+    <div class="flex flex-col items-center gap-4 grow mobile:w-full bg--500">
+        <div class="text-xs text-slate-500 w-full ">Diselenggarakan oleh</div>
         <div class="flex items-center gap-4">
             <a href="#">
                 <img src="/images/penyelenggara.png" alt="Sponsor" class="h-64 mobile:h-auto mobile:w-full">
             </a>
         </div>
     </div>
-    <div class="flex flex-col items-center gap-4 grow mobile:w-full">
+    <div class="flex flex-col items-start gap-4 grow mobile:w-full bg--500">
         <div class="text-xs text-slate-500">Berkolaborasi dengan</div>
         <div class="flex items-center gap-4">
             <a href="#">
@@ -57,8 +57,13 @@
     </div>
 </section>
 <section class="p-20 mobile:p-8 flex mobile:flex-col gap-10" id="about">
-    <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
-    <div class="flex flex-col gap-4 grow">
+    {{-- <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;"> --}}
+    <div class="w-5/12 mobile:w-full flex flex-col gap-4 items-center text-center">
+        <img src="/images/Bambang_Purwanto_Utomo.jpg" alt="Bambang Purwanto Utomo" class="w-7/12 rounded-lg" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
+        <h3 class="text-3xl text-slate-700 font-bold mt-4">Bambang Purwanto Utomo</h3>
+        <div class="text-slate-600">Ketua Panitia</div>
+    </div>
+    <div class="flex flex-col gap-4 basis-32 grow">
         <h3 class="text-2xl text-slate-800 font-bold flex items-center gap-4">
             <span class="bg-coklat-muda text-primary rounded-full p-2 px-5 text-3xl">Sugeng</span> 
             Rawuh

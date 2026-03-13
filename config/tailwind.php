@@ -30,7 +30,8 @@ return [
                 'secondary-transparent' => "#B84F2630",
                 'coklat-tua' => "#89251c",
                 'coklat-muda' => "#F0E0CB",
-                'coklat-muda-gradient' => "#F0E0CB80",
+                'coklat-muda-transparent' => "#F0E0CB30",
+                'coklat-muda-gradient' => "#F0E0CB70",
             ]
         ]
     ],

@@ -107,10 +107,10 @@ class UserController extends Controller
             'file.max' => "Ukuran file tidak boleh melebihi " . $maxSize . " MB"
         ]);
 
-        if ($user == null && $type == "poster") {
+        if ($user == null) {
             $eligible = false;
         } else {
-            if ($type == "poster" && ($user->transaction == null || @$user->transaction->payment_status != "PAID")) {
+            if ($user->transaction == null || @$user->transaction->payment_status != "PAID") {
                 $eligible = false;
             }
         }
@@ -238,6 +238,7 @@ class UserController extends Controller
         if ($step == "welcome") {
             if ($request->method() == "GET") {
                 $categories = TicketCategory::with([
+                    'tickets.category',
                     'tickets' => function ($query) {
                         $query->where([
                             ['quantity', '>', 0],
@@ -309,7 +310,7 @@ class UserController extends Controller
             } else {
                 $ticketID = $payload['ticket']['id'];
 
-                foreach ($payload['workshops'] as $ws) {
+                foreach ($payload['workshops'] ?? [] as $ws) {
                     $work = Workshop::where('id', $ws['id']);
                     $workshop = $work->first();
 

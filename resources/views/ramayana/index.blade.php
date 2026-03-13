@@ -16,7 +16,7 @@
 
 <div class="p-20 mobile:p-8 grid grid-cols-2 mobile:grid-cols-1 gap-10">
     <div class="flex flex-col gap-4">
-        <h3 class="text-4xl text-primary font-bold mt-8">Sendratari Ramayana</h3>
+        <h3 class="text-4xl text-primary font-bold mt-12">Sendratari Ramayana</h3>
         <div class="flex flex-col gap-2 mt-4">
             @for ($i = 0; $i < 2; $i++)
                 <div class="flex items-center gap-2">
@@ -29,9 +29,6 @@
     </div>
     <div class="flex flex-col gap-4">
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
-            Sendratari Ramayana merupakan salah satu media dalam menyajikan wiracarita atau epos Ramayana, media lain seperti seni sastra, seni rupa, dan berbagai seni pertunjukan. Sendratari mengutamakan gerak-gerak penguat ekspresi sebagai pengganti dialog, sehingga dengan sendratari diharapkan penyampaian wiracarita Ramayana dapat lebih mudah dipahami dengan latar belakang budaya dan bahasa penonton yang berbeda. 
-        </div>
-        <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
             Kami selaku panitia PIT PERABDIN - ASAR ELC 2026 mengajak peserta beserta keluarga untuk menyaksikan Sendratari Ramayana Prambanan, sebuah pertunjukan paling ikonik di kompleks Prambanan. 
         </div>
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
@@ -39,6 +36,11 @@
         </div>
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
             Kami menyediakan pembelian tiket kolektif melalui website ini, dengan harga Rp. TBA, sudah termasuk tiket masuk dan transportasi ke lokasi (PP).
+        </div>
+        <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
+            Bagi peserta dan keluarga yang mendaftar diharapkan bersiap untuk penjemputan menuju lokasi pada; <br />
+            Tempat 	: TBA<br />
+            Waktu	: TBA
         </div>
     </div>
 </div>

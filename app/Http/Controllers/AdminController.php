@@ -28,6 +28,7 @@ use App\Models\User;
 use App\Models\WaDevice;
 use App\Models\WsCategory;
 use App\Notifications\EmailChanged;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -167,6 +168,17 @@ class AdminController extends Controller
                 ]),
                 $filename
             );
+        }
+
+        if ($request->qr == 1) {
+            $filename = "QR_Peserta.pdf";
+            $pages = array_chunk($users->items(), 4);
+
+            $pdf = Pdf::loadView('pdf.qr_peserta', [
+                'pages' => $pages,
+            ]);
+
+            return $pdf->stream($filename);
         }
 
         return view('admin.peserta.index', [
