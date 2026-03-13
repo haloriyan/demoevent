@@ -178,7 +178,7 @@ class AdminController extends Controller
                 'pages' => $pages,
             ]);
 
-            return $pdf->stream($filename);
+            return $pdf->download($filename);
         }
 
         return view('admin.peserta.index', [
