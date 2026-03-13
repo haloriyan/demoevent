@@ -57,6 +57,12 @@
 <script>
     let maxWorkshops = 2;
 
+    function like(needle, haystack, reversed = false) {
+        return reversed
+            ? needle.includes(haystack)
+            : haystack.includes(needle);
+    }
+
     const getAngka = text => {
         let texts = text.split(' ');
         let toReturn = null;
@@ -91,7 +97,7 @@
 
         let parentCategory = data.category.name;
         
-        if (jumlahWS !== null && parentCategory != "Residen") {
+        if (jumlahWS !== null && !parentCategory.includes('Residen')) {
             maxWorkshops = jumlahWS;
             selectedWorkshops = {};
             select("#WSPickerSubmitArea")?.classList.add('hidden');
