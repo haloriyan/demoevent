@@ -45,7 +45,7 @@
             @endif
         </button>
 
-        <div class="group relative">
+        {{-- <div class="group relative">
             <button class="bg-green-600 text-white text-sm font-medium h-14 px-6 rounded-lg flex items-center gap-3" onclick="addFilter({download: 1})">
                 <ion-icon name="download-outline" class="text-lg"></ion-icon>
                 Download Excel
@@ -64,7 +64,7 @@
                     </a>
                 </div>
             @endif
-        </div>
+        </div> --}}
 
         <div class="group relative">
             <div class="w-12 h-12 flex items-center justify-center rounded-full border cursor-pointer">

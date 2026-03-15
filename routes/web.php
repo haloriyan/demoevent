@@ -2,9 +2,17 @@
 
 use App\Http\Controllers\RamayanaController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
+Route::match(['get', 'post'], 'tes', function (Request $request) {
+    if ($request->method() == "GET") {
+        return view('del');
+    } else {
+        $file = $request->file('berkas');
+        return $file->getClientOriginalName();
+    }
+})->name('del');
 Route::group(['middleware' => "Construction"], function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('program', [UserController::class, 'program'])->name('program');
