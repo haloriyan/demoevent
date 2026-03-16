@@ -20,6 +20,7 @@
             flex-direction: row;
             gap: 4px;
         }
+
         .page {
             page-break-after: always;
             width: 180mm;
@@ -38,16 +39,16 @@
         .card {
             display: table-cell;
             width: 90mm;
-            height: 120mm;
+            height: 118mm;
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: top;
             overflow: hidden;
-        }
 
-        .card img.kop {
-            width: 100%;
-            display: block;
+            background-image: url("{{ public_path('images/kartu_bg.jpg') }}");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-position: center;
         }
 
         .card_inner {
@@ -55,10 +56,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
+
+            padding-top: 50px;
+            padding-bottom: 30px;
         }
 
         .spacer {
-            height: 40px;
+            height: 45mm;
             flex-shrink: 0;
         }
 
@@ -70,7 +74,7 @@
         .name {
             font-size: 10pt;
             font-weight: bold;
-            margin: 8px 6px 4px 6px;
+            margin: 12px 6px 4px 6px;
             line-height: 1.2;
         }
 
@@ -79,13 +83,16 @@
             margin: 0 6px;
             line-height: 1.2;
         }
+
         .ws {
             font-size: 7pt;
             color: #89251c;
             margin-top: 4px;
         }
+
         .card--empty {
             border: none;
+            background: none;
         }
     </style>
 </head>
@@ -95,7 +102,6 @@
 @foreach ($pages as $page)
     <div class="page">
         <div class="grid">
-            {{-- change both @for rows like this --}}
 
             <div class="row">
                 @for ($i = 0; $i < 2; $i++)
@@ -111,11 +117,10 @@
                             $workshops = json_decode($user->transaction->workshops);
                         @endphp
                         <div class="card">
-                            <img class="kop" src="{{ public_path('images/kop_surat.jpg') }}" alt="Kop">
                             <div class="card_inner">
                                 <div class="spacer"></div>
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
-                                <h2 class="name">{{ $page[$i]->name }}</h2>
+                                <h2 class="name">{{ $user->name }}</h2>
                                 <div class="ib">
                                     @foreach ($workshops ?? [] as $ws)
                                         <div class="ws">{{ $ws->title }}</div>
@@ -143,11 +148,10 @@
                             $workshops = json_decode($user->transaction->workshops);
                         @endphp
                         <div class="card">
-                            <img class="kop" src="{{ public_path('images/kop_surat.jpg') }}" alt="Kop">
                             <div class="card_inner">
                                 <div class="spacer"></div>
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
-                                <h2 class="name">{{ $page[$i]->name }}</h2>
+                                <h2 class="name">{{ $user->name }}</h2>
                                 <div class="ib">
                                     @foreach ($workshops ?? [] as $ws)
                                         <div class="ws">{{ $ws->title }}</div>
@@ -160,7 +164,7 @@
                     @endif
                 @endfor
             </div>
-            
+
         </div>
     </div>
 @endforeach

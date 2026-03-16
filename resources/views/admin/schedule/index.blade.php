@@ -57,13 +57,13 @@
                                     <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
 
                                     <div class="absolute top-[-10px] right-0 hidden group-hover:flex items-center gap-2 bg-white border rounded-lg p-2">
-                                        <a href="{{ route('admin.rundown.update', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-primary text-primary bg-opacity-20 rounded-lg" onclick="ManageSpeaker(event, '{{ $rundown }}')">
+                                        <a href="{{ route('admin.rundown.update', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-primary text-primary bg-opacity-20 rounded-lg" onclick="ManageSpeaker(event, '{{ base64_encode(json_encode($rundown)) }}')">
                                             <ion-icon name="people-outline"></ion-icon>
                                         </a>
-                                        <a href="{{ route('admin.rundown.update', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-500 rounded-lg" onclick="EditRundown(event, '{{ $rundown }}')">
+                                        <a href="{{ route('admin.rundown.update', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-500 rounded-lg" onclick="EditRundown(event, '{{ base64_encode(json_encode($rundown)) }}')">
                                             <ion-icon name="create-outline"></ion-icon>
                                         </a>
-                                        <a href="{{ route('admin.rundown.delete', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-red-100 text-red-500 rounded-lg" onclick="DeleteRundown(event, '{{ $rundown }}')">
+                                        <a href="{{ route('admin.rundown.delete', [$rundown->id]) }}" class="w-8 h-8 flex items-center justify-center bg-red-100 text-red-500 rounded-lg" onclick="DeleteRundown(event, '{{ base64_encode(json_encode($rundown)) }}')">
                                             <ion-icon name="trash-outline"></ion-icon>
                                         </a>
                                     </div>
@@ -72,7 +72,7 @@
 
                             <div class="flex items-center gap-2">
                                 @if ($speakers->count() > 0)
-                                    <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ $rundown }}')">
+                                    <div class="flex items-center w-full relative cursor-pointer" onclick="ManageSpeaker(event, '{{ base64_encode(json_encode($rundown)) }}')">
                                         <img src="{{ asset('storage/speaker_photos/' . $speakers[0]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full" />
                                         @isset($speakers[1])
                                             <img src="{{ asset('storage/speaker_photos/' . $speakers[1]->photo) }}" class="w-10 h-10 border-2 border-white rounded-full absolute left-6" />
@@ -163,7 +163,7 @@
     }
     const DeleteRundown = (event, data) => {
         event.preventDefault();
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data));
         const link = event.currentTarget;
 
         select("#DeleteRundown form").setAttribute('action', link.href);
@@ -172,7 +172,7 @@
     }
     const EditRundown = (event, data) => {
         event.preventDefault();
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data));
         const link = event.currentTarget;
 
         select("#EditRundown form").setAttribute('action', link.href);
@@ -223,7 +223,7 @@
     });
 
     const ManageSpeaker = (e, data) => {
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data));
         e.preventDefault();
         select("#ManageSpeaker #AddSpeaker").setAttribute('action', `/admin/rundown/${data.id}/speaker`);
         toggleHidden("#ManageSpeaker");
