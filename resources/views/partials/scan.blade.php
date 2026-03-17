@@ -6,7 +6,7 @@
             <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#ScanModal')"></ion-icon>
         </div>
 
-        <input type="hidden" name="p" id="p" value="eyJ0cnhfaWQiOjMsInVzZXJfaWQiOjJ9">
+        <input type="hidden" name="p" id="p" value="">
 
         <div class="relative">
             <video id="Scanner" class="w-full aspect-square bg-black/40 rounded-xl"></video>

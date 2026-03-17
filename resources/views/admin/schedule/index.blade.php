@@ -20,7 +20,7 @@
             <div class="border rounded-lg bg-white">
                 <div class="flex items-center gap-4 border-b p-3 px-4">
                     <div class="text-slate-600 font-medium flex grow">{{ $schedule->title }}</div>
-                    <a href="{{ route('admin.schedule.update', [$schedule->id]) }}" class="flex items-center bg-green-500 text-white p-2 px-3 rounded-lg" onclick="EditSchedule(event, '{{ $schedule }}')">
+                    <a href="{{ route('admin.schedule.update', [$schedule->id]) }}" class="flex items-center bg-green-500 text-white p-2 px-3 rounded-lg" onclick="EditSchedule(event, '{{ base64_encode(json_encode($schedule)) }}')">
                         <ion-icon name="create-outline" ></ion-icon>
                     </a>
                     {{-- <a href="{{ route('admin.schedule.delete', [$schedule->id]) }}" class="flex items-center bg-red-500 text-white p-2 px-3 rounded-lg" onclick="DeleteSchedule(event, '{{ $schedule }}')">
@@ -30,7 +30,7 @@
                 
                 <div class="p-4 flex flex-col gap-8">
                     @if ($schedule->rundowns->count() > 1)
-                        <button class="text-primary hover:bg-primary-transparent rounded-lg w-full h-10 text-xs font-medium flex items-center justify-center gap-4" onclick="AddRundown('{{ $schedule }}')">
+                        <button class="text-primary hover:bg-primary-transparent rounded-lg w-full h-10 text-xs font-medium flex items-center justify-center gap-4" onclick="AddRundown('{{ base64_encode(json_encode($schedule)) }}')">
                             <ion-icon name="add-outline"></ion-icon>
                             Tambah Rundown
                         </button>
@@ -132,7 +132,7 @@
 
     const EditSchedule = (event, data) => {
         event.preventDefault();
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data));
         const link = event.currentTarget;
 
         select("#EditSchedule form").setAttribute('action', link.href);
@@ -157,7 +157,7 @@
         toggleHidden("#DeleteSchedule");
     }
     const AddRundown = data => {
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data));
         select("#AddRundown #schedule_id").value = data.id;
         toggleHidden('#AddRundown');
     }

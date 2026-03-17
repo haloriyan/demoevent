@@ -117,7 +117,7 @@ class UserController extends Controller
 
         if (!$eligible) {
             return redirect()->back()->withErrors([
-                'Anda harus terdaftar sebagai peserta Simposium untuk mengirimkan poster'
+                'Anda harus terdaftar sebagai peserta Simposium untuk mengirimkan ' . ucwords($type),
             ]);
         }
 

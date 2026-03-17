@@ -385,33 +385,42 @@ class AdminController extends Controller
         }
 
         if ($user == null || $transaction == null) {
-            return redirect()->back()->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
+            // return redirect()->back()->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
+            return redirect()->route('admin.dashboard')->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
         }
         
-        $check = Scan::where([
+        $sc = Scan::where([
             ['user_id', $user->id],
             ['transaction_id', $transaction->id],
-        ])->first();
+        ]);
+        $check = $sc->first();
+        $hasCheckedIn = $check != null;
 
         if (
-            $transaction->payment_status == "PAID" &&
-            $transaction->user_id == $p->user_id &&
-            $check == null
+            $transaction != null && 
+            $transaction->payment_status == "PAID"
         ) {
 
             if ($request->confirm != "y") {
                 return view('admin.scan', [
                     'trx' => $transaction,
-                    'p' => $request->p,
+                    'p' => $p ?? base64_encode(json_encode([
+                        'trx_id' => $transaction->id,
+                        'user_id' => $user->id,
+                    ]))
                 ]);
             }
 
-            $scan = Scan::create([
-                'user_id' => $transaction->user_id,
-                'transaction_id' => $p->trx_id,
-                'ticket_id' => $transaction->ticket_id,
-            ]);
-            $scan = Scan::where('id', $scan->id)->with(['user', 'transaction', 'ticket'])->first();
+            if ($hasCheckedIn) {
+                $scan = $sc->with(['user', 'transaction', 'ticket'])->first();
+            } else {
+                $scan = Scan::create([
+                    'user_id' => $transaction->user_id,
+                    'transaction_id' => $p->trx_id,
+                    'ticket_id' => $transaction->ticket_id,
+                ]);
+                $scan = Scan::where('id', $scan->id)->with(['user', 'transaction', 'ticket'])->first();
+            }
 
             if ($request->response_type == "api") {
                 return response()->json([
@@ -425,9 +434,7 @@ class AdminController extends Controller
             }
         } else {
             $message = "Gagal melakukan scan";
-            if ($check != null) {
-                $message = "Sudah cek-in dengan QR ini.";
-            } else if ($transaction == null || $transaction->payment_status != "PAID") {
+            if ($transaction == null || $transaction->payment_status != "PAID") {
                 $message = "Transaksi tidak valid";
             }
 

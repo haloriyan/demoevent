@@ -22,7 +22,8 @@
     
 @section('content')
 <div class="w-full h-[100vh] relative bg-[url(/images/hero.jpg)] bg-cover bg-center">
-    <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-b from-coklat-muda-transparent via-coklat-muda to-coklat-muda-gradient text-slate-800">
+    {{-- <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 bg-gradient-to-b from-coklat-muda-transparent via-coklat-muda to-coklat-muda-gradient text-slate-800"> --}}
+        <div class="absolute top-0 left-0 right-0 bottom-0 flex items-center p-20 mobile:p-8 text-white">
         <div class="flex flex-col gap-4 w-7/12 mobile:w-full">
             <h1 class="text-[7vh] mobile:text-[4vh] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div>{{ env('EVENT_DATES') }}, {{ env('EVENT_PLACE') }}</div>
@@ -30,7 +31,7 @@
                 <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-secondary text-white">
                     Daftar Sekarang
                 </a>
-                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-slate-800 text-slate-800 hover:bg-slate-800 hover:border-slate-800 hover:text-white" onclick="selengkapnya(event)">
+                <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-white text-white hover:bg-white hover:border-primary hover:text-primary" onclick="selengkapnya(event)">
                     Selengkapnya
                 </a>
             </div>
@@ -38,24 +39,17 @@
     </div>
 </div>
 
-<section class="p-14 bg-white mobile:p-8 px-20 mobile:px-8 flex flex-wrap justify-center gap-8 mobile:gap-8">
-    <div class="flex flex-col items-center gap-4 grow mobile:w-full bg--500">
-        <div class="text-xs text-slate-500 w-full ">Diselenggarakan oleh</div>
-        <div class="flex items-center gap-4">
-            <a href="#">
-                <img src="/images/penyelenggara.png" alt="Sponsor" class="h-64 mobile:h-auto mobile:w-full">
-            </a>
-        </div>
+<section class="p-14 bg-white mobile:p-8 px-20 mobile:px-8 flex gap-8 mobile:gap-8">
+    <div class="flex flex-col gap-4 grow">
+        <div class="text-xs text-slate-500">Diselenggarakan oleh</div>
+        <img src="/images/penyelenggara.png" alt="Sponsor" class="min-h-64 mobile:h-auto mobile:w-full">
     </div>
-    <div class="flex flex-col items-start gap-4 grow mobile:w-full bg--500">
+    <div class="flex flex-col gap-4 grow">
         <div class="text-xs text-slate-500">Berkolaborasi dengan</div>
-        <div class="flex items-center gap-4">
-            <a href="#">
-                <img src="/images/kolaborator.png" alt="Sponsor" class="h-64 mobile:h-32">
-            </a>
-        </div>
+        <img src="/images/kolaborator.png" alt="Sponsor" class="min-h-64 mobile:h-auto">
     </div>
 </section>
+
 <section class="p-20 mobile:p-8 flex mobile:flex-col gap-10" id="about">
     {{-- <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;"> --}}
     <div class="w-5/12 mobile:w-full flex flex-col gap-4 items-center text-center">

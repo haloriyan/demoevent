@@ -56,11 +56,11 @@
                 <a href="{{ url()->previous() }}" class="flex items-center gap-3 p-3 px-5 rounded-lg text-sm bg-slate-200 text-slate-600">
                     Kembali
                 </a>
-                <button class="flex items-center gap-3 p-3 px-5 rounded-lg text-sm bg-green-500 text-white font-bold">
+                <button type="submit" class="flex items-center gap-3 p-3 px-5 rounded-lg text-sm bg-green-500 text-white font-bold">
                     Konfirmasi
                 </button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 

@@ -15,24 +15,24 @@ class Cors
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->getMethod() === 'OPTIONS') {
-            return response()->noContent(204, [
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => '*',
-            ]);
-        }
+        // if ($request->getMethod() === 'OPTIONS') {
+        //     return response()->noContent(204, [
+        //         'Access-Control-Allow-Origin' => '*',
+        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+        //         'Access-Control-Allow-Headers' => '*',
+        //     ]);
+        // }
 
         // Process the request
         $response = $next($request);
 
         // Remove any duplicate header (just in case)
-        $response->headers->remove('Access-Control-Allow-Origin');
+        // $response->headers->remove('Access-Control-Allow-Origin');
 
-        // Add the CORS headers
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-        $response->headers->set('Access-Control-Allow-Headers', '*');
+        // // Add the CORS headers
+        // $response->headers->set('Access-Control-Allow-Origin', '*');
+        // $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        // $response->headers->set('Access-Control-Allow-Headers', '*');
 
         return $response;
     }

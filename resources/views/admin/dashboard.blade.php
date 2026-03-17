@@ -19,6 +19,7 @@
             </a>
         </div>
     </div>
+    @include('partials.flash_message')
     <div class="grid grid-cols-3 gap-8">
         <div class="flex items-center gap-6 bg-white rounded-lg p-4">
             <div class="w-16 aspect-square rounded-lg flex items-center justify-center bg-blue-400">

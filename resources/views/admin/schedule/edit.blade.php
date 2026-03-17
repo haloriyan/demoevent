@@ -28,8 +28,8 @@
         </div>
 
         <div class="flex items-center justify-end gap-4 mt-4">
-            <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#EditSchedule')">{{ __('organizer.cancel') }}</button>
-            <button class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">{{ __('organizer.submit') }}</button>
+            <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#EditSchedule')">Batal</button>
+            <button class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">Simpan Perubahan</button>
         </div>
     </form>
 </div>
