@@ -239,7 +239,8 @@
     const selengkapnya = e => {
         e.preventDefault();
         select("section#about").scrollIntoView({
-            behavior: 'smooth'
+            behavior: 'smooth',
+            block: 'center'
         })
     }
 </script>

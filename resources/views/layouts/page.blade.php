@@ -37,7 +37,7 @@
     <div class="desktop:hidden flex grow"></div>
     <div class="flex items-center justify-center gap-6 w-8/12 mobile:hidden">
         <a href="/" class="flex items-center gap-3 p-2 px-4">
-            <div class="text-sm {{ $route == 'index' ? 'text-primary' : '' }}">Beranda</div>
+            <div class="text-sm {{ $route == 'index' ? '' : '' }}">Beranda</div>
         </a>
         <a href="{{ route('program') }}" class="flex items-center gap-3 p-2 px-3">
             <div class="text-sm {{ $route == 'program' ? 'text-primary' : '' }}">Program</div>
@@ -123,7 +123,7 @@
         if (!header.classList.contains('default')) {
             header.classList.add('default');
 
-            header.classList.remove('top-12', 'text-primary');
+            header.classList.remove('top-12', 'text-white');
             header.classList.add('bg-white', 'border-b', 'text-slate-700');
             mobileNav.classList.remove('top-32');
             mobileNav.classList.add('top-20');
@@ -133,7 +133,7 @@
         if (header.classList.contains('default')) {
             header.classList.remove('default');
 
-            header.classList.add('top-12', 'text-primary');
+            header.classList.add('top-12', 'text-white');
             header.classList.remove('bg-white', 'border-b', 'text-slate-700');
             mobileNav.classList.remove('top-20');
             mobileNav.classList.add('top-32');
@@ -165,6 +165,19 @@
     document.addEventListener("scroll", handleScroll);
     handleScroll();
     muteHeader();
+
+    const scrollTo = (event) => {
+        event?.preventDefault();
+
+        if (typeof target === "string") {
+            target = select(target);
+        }
+
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
 </script>
 @yield('javascript')
 

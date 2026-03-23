@@ -25,14 +25,18 @@
         <div class="w-4/12 h-[1px] bg-slate-200"></div>
     </div>
 
-    <div class="flex items-center gap-4">
-        <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
-            <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Kontak Email :</label>
-            <input type="text" name="EMAIL" id="EMAIL" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('EMAIL') }}" required />
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+            <div class="text-xs text-slate-500 flex grow">Kontak Email</div>
+            <input type="text" name="EMAIL" id="EMAIL" class="text-sm text-slate-600 border rounded-lg outline-none w-5/12 h-12 px-4" value="{{ env('EMAIL') }}" required>
         </div>
-        <div class="group border focus-within:border-primary rounded-lg p-2 relative flex flex-col grow">
-            <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Kontak No. Telepon :</label>
-            <input type="text" name="PHONE" id="PHONE" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ env('PHONE') }}" required />
+        <div class="flex items-center gap-4">
+            <div class="text-xs text-slate-500 flex grow">Kontak No. Telepon</div>
+            <input type="text" name="PHONE" id="PHONE" class="text-sm text-slate-600 border rounded-lg outline-none w-5/12 h-12 px-4" value="{{ env('PHONE') }}" required>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="text-xs text-slate-500 flex grow">Jumlah Minimal Check-in Booth</div>
+            <input type="number" name="MINIMUM_BOOTH_SCAN" id="MINIMUM_BOOTH_SCAN" class="text-sm text-slate-600 border rounded-lg outline-none w-3/12 h-12 px-4" value="{{ env('MINIMUM_BOOTH_SCAN') }}" required>
         </div>
     </div>
 

@@ -26,6 +26,7 @@ use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\WaDevice;
+use App\Models\Winner;
 use App\Models\WsCategory;
 use App\Notifications\EmailChanged;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -33,6 +34,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -41,6 +43,43 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
+    public function spinnerStore(Request $request) {
+        $userID = $request->user_id;
+
+        Winner::create([
+            'user_id' => $userID
+        ]);
+
+        return redirect()->back();
+    }
+    public function spinnerRemove($userID) {
+        Winner::where('user_id', $userID)->delete();
+
+        return redirect()->back();
+    }
+    public function spinner() {
+        $minimumNumbers = (int)env('MINIMUM_BOOTH_SCAN');
+
+        $winners = Winner::with(['user'])->get();
+        $winnersID = $winners->pluck('user_id');
+
+        $users = User::whereHas('transaction', function ($query) {
+            // $query->where('payment_status', '*');
+        })
+        ->withCount([
+            'booth_checkins as booth_unique_count' => function ($query) {
+                $query->select(DB::raw('COUNT(DISTINCT booth_id)'));
+            }
+        ])
+        ->having('booth_unique_count', '>=', $minimumNumbers)
+        ->whereNotIn('id', $winnersID)
+        ->get();
+
+        return view('admin.spinner', [
+            'users' => $users,
+            'winners' => $winners,
+        ]);
+    }
     public function login(Request $request) {
         if ($request->method() == "GET") {
             $message = Session::get('message');
@@ -605,7 +644,7 @@ class AdminController extends Controller
                 'message' => $message,
             ]);
         } else {
-            $toChange = ['EVENT_NAME', 'EVENT_DATES', 'EVENT_PLACE', 'EMAIL', 'PHONE'];
+            $toChange = ['EVENT_NAME', 'EVENT_DATES', 'EVENT_PLACE', 'EMAIL', 'PHONE', 'MINIMUM_BOOTH_SCAN'];
             foreach ($toChange as $item) {
                 changeEnv($item, $request->{$item});
             }

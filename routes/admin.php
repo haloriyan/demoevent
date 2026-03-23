@@ -23,7 +23,11 @@ Route::group(['prefix' => "admin"], function () {
     });
 
     Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
+
     Route::group(['middleware' => "Admin"], function () {
+        Route::get('spinner', [AdminController::class, 'spinner'])->name('admin.spinner');
+        Route::post('spinner-store', [AdminController::class, 'spinnerStore'])->name('admin.spinner.store');
+        Route::get('spinner-remove/{userID}', [AdminController::class, 'spinnerRemove'])->name('admin.spinner.remove');
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         Route::group(['prefix' => "peserta"], function () {

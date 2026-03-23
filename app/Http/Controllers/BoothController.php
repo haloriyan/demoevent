@@ -38,6 +38,10 @@ class BoothController extends Controller
             return redirect()->route('booth.dashboard');
         }
     }
+    public function logout() {
+        $loggingOut = Auth::guard('booth')->logout();
+        return redirect()->route('booth.login');
+    }
     public function store(Request $request) {
         $cover = $request->file('cover');
 

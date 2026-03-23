@@ -217,6 +217,15 @@
             </div>
         </div>
     @endif
+
+    <a href="{{ route('admin.spinner') }}">
+        <div class="p-8 bg-primary text-white rounded-lg mt-4 flex items-center gap-3">
+            <ion-icon name="disc-outline" class="text-xl"></ion-icon>
+            <div class="flex flex-col gap-1 grow">
+                <div class="text-sm font-medium">Spinner Wheel</div>
+            </div>
+        </div>
+    </a>
 </div>
 
 <div class="absolute top-16 left-72 mobile:left-0 right-0 z-10" id="content">
