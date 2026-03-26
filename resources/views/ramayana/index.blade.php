@@ -39,8 +39,8 @@
         </div>
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
             Bagi peserta dan keluarga yang mendaftar diharapkan bersiap untuk penjemputan menuju lokasi pada; <br />
-            Tempat 	: TBA<br />
-            Waktu	: TBA
+            Tempat 	: {{ env('RAMAYANA_PLACE') }}<br />
+            Waktu	: {{ env('RAMAYANA_TIME') }}
         </div>
     </div>
 </div>
