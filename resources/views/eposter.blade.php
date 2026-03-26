@@ -1,0 +1,171 @@
+@extends('layouts.page')
+
+@section('title', "Panduan E-Poster")
+
+@section('head')
+<style>
+    .active {
+        background-color: #89251c;
+        color: #fff;
+    }
+</style>
+@endsection
+    
+@section('content')
+<div class="w-full bg-coklat-muda text-primary flex flex-col gap-8 justify-end p-20 mobile:p-8 py-24">
+    <div class="h-[10vh] mobile:h-[20vh]"></div>
+    <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
+    <div class="flex items-center gap-4">
+        <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-secondary bg-secondary hover:bg-orange-800 hover:border-secondary text-white">
+            KIRIM ABSTRAK
+        </a>
+    </div>
+    <div class="mobile:h-[10vh]"></div>
+</div>
+
+<section class="p-20 mobile:p-8 bg-slate-100 flex flex-col gap-8 items-center">
+    <h3 class="text-2xl text-slate-700 font-medium">Panduan <span class="text-secondary underline">Umum</span></h3>
+    <div class="w-8/12 mobile:w-full bg-white shadow-md rounded-lg p-10 flex gap-10">
+        <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
+            <li>Tema abstrak adalah <b>“ABDOMINAL IMAGING”</b>.</li>
+            <li>Abstrak yang dikirim tidak pernah dipublikasikan di acara ilmiah lainnya.</li>
+            <li>Penulis utama abstrak harus terdaftar sebagai peserta dan telah membayar. </li>
+            <li>Format abstrak : <b>file format DOCX</b>.</li>
+            <li>Batas waktu pengiriman abstrak melalui <b>website registrasi : 1 AGUSTUS 2026</b>. Abstrak yang dikirim setelah batas waktu tidak akan diproses.</li>
+            <li>Panitia akan menseleksi abstrak yang sesuai dengan tema acara.</li>
+            <li>Pengumuman penerimaan abstrak: <b>10 AGUSTUS 2026</b>. Akan dikirim melalui email peserta (mohon hubungi panitia jika Anda belum menerima konfirmasi).</li>
+            <li>Batas akhir pengiriman e-poster : <b>10 SEPTEMBER 2026</b>.</li>
+            <li>Format e-poster : ukuran <b>A4 dengan file format PDF</b>.</li>
+            <li>Peserta e-poster akan mendapatkan Sertifikat Partisipasi E-Poster.</li>
+            <li>Pemenang kompetisi E-Poster akan ditentukan berdasarkan Rapat Dewan Juri. Keputusan Juri bersifat mutlak dan tidak dapat diganggu gugat.</li>
+            <li>Pemenang e-poster akan diumumkan pada hari Sabtu, <b>10 OKTOBER 2026</b>, saat Acara Penutupan.</li>
+            <li>E-Poster dikirim melalui <b>website registrasi</b>.</li>
+        </div>
+    </div>
+</section>
+
+<section class="p-20 mobile:p-8 pt-0 bg-slate-100 flex flex-col gap-8 items-center">
+    <h3 class="text-2xl text-slate-700 font-medium">Panduan Penulisan <span class="text-secondary underline">Abstrak</span></h3>
+    <div class="w-full bg-white shadow-md rounded-lg p-10 flex mobile:flex-col gap-10">
+        <div class="w-3/12 mobile:w-full flex flex-col">
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_PanduanUmum" onclick="switchAbstrak('PanduanUmum')">
+                Panduan Umum
+            </div>
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_Research" onclick="switchAbstrak('Research')">
+                Research Abstract
+            </div>
+            <div class="rounded-full p-4 px-5 cursor-pointer text-sm font-medium AbstrakTab" id="AbstrakTab_CaseReport" onclick="switchAbstrak('CaseReport')">
+                Case Report
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 basis-32 grow">
+            <div class="AbstrakContent hidden" id="AbstrakContent_PanduanUmum">
+                <h4 class="text-xl text-slate-700 font-medium">Pedoman Penulisan Abstrak</h4>
+                <ol type="1" class="ps-4 text-sm text-slate-700 leading-8 mt-4 list-decimal">
+                    <li>Ditulis dalam bahasa Inggris, menggunakan font Arial ukuran 11pt dan spasi tunggal.</li>
+                    <li>Judul abstrak maksimal 20 kata. Isi abstrak maksimal 300 kata.</li>
+                    <li>Penulis utama dicantumkan pertama dan digarisbawahi sebagai presenter.</li>
+                    <li>Detail afiliasi mencakup departemen, institusi/rumah sakit, kota/provinsi, dan negara.</li>
+                    <li>Abstrak hanya boleh berisi teks. Tabel, grafik, atau diagram TIDAK diperkenankan untuk dimasukkan ke dalam abstrak.</li>
+                    <li>Abstrak yang dikirimkan dapat berupa Research abstract (penelitian) atau Case Report (laporan kasus).</li>
+                    <li>Abstrak akan ditinjau oleh Komite Ilmiah berdasarkan kriteria berikut: kualitas, kejelasan, relevansi, dan signifikansi.</li>
+                </ol>
+            </div>
+            <div class="AbstrakContent hidden" id="AbstrakContent_Research">
+                <h4 class="text-xl text-slate-700 font-medium">Research Abstract (Penelitian)</h4>
+                <div class="text-sm text-slate-600 leading-8 mt-2">
+                    terdiri dari empat paragraf utama yang menjelaskan secara singkat hal berikut :
+                </div>
+                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
+                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Menyatakan secara singkat mengapa penelitian ini dilakukan.</li>
+                    <li><span class="font-medium text-slate-800">METHOD</span> : Sebutkan lokasi, jumlah sampel, tes utama yang dilakukan, dan jenis analisis statistik yang digunakan..</li>
+                    <li><span class="font-medium text-slate-800">RESULT</span> : Konfirmasi atau bantah hipotesis yang ada, didukung dengan data statistik jika diperlukan.</li>
+                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Nyatakan dampak dari studi ini terhadap manajemen pasien di masa depan atau pemahaman terhadap proses dasar.</li>
+                </div>
+            </div>
+            <div class="AbstrakContent hidden" id="AbstrakContent_CaseReport">
+                <h4 class="text-xl text-slate-700 font-medium">Case Report Abstract (Laporan Kasus)</h4>
+                <div class="text-sm text-slate-600 leading-8 mt-2">
+                    Isi Case Report Abstract harus terdiri dari :
+                </div>
+                <div class="text-sm text-slate-600 leading-8 mt-4 ps-4">
+                    <li><span class="font-medium text-slate-800">BACKGROUND / OBJECTIVE</span> : Menyatakan secara singkat mengapa kasus ini penting untuk dilaporkan, kebaruan (novelty) kasus ini, serta implikasi klinisnya.</li>
+                    <li><span class="font-medium text-slate-800">CASE</span> : Deskripsi atau gambaran kasus.</li>
+                    <li><span class="font-medium text-slate-800">CONCLUSION</span> : Ringkasan implikasi klinis dari kasus ini, saran untuk aplikasi klinis, tindakan pencegahan yang perlu diambil, atau topik penelitian lebih lanjut yang diperlukan.</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="p-20 mobile:p-8 bg-slate-100">
+    <div class="rounded-xl text-primary bg-alpha w-full flex flex-col gap-8 p-20 mobile:p-8">
+        <div class="flex mobile:flex-col items-center gap-8">
+            <div class="flex flex-col gap-4 grow">
+                <h3 class="text-4xl mobile:text-xl font-bold">Tulis Karya Ilmiah dan Buat Poster</h3>
+                <div class="font-medium mobile:text-xs">Ikuti kompetisi karya tulis ilmiah dalam topik Kesehatan dan buat poster kampanye</div>
+            </div>
+            <a href="{{ route('submission') }}" class="bg-secondary text-white rounded-full p-3 px-8 font-medium text-sm">
+                KIRIM ABSTRAK
+            </a>
+        </div>
+
+        <div class="overflow-x-scroll flex mt-4">
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Batas Pengiriman Abstrak</h4>
+                <div class="text-xs">1 Agustus 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengumuman Penerimaan Abstrak</h4>
+                <div class="text-xs">10 Agustus 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Batas Pengiriman E-Poster</h4>
+                <div class="text-xs">10 September 2026</div>
+            </div>
+            <div class="flex flex-col gap-2 basis-32 mobile:basis-72 mobile:min-w-56 grow">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                    <div class="flex grow h-1 bg-white bg-opacity-0"></div>
+                </div>
+                <h4 class="mt-4 mobile:text-sm">Pengumuman Pemenang</h4>
+                <div class="text-xs">10 Oktober 2026</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('partials.footer')
+@endsection
+
+@section('javascript')
+<script>
+    const toggler = (toHide, toShow, classToSwitch = 'hidden', revert = false) => {
+        if (revert) {
+            selectAll(toHide).forEach(item => item.classList.add(classToSwitch));
+            select(toShow).classList.remove(classToSwitch);
+        } else {
+            selectAll(toHide).forEach(item => item.classList.remove(classToSwitch));
+            select(toShow).classList.add(classToSwitch);
+        }
+    }
+    const switchAbstrak = target => {
+        toggler(".AbstrakTab", `#AbstrakTab_${target}`, 'active');
+        toggler(".AbstrakContent", `#AbstrakContent_${target}`, 'hidden', true);
+    }
+
+    switchAbstrak("PanduanUmum");
+</script>
+@endsection

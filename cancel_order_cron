@@ -1,0 +1,6 @@
+To run :
+0 */3 * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
+
+To check cron availability :
+sudo systemctl enable cron
+sudo systemctl start cron
