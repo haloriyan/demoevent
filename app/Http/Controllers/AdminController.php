@@ -412,9 +412,11 @@ class AdminController extends Controller
         $transaction = null;
         $scan = null;
         $user = null;
+        $users = [];
 
         if ($request->name != "") {
-            $user = User::where('name', 'LIKE', '%'.$request->name.'%')->first();
+            $users = User::where('name', 'LIKE', '%'.$request->name.'%')->get();
+            $user = $users[0];
             $trx = Transaction::where('user_id', @$user->id);
             $transaction = $trx->with(['user', 'ticket'])->first();
         } else {
@@ -424,7 +426,6 @@ class AdminController extends Controller
         }
 
         if ($user == null || $transaction == null) {
-            // return redirect()->back()->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
             return redirect()->route('admin.dashboard')->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
         }
         
@@ -442,8 +443,9 @@ class AdminController extends Controller
 
             if ($request->confirm != "y") {
                 return view('admin.scan', [
+                    'users' => $users,
                     'trx' => $transaction,
-                    'p' => $p ?? base64_encode(json_encode([
+                    'p' => base64_encode(json_encode($p)) ?? base64_encode(json_encode([
                         'trx_id' => $transaction->id,
                         'user_id' => $user->id,
                     ]))
@@ -483,7 +485,7 @@ class AdminController extends Controller
                     'message' => $message
                 ]);
             } else {
-                return redirect()->back()->withErrors([
+                return redirect()->route('admin.dashboard')->withErrors([
                     $message,
                 ]);
             }

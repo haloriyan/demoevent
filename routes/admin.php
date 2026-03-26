@@ -19,7 +19,8 @@ Route::group(['prefix' => "fo"], function () {
 Route::group(['prefix' => "admin"], function () {
     Route::match(['get', 'post'], 'login', [AdminController::class, 'login'])->name('admin.login');
     Route::group(['middleware' => "Cors"], function () {
-        Route::post('scan', [AdminController::class, 'scan'])->name('admin.scan');
+        Route::match(['get', 'post'], 'scan', [AdminController::class, 'scan'])->name('admin.scan');
+        Route::post('scan-confirm', [AdminController::class, 'scanConfirm'])->name('admin.scan.confirm');
     });
 
     Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');

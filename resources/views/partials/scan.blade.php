@@ -1,5 +1,5 @@
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-30" id="ScanModal">
-    <form action="{{ route('admin.scan') }}" method="POST" class="bg-white shadow-lg rounded-lg p-10 w-4/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
+    <form action="{{ route('admin.scan') }}" method="GET" class="bg-white shadow-lg rounded-lg p-10 w-4/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
         @csrf
         <div class="flex items-center gap-4 mb-4">
             <h3 class="text-lg text-slate-700 font-medium flex grow">Scan QR</h3>

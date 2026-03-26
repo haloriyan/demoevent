@@ -61,6 +61,17 @@
                 </button>
             </div>
         </form>
+
+        @if (count($users) > 1)
+            <div class="text-sm text-slate-500">Hasil pencarian lainnya</div>
+            <div class="flex flex-wrap items-center gap-4">
+                @foreach ($users as $u => $theUser)
+                    <a href="{{ route('admin.scan', ['name' => $theUser->name]) }}" class="p-2 px-4 rounded-full border border-primary text-xs text-primary hover:bg-primary hover:text-white" onclick="ClickLink(this, event)">
+                        {{ $theUser->name }}
+                    </a>
+                @endforeach
+            </div>
+        @endif
     </div>
 </div>
 
@@ -69,6 +80,14 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 @yield('javascript')
+<script>
+    const ClickLink = (link, event) => {
+        setTimeout(() => {
+            window.location.href = link.href;
+        }, 30);
+        event.preventDefault();
+    }
+</script>
 
 </body>
 </html>
