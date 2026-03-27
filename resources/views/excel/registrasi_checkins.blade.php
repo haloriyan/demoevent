@@ -16,7 +16,7 @@
     <tbody>
         @foreach ($checkins as $check)
             <tr>
-                <td>{{ $check->created_at }}</td>
+                <td>{{ $check->updated_at }}</td>
                 <td>{{ $check->user->name }}</td>
                 <td>{{ $check->user->instansi ?? '-' }}</td>
                 <td>{{ $check->ticket->name }}</td>

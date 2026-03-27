@@ -41,6 +41,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
+use function Symfony\Component\Clock\now;
+
 class AdminController extends Controller
 {
     public function spinnerStore(Request $request) {
@@ -407,7 +409,7 @@ class AdminController extends Controller
 
     public function scan(Request $request) {
         $p = json_decode(base64_decode($request->p));
-
+        // return $request->p;
         $trx = null;
         $transaction = null;
         $scan = null;
@@ -443,9 +445,10 @@ class AdminController extends Controller
 
             if ($request->confirm != "y") {
                 return view('admin.scan', [
+                    'request' => $request,
                     'users' => $users,
                     'trx' => $transaction,
-                    'p' => base64_encode(json_encode($p)) ?? base64_encode(json_encode([
+                    'p' => $p != null ? base64_encode(json_encode($p)) : base64_encode(json_encode([
                         'trx_id' => $transaction->id,
                         'user_id' => $user->id,
                     ]))
@@ -453,6 +456,10 @@ class AdminController extends Controller
             }
 
             if ($hasCheckedIn) {
+                $sc->update([
+                    'updated_at' => now()
+                ]);
+
                 $scan = $sc->with(['user', 'transaction', 'ticket'])->first();
             } else {
                 $scan = Scan::create([
@@ -469,7 +476,7 @@ class AdminController extends Controller
                     'message' => "Berhasil scan"
                 ]);
             } else {
-                return redirect()->route('admin.dashboard')->with([
+                return redirect()->route('admin.checkin.registrasi')->with([
                     'message' => "Berhasil scan"
                 ]);
             }

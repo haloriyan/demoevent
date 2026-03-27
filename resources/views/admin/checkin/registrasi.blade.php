@@ -26,7 +26,7 @@
                 @foreach ($checkins as $check)
                     <tr class="hover:bg-slate-100 transition-colors">
                         <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $check->created_at }}
+                            {{ $check->updated_at }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $check->user->name }}

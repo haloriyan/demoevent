@@ -29,6 +29,7 @@
             @csrf
             <input type="hidden" name="confirm" value="y">
             <input type="hidden" name="p" value="{{ $p }}">
+            <input type="hidden" name="name" value="{{ $request->name }}">
             <h3 class="text-xl text-slate-700 font-medium">Konfirmasi Scan</h3>
 
             <div class="mt-2">
