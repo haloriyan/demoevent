@@ -83,7 +83,7 @@
 
 <section id="spakers" class="bg-primary p-20 mobile:p-8 flex flex-col gap-8">
     <div class="flex items-center gap-10 text-white">
-        <h3 class="text-4xl font-bold"><span class="text-coklat-muda underline">PEMBICARA</span> SPEKTAKULER ACARA INI</h3>
+        <h3 class="text-4xl font-bold"><span class="text-coklat-muda underline">PEMBICARA</span> - INSTRUKTUR - MODERATOR</h3>
     </div>
 
     <div class="grid grid-cols-4 mobile:grid-cols-2 gap-8 mobile:gap-4">
@@ -100,7 +100,7 @@
 </section>
 
 <section id="schedules" class="p-20 mobile:p-8 flex flex-col gap-8 items-center">
-    <h3 class="text-4xl font-bold"><span class="text-secondary underline">Programs</span> Acara</h3>
+    <h3 class="text-4xl font-bold"><span class="text-secondary underline">Programs</span></h3>
     <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
         @foreach ($schedules as $schedule)
             <div class="rounded-lg border">
