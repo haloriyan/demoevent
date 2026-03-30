@@ -445,7 +445,7 @@ class AdminController extends Controller
 
             if ($request->confirm != "y") {
                 if (count($users) > 1) {
-                    $users = array_splice(0, 1);
+                    $users = array_splice($users, 0, 1);
                 }
                 return view('admin.scan', [
                     'request' => $request,
