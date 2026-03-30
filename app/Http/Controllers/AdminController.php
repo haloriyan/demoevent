@@ -317,7 +317,7 @@ class AdminController extends Controller
         $me = me();
         $message = Session::get('message');
 
-        $check = Scan::orderBy('created_at', 'DESC')->with(['user', 'transaction', 'ticket']);
+        $check = Scan::orderBy('updated_at', 'DESC')->with(['user', 'transaction', 'ticket']);
         if ($request->download == 1) {
             $filename = "Data_Checkin_Registrasi-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
             $checkins = $check->get();
@@ -444,6 +444,9 @@ class AdminController extends Controller
         ) {
 
             if ($request->confirm != "y") {
+                if (count($users) > 1) {
+                    $users = array_splice(0, 1);
+                }
                 return view('admin.scan', [
                     'request' => $request,
                     'users' => $users,
