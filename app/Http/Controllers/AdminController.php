@@ -10,6 +10,7 @@ use App\Exports\SubmissionExport;
 use App\Mail\EmailChanged as MailEmailChanged;
 use App\Mail\PaymentConfirmed;
 use App\Mail\RamayanaCreated;
+use App\Mail\Webmail;
 use App\Models\Admin;
 use App\Models\Booth;
 use App\Models\BoothCheckin;
@@ -39,7 +40,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Webklex\IMAP\Client as ClientCore;
+use Webklex\PHPIMAP\Client;
+use Webklex\PHPIMAP\ClientManager;
+use Webklex\PHPIMAP\Config;
+use Symfony\Component\Mime\Email;
 
 use function Symfony\Component\Clock\now;
 
@@ -409,7 +416,6 @@ class AdminController extends Controller
 
     public function scan(Request $request) {
         $p = json_decode(base64_decode($request->p));
-        // return $request->p;
         $trx = null;
         $transaction = null;
         $scan = null;
@@ -594,6 +600,244 @@ class AdminController extends Controller
                 'message' => "Berhasil menyimpan perubahan"
             ]);
         }
+    }
+    public function parseMailHeader($raw) {
+        $headers = [];
+        $lines = preg_split("/\r\n|\n|\r/", $raw);
+
+        $currentKey = null;
+
+        foreach ($lines as $line) {
+            // Skip empty lines
+            if (trim($line) === '') continue;
+
+            // Check if this is a continuation line (starts with space or tab)
+            if (preg_match('/^\s+/', $line) && $currentKey !== null) {
+                $headers[$currentKey] .= ' ' . trim($line);
+                continue;
+            }
+
+            // Split only on FIRST colon
+            $parts = explode(':', $line, 2);
+
+            if (count($parts) === 2) {
+                $key = trim($parts[0]);
+                $value = trim($parts[1]);
+
+                $headers[$key] = $value;
+                $currentKey = $key;
+            }
+        }
+
+        return $headers;
+    }
+    public function mailInboxFetch(Request $request) {
+        $cfg = config('imap.accounts.default');
+
+        $cm = new ClientManager(config('imap'));
+        $client = $cm->make([
+            'host' => $cfg['host'],
+            'port' => $cfg['port'],
+            'encryption' => $cfg['encryption'],
+            'validate_cert' => false,
+            'username' => env('IMAP_USERNAME'),
+            'password' => env('IMAP_PASSWORD'),
+            'protocol' => 'imap',
+        ]);
+        $client->connect();
+        $canNext = false;
+        
+        $page = $request->page ?? 1;
+        $perPage = 10;
+        $targetEmail = "pitperabdin";
+
+        $folder = $client->getFolder('INBOX');
+        $messages = [];
+        $messagesRaw = $folder->messages()
+            ->all()
+            ->setFetchOrder('desc')
+            ->limit($perPage, $page)
+            ->get();
+
+        foreach ($messagesRaw as $msg) {
+            $raw = $msg->header->raw;
+            $headers = $this->parseMailHeader($raw);
+
+            if (strpos($headers['Original-recipient'], $targetEmail)) {
+                $messages[] = [
+                    'headers' => $this->parseMailHeader($raw),
+                    'bodies' => $msg->bodies,
+                    'attachments' => $msg->attachments,
+                    'flags' => $msg->flags,
+                ];
+            }
+        }
+
+        $messages = array_reverse($messages);
+        if (count($messages) == $perPage) {
+            $canNext = true;
+        }
+
+        return response()->json([
+            'messages' => $messages,
+            'can_next' => $canNext
+        ]);
+    }
+    public function mailOutboxFetch(Request $request) {
+        $cfg = config('imap.accounts.default');
+
+        $cm = new ClientManager(config('imap'));
+        $client = $cm->make([
+            'host' => $cfg['host'],
+            'port' => $cfg['port'],
+            'encryption' => $cfg['encryption'],
+            'validate_cert' => false,
+            'username' => env('IMAP_USERNAME'),
+            'password' => env('IMAP_PASSWORD'),
+            'protocol' => 'imap',
+        ]);
+        $client->connect();
+        $canNext = false;
+        
+        $page = $request->page ?? 1;
+        $perPage = 10;
+        $targetEmail = "pitperabdin";
+        $folders = $client->getFolders();
+
+        $folder = $client->getFolder('Sent Messages');
+        $messages = [];
+        $messagesRaw = $folder->messages()
+            ->all()
+            ->setFetchOrder('desc')
+            ->limit($perPage, $page)
+            ->get();
+
+        foreach ($messagesRaw as $msg) {
+            $raw = $msg->header->raw;
+            $headers = $this->parseMailHeader($raw);
+
+            if (strpos($headers['From'], $targetEmail)) {
+                $messages[] = [
+                    'headers' => $this->parseMailHeader($raw),
+                    'bodies' => $msg->bodies,
+                    'attachments' => $msg->attachments,
+                    'flags' => $msg->flags,
+                ];
+            }
+        }
+
+        $messages = array_reverse($messages);
+        if (count($messages) == $perPage) {
+            $canNext = true;
+        }
+
+        return response()->json([
+            'messages' => $messages,
+            'can_next' => $canNext
+        ]);
+    }
+    public function mailInbox(Request $request) {
+        $me = me('admin');
+        $message = Session::get('message');
+
+        return view('admin.mail.inbox', [
+            'me' => $me,
+            'message' => $message,
+        ]);
+    }
+    public function mailOutbox(Request $request) {
+        $me = me('admin');
+        $message = Session::get('message');
+
+        return view('admin.mail.outbox', [
+            'me' => $me,
+            'message' => $message,
+        ]);
+    }
+    public function mailCompose(Request $request) {
+        return view('admin.mail.compose');
+    }
+
+    public function mailComposeSend(Request $request) {
+
+        $body = $request->body;
+        $bodies = explode(PHP_EOL, $body);
+        $attachments = [];
+
+        // 📎 Upload attachments
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $attach) {
+                $fileName = time() . '_' . $attach->getClientOriginalName();
+                $path = public_path('storage/webmail_attachments/');
+
+                $attach->move($path, $fileName);
+                $attachments[] = $path . $fileName;
+            }
+        }
+
+        $htmlContent = view('emails.webmail', [
+            'bodies' => $bodies,
+            'subject' => $request->subject,
+            'uris' => $attachments
+        ])->render();
+
+        $plainText = implode("\n", $bodies);
+
+        // 🧱 Build RAW MIME (for IMAP append)
+        $email = (new Email())
+            ->from(config('mail.from.address'))
+            ->to($request->to)
+            ->subject($request->subject)
+            ->html($htmlContent, 'text/html')
+            ->text($plainText, 'text/plain');
+
+        foreach ($attachments as $file) {
+            $email->attachFromPath($file);
+        }
+
+        $rawMime = $email->toString();
+
+        // 📤 Send via SMTP (Laravel Mailable)
+        Mail::to($request->to)->send(new Webmail([
+            'bodies' => $bodies,
+            'subject' => $request->subject,
+            'uris' => $attachments
+        ]));
+
+        // 📥 Append to iCloud "Sent Messages"
+        try {
+            $cfg = config('imap.accounts.default');
+
+            $cm = new ClientManager(config('imap'));
+            $client = $cm->make([
+                'host' => $cfg['host'],
+                'port' => $cfg['port'],
+                'encryption' => $cfg['encryption'],
+                'validate_cert' => false,
+                'username' => env('IMAP_USERNAME'),
+                'password' => env('IMAP_PASSWORD'),
+                'protocol' => 'imap',
+            ]);
+            $client->connect();
+
+            $folder = $client->getFolder('Sent Messages');
+
+            $folder->appendMessage($rawMime, ['Seen']);
+
+        } catch (\Exception $e) {
+            Log::error('IMAP append failed: ' . $e->getMessage());
+        }
+
+        // 🧹 Delete uploaded attachments
+        foreach ($attachments as $file) {
+            if (file_exists($file)) {
+                Storage::delete('public/storage/' . $attach);
+            }
+        }
+
+        return redirect()->route('admin.mail.outbox')->with([
+            'message' => "Email berhasil dikirim ke " . $request->to,
+        ]);
     }
 
     public function store(Request $request) {

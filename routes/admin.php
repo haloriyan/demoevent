@@ -91,6 +91,14 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('booth', [AdminController::class, 'boothCheckin'])->name('admin.checkin.booth');
         });
 
+        Route::group(['prefix' => "mail"], function () {
+            Route::get('inbox', [AdminController::class, 'mailInbox'])->name('admin.mail.inbox');
+            Route::get('outbox', [AdminController::class, 'mailOutbox'])->name('admin.mail.outbox');
+            Route::get('compose', [AdminController::class, 'mailCompose'])->name('admin.mail.compose');
+            Route::post('compose/send', [AdminController::class, 'mailComposeSend'])->name('admin.mail.send');
+            Route::get('{tab}', [AdminController::class, 'mail']);
+        });
+
         Route::group(['prefix' => "handbook"], function () {
             Route::group(['prefix' => "category"], function () {
                 Route::post('{id}/update', [HandbookController::class, 'updateCategory'])->name('admin.handbook.category.update');

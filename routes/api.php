@@ -17,6 +17,8 @@ Route::get('speakers/search', [SpeakerController::class, 'search']);
 
 Route::post('handbooks', [AdminController::class, 'handbook']);
 Route::group(['middleware' => "Cors"], function () {
+    Route::get('mail/inbox', [AdminController::class, 'mailInboxFetch']);
+    Route::get('mail/outbox', [AdminController::class, 'mailOutboxFetch']);
     Route::get('pdf/{filename}', [UserController::class, 'streamPdf']);
 });
 

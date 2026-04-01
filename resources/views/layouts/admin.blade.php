@@ -174,6 +174,27 @@
         <ion-icon name="volume-high-outline"></ion-icon>
         <div class="text-sm flex">Broadcast</div>
     </a>
+    <div class="group relative">
+        <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'mail' ? 'bg-primary-transparent text-primary' : '' }}">
+            <div class="h-12 w-1 {{ $routes[1] == 'mail' ? 'bg-primary' : 'bg-white' }}"></div>
+            <ion-icon name="mail-outline" class="{{ $routes[1] == 'mail' ? 'text-primary' : '' }}"></ion-icon>
+            <div class="text-sm flex grow {{ $routes[1] == 'mail' ? 'text-primary' : '' }}">Webmail</div>
+            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
+        </a>
+        <div class="{{ $routes[1] == 'mail' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+            <a href="{{ route('admin.mail.inbox') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}">Inbox</div>
+            </a>
+            <a href="{{ route('admin.mail.outbox') }}" class="flex items-center gap-4 text-slate-500">
+                <div class="h-10 w-1 bg-white"></div>
+                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}">Outbox</div>
+            </a>
+        </div>
+    </div>
+
     <a href="{{ route('admin.submission') }}" class="flex items-center gap-4 {{ in_array('submission', $routes) ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
         <div class="h-12 w-1 {{ in_array('submission', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
         <ion-icon name="file-tray-full-outline"></ion-icon>
@@ -247,6 +268,31 @@
     const sidebar = select("#sidebar");
     const content = select("#content");
     // const ProfileMenu = select("#ProfileMenu");
+
+    const Initial = (name) => {
+        if (!name || typeof name === 'undefined') {
+            return null;
+        }
+        
+        name = name.replace(/<[^>]*>/g, '');
+        name = name.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+
+        if (!name) return null;
+
+        const words = name.split(/\s+/);
+
+        if (words.length === 1) {
+            return (
+                words[0][0].toUpperCase() +
+                (words[0][1] ? words[0][1].toUpperCase() : '')
+            );
+        } else {
+            return (
+                words[0][0].toUpperCase() +
+                words[words.length - 1][0].toUpperCase()
+            );
+        }
+    };
 
     // const randomString = (length) => Array.from({ length }, () => Math.random().toString(36)[2]).join('');
     const randomString = (length) => Array.from({ length }, (_, i) => i < length / 2 ? String.fromCharCode(97 + Math.floor(Math.random() * 26)) : Math.floor(Math.random() * 10)).join('');
