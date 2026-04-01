@@ -174,26 +174,29 @@
         <ion-icon name="volume-high-outline"></ion-icon>
         <div class="text-sm flex">Broadcast</div>
     </a>
-    <div class="group relative">
-        <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'mail' ? 'bg-primary-transparent text-primary' : '' }}">
-            <div class="h-12 w-1 {{ $routes[1] == 'mail' ? 'bg-primary' : 'bg-white' }}"></div>
-            <ion-icon name="mail-outline" class="{{ $routes[1] == 'mail' ? 'text-primary' : '' }}"></ion-icon>
-            <div class="text-sm flex grow {{ $routes[1] == 'mail' ? 'text-primary' : '' }}">Webmail</div>
-            <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
-        </a>
-        <div class="{{ $routes[1] == 'mail' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
-            <a href="{{ route('admin.mail.inbox') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}">Inbox</div>
+
+    @if (in_array($role, ['admin']))
+        <div class="group relative">
+            <a href="#" class="flex items-center gap-4 text-slate-500 {{ $routes[1] == 'mail' ? 'bg-primary-transparent text-primary' : '' }}">
+                <div class="h-12 w-1 {{ $routes[1] == 'mail' ? 'bg-primary' : 'bg-white' }}"></div>
+                <ion-icon name="mail-outline" class="{{ $routes[1] == 'mail' ? 'text-primary' : '' }}"></ion-icon>
+                <div class="text-sm flex grow {{ $routes[1] == 'mail' ? 'text-primary' : '' }}">Webmail</div>
+                <ion-icon name="chevron-down-outline" class="me-4"></ion-icon>
             </a>
-            <a href="{{ route('admin.mail.outbox') }}" class="flex items-center gap-4 text-slate-500">
-                <div class="h-10 w-1 bg-white"></div>
-                <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}"></ion-icon>
-                <div class="text-sm flex grow {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}">Outbox</div>
-            </a>
+            <div class="{{ $routes[1] == 'mail' ? 'flex' : 'hidden' }} group-hover:flex flex-col mt-2 mb-2">
+                <a href="{{ route('admin.mail.inbox') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'inbox' ? 'text-primary' : '' }}">Inbox</div>
+                </a>
+                <a href="{{ route('admin.mail.outbox') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[2] == 'outbox' ? 'text-primary' : '' }}">Outbox</div>
+                </a>
+            </div>
         </div>
-    </div>
+    @endif
 
     <a href="{{ route('admin.submission') }}" class="flex items-center gap-4 {{ in_array('submission', $routes) ? 'bg-primary-transparent text-primary' : 'text-slate-500' }}">
         <div class="h-12 w-1 {{ in_array('submission', $routes) ? 'bg-primary' : 'bg-white' }}"></div>
