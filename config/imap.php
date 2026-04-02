@@ -131,12 +131,12 @@ return [
     */
     'options' => [
         'delimiter' => '/',
-        'fetch' => \Webklex\PHPIMAP\IMAP::FT_PEEK,
+        'fetch' => \Webklex\PHPIMAP\IMAP::FT_UID,
         'sequence' => \Webklex\PHPIMAP\IMAP::ST_UID,
         'fetch_body' => true,
         'fetch_flags' => true,
         'soft_fail' => false,
-        'rfc822' => true,
+        'rfc822' => false,
         'debug' => false,
         'uid_cache' => true,
         // 'fallback_date' => "01.01.1970 00:00:00",

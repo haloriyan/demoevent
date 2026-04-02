@@ -281,10 +281,10 @@ class UserController extends Controller
             } else {
                 $request->validate([
                     'email' => "unique:users",
-                    'whatsapp' => "unique:users"
+                    'nik' => "unique:users"
                 ], [
                     'email.unique' => "Alamat email telah digunakan. Mohon gunakan yang lain",
-                    'whatsapp.unique' => "No. Whatsapp telah digunakan. Mohon gunakan yang lain",
+                    'nik.unique' => "NIK telah digunakan.",
                 ]);
 
                 $payload['nik'] = $request->nik;

@@ -12,6 +12,8 @@
         <div id="body" class="max-h-[450px] mobile:max-h-[375px] overflow-y-auto"></div>
         {{-- whitespace-pre-wrap break-words  --}}
 
+        <div id="AttachmentsArea" class="flex flex-col gap-2"></div>
+
         <div class="flex items-center justify-end gap-4 mt-4">
             <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#MailContent')">Tutup</button>
         </div>

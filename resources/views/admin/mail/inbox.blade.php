@@ -23,7 +23,12 @@
 @endsection
 
 @section('javascript')
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
 <script>
+    dayjs.extend(dayjs_plugin_customParseFormat);
+    dayjs.extend(dayjs_plugin_relativeTime);
     let canNext = true;
     let page = 1;
     const LoadingArea = select("#LoadingArea");
@@ -45,15 +50,56 @@
             email: match[2] ? match[2].trim() : null
         };
     }
+    function downloadAttachment(base64Data, filename, mimeType) {
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = Array.from(byteCharacters, c => c.charCodeAt(0));
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: mimeType });
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(url); // cleanup
+    }
+
     const expand = (msg) => {
         let headers = msg.headers;
         let bodies = msg.bodies;
         let from = parseFromHeader(headers.From);
+        
 
         select("#MailContent #initial").innerHTML = Initial(from.name);
         select("#MailContent #from_name").innerHTML = from.name;
         select("#MailContent #from_email").innerHTML = from.email;
-        select("#MailContent #body").innerHTML = bodies.html ?? bodies.text;
+        select("#MailContent #body").innerHTML = bodies.html ?? bodies.plain;
+
+        if (msg.attachments.length > 0) {
+            select("#AttachmentsArea").classList.remove('hidden');
+            select("#AttachmentsArea").innerHTML = "";
+            msg.attachments.forEach((file, f) => {
+                let attach = document.createElement('div');
+                attach.classList.add('cursor-pointer', 'bg-slate-200', 'p-4', 'rounded-lg', 'flex', 'items-center', 'gap-4');
+                attach.innerHTML = `<div class="w-10 h-10 rounded-lg bg-primary text-white text-[8px] font-bold flex items-center justify-center">${file.filename.split(".").pop().toUpperCase()}</div>
+                <div class="flex flex-col gap-1 grow">
+                    <div class="text-xs text-slate-700 font-medium">${file.filename}</div>
+                    <div class="text-xs text-slate-500">${Math.floor(file.size / 1024)} KB</div>
+                </div>`;
+                attach.addEventListener("click", () => {
+                    downloadAttachment(
+                        file.data,      // base64 string from API
+                        file.filename,  // "invoice.pdf"
+                        file.mimeType   // "pdf" — see note below
+                    );
+                });
+
+                select("#AttachmentsArea").appendChild(attach);
+            })
+        } else {
+            select("#AttachmentsArea").classList.add('hidden');
+        }
 
         toggleHidden("#MailContent");
     }
@@ -71,6 +117,7 @@
         LoadingArea.classList.add('hidden');
 
         messages.forEach(msg => {
+            let parsedTimestamp = dayjs(msg.headers.Date, "ddd, D MMM YYYY HH:mm:ss ZZ");
             let item = document.createElement("div");
             // <div class="item flex items-center gap-4 p-4 px-8 hover:bg-slate-200 cursor-pointer ">
             item.classList.add('item', 'flex', 'items-center', 'gap-4', 'p-4', 'px-8', 'hover:bg-slate-200', 'cursor-pointer');
@@ -78,10 +125,10 @@
                 ${Initial(msg.headers.From)}
             </div>
             <div class="flex flex-col gap-1 grow">
-                <div class="text-sm text-slate-700 font-medium">${msg.headers.Subject}</div>
-                <div class="text-xs text-slate-500">${msg.bodies.html ?? msg.bodies.text}</div>
+                <div class="text-xs text-slate-700 font-medium">${msg.headers.Subject}</div>
+                <div class="text-xs text-slate-500">${msg.bodies.plain.substr(0, 100)}...</div>
             </div>
-            <div class="text-xs text-slate-500">${msg.headers.Date.substr(0, 100)}...</div>`;
+            <div class="text-xs text-slate-500">${parsedTimestamp.fromNow()}</div>`;
             item.addEventListener("click", () => {
                 expand(msg);
             });
