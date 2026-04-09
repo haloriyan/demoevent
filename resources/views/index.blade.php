@@ -57,7 +57,7 @@
 <section class="p-20 mobile:p-8 flex mobile:flex-col gap-10" id="about">
     {{-- <img src="/images/doctors.jpg" alt="dokter" class="w-5/12 mobile:w-full rounded-lg object-cover" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;"> --}}
     <div class="w-5/12 mobile:w-full flex flex-col gap-4 items-center text-center">
-        <img src="/images/Bambang2.jpg" alt="Bambang Purwanto Utomo" class="w-7/12 mobile:w-10/12 rounded-lg" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
+        <img src="/images/ketua_panitia.jpeg" alt="Bambang Purwanto Utomo" class="w-7/12 mobile:w-10/12 rounded-lg" style="border-top-right-radius: 80px;border-bottom-left-radius: 80px;">
         <h3 class="text-3xl text-slate-700 font-bold mt-4">Bambang Purwanto Utomo</h3>
         <div class="text-slate-600">Ketua Panitia</div>
     </div>
