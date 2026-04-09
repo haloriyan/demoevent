@@ -5,6 +5,21 @@
 @section('content')
 <div class="p-10 flex flex-col gap-8">
     @include('partials.flash_message')
+    <div class="flex items-center gap-4">
+        <div class="text-sm text-slate-700">Jenis Tiket</div>
+        <a href="{{ route('admin.workshop') }}" class="p-2 px-5 rounded-full text-sm {{ $request->ticket_category == '' ? 'bg-primary text-white' : 'text-primary bg-primary bg-opacity-25' }}">
+            Semua
+        </a>
+        @foreach ($ticketCategories as $cat)
+            @php
+                $isSelected = $request->ticket_category == $cat->id;
+            @endphp
+            <a href="?ticket_category={{ $cat->id }}" class="p-2 px-5 rounded-full text-sm {{ $isSelected ? 'bg-primary text-white' : 'text-primary bg-primary bg-opacity-25' }}">
+                {{ $cat->name }}
+            </a>
+        @endforeach
+    </div>
+
     <div class="grid grid-cols-2 gap-10">
         @foreach ($categories as $cat)
             <div class="flex flex-col gap-4">

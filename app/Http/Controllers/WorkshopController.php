@@ -10,6 +10,7 @@ class WorkshopController extends Controller
     public function store(Request $request) {
         $ws = Workshop::create([
             'category_id' => $request->category_id,
+            'ticket_category_id' => $request->ticket_category_id,
             'title' => $request->title,
             'count' => 0,
             'quantity' => $request->quantity,

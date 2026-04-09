@@ -9,8 +9,8 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-6">
-            @foreach ($workshops as $cat)
+        <div class="grid grid-cols-2 gap-6" id="WSCategoryRender">
+            {{-- @foreach ($workshops as $cat)
                 <div 
                     class="flex flex-col gap-4" 
                     data-category="{{ $cat->id }}"
@@ -33,7 +33,7 @@
                     @endforeach
 
                 </div>
-            @endforeach
+            @endforeach --}}
         </div>
 
         <div class="flex items-center justify-end gap-4 mt-4 hidden" id="WSPickerSubmitArea">

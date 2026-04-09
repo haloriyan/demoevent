@@ -2,6 +2,7 @@
     <form action="{{ route('admin.workshop.store') }}" method="POST" class="bg-white shadow-lg rounded-lg p-10 w-4/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
         @csrf
         <input type="hidden" name="category_id" id="category_id">
+        <input type="hidden" name="ticket_category_id" id="ticket_category_id" value="{{ $request->ticket_category }}">
         <div class="flex items-center gap-4 mb-4">
             <h3 class="text-lg text-slate-700 font-medium flex grow gap-2">Tambah ke <span id="CategoryName"></span></h3>
             <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#CreateWorkshop')"></ion-icon>

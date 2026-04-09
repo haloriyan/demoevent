@@ -311,13 +311,20 @@ class AdminController extends Controller
     public function workshop(Request $request) {
         $me = me();
         $message = Session::get('message');
-        $categories = WsCategory::with('workshops')->get();
+        $categories = WsCategory::with(['workshops' => function ($query) use ($request) {
+            if ($request->ticket_category != "") {
+                $query->where('workshops.ticket_category_id', $request->ticket_category);
+            }
+        }])
+        ->get();
+        $ticketCategories = TicketCategory::orderBy('name', 'ASC')->get();
 
         return view('admin.workshop.index', [
             'me' => $me,
             'message' => $message,
             'request' => $request,
             'categories' => $categories,
+            'ticketCategories' => $ticketCategories,
         ]);
     }
     public function registrasiCheckin(Request $request) {

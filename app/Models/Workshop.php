@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Workshop extends Model
 {
     protected $fillable = [
-        'category_id', 'title', 'count', 'quantity'
+        'category_id', 'ticket_category_id', 'title', 'count', 'quantity'
     ];
 
     public function category() {

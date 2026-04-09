@@ -154,7 +154,7 @@
                                         </a>
                                     @endif
                                     @if ($me->role == "admin")
-                                        <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="EditPeserta(event, '{{ $user }}')">
+                                        <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
                                             Edit Peserta
                                         </a>
@@ -220,7 +220,7 @@
                                         </a>
                                     @endif
                                     @if ($me->role == "admin")
-                                        <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="EditPeserta(event, '{{ $user }}')">
+                                        <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
                                             Edit Peserta
                                         </a>
@@ -274,9 +274,24 @@
         toggleHidden("#ConfirmTrx");
     }
 
+    const parseJsonData = (data) => {
+        if (typeof data === 'string') {
+            try {
+                return JSON.parse(data);
+            } catch (error) {
+                console.error('Failed to parse JSON data', error, data);
+                return null;
+            }
+        }
+        return data;
+    }
+
     const EditPeserta = (event, data) => {
         event.preventDefault();
-        data = JSON.parse(data);
+        data = parseJsonData(data);
+        if (!data) {
+            return;
+        }
         const link = event.currentTarget;
 
         select("#EditPeserta form").setAttribute('action', link.href);

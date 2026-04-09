@@ -56,6 +56,7 @@
 @section('javascript')
 <script>
     let maxWorkshops = 2;
+    let WSCategories = @json($workshops);
 
     function like(needle, haystack, reversed = false) {
         return reversed
@@ -77,6 +78,7 @@
     }
     const ChooseTicket = (data, btn = null) => {
         data = JSON.parse(data);
+        
         if (btn == null) {
             btn = select(`#Ticket_${data.id}`);
         }
@@ -97,9 +99,49 @@
 
         let parentCategory = data.category.name;
         
-        if (jumlahWS !== null && !parentCategory.includes('Residen')) {
+        if (jumlahWS !== null) {
+            let ticketCategoryID = data.category_id;
+            
             maxWorkshops = jumlahWS;
             selectedWorkshops = {};
+            
+            WSCategories = WSCategories.map(cat => ({
+                ...cat,
+                workshops: cat.workshops.filter(ws => {
+                    if (ws.ticket_category_id !== ticketCategoryID) {
+                        // console.log(ws.title, " eliminated due to ", ws.ticket_category_id);
+                        return false;
+                    }
+                    return true;
+                })
+            }));
+            
+            select("#WSCategoryRender").innerHTML = "";
+            WSCategories.map((cat, c) => {
+                let WSCat = document.createElement('DIV');
+                WSCat.classList.add('flex', 'flex-col', 'gap-4');
+                WSCat.setAttribute('data-category', cat.id);
+                WSCat.setAttribute('data-category-name', cat.name);
+                WSCat.innerHTML = `<div class="p-3 px-4 bg-primary text-white text-sm font-medium">
+                    ${cat.name}
+                </div>
+                <div id="WorkshopItemArea_${cat.id}" class='flex flex-col gap-4'></div>`;
+                select("#WSCategoryRender").appendChild(WSCat);
+
+                cat.workshops.map((ws, w) => {
+                    let WSItem = document.createElement('DIV');
+                    WSItem.classList.add('workshop-item', 'cursor-pointer', 'border', 'rounded-lg', 'p-3', 'px-4', 'text-sm');
+                    WSItem.setAttribute('data-id', ws.id);
+                    WSItem.setAttribute('data-title', ws.title);
+                    WSItem.addEventListener('click', function (e) {
+                        ChooseWorkshop(e);
+                    });
+                    WSItem.innerHTML = ws.title;
+
+                    select(`#WorkshopItemArea_${cat.id}`).appendChild(WSItem);
+                })
+            })
+
             select("#WSPickerSubmitArea")?.classList.add('hidden');
             select("#WorkshopPicker #ModalTitle").innerHTML = `Pilih ${jumlahWS} Workshop`;
             toggleHidden('#WorkshopPicker');
@@ -113,9 +155,14 @@
     let selectedWorkshops = {}
 
     function ChooseWorkshop(event) {
-
+        
         const element = event.currentTarget
-        const categoryWrapper = element.parentNode
+        const categoryWrapper = element.closest('[data-category]')
+
+        if (!categoryWrapper) {
+            console.error('Workshop category wrapper not found')
+            return
+        }
 
         const categoryId = categoryWrapper.dataset.category
         const categoryName = categoryWrapper.dataset.categoryName
@@ -171,6 +218,8 @@
                 name: categoryName
             }
         }
+        console.log(selectedWorkshops);
+        
         
         if (Object.keys(selectedWorkshops).length === maxWorkshops) {
             select("#WSPickerSubmitArea")?.classList.remove('hidden');
