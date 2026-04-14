@@ -126,6 +126,8 @@
         LoadingArea.classList.add('hidden');
 
         messages.forEach(msg => {
+            console.log(msg.bodies);
+            
             let parsedTimestamp = dayjs(msg.headers.Date, "ddd, D MMM YYYY HH:mm:ss ZZ");
             let item = document.createElement("div");
             // <div class="item flex items-center gap-4 p-4 px-8 hover:bg-slate-200 cursor-pointer ">
@@ -135,7 +137,7 @@
             </div>
             <div class="flex flex-col gap-1 grow">
                 <div class="text-sm mobile:text-xs text-slate-700 font-medium">${msg.headers.Subject}</div>
-                <div class="text-xs text-slate-500">${msg.bodies.plain.substr(0, 100)}...</div>
+                <div class="text-xs text-slate-500">${msg.bodies.plain?.substr(0, 100)}...</div>
             </div>
             <div class="text-xs text-slate-500">${parsedTimestamp.fromNow()}</div>`;
             item.addEventListener("click", () => {
