@@ -654,7 +654,7 @@ class AdminController extends Controller
         $client->connect();
 
         $page        = $request->page ?? 1;
-        $perPage     = 10;
+        $perPage     = 25;
         $targetEmail = "pitperabdin";
         $canNext     = false;
 
@@ -803,7 +803,7 @@ class AdminController extends Controller
         $client->connect();
 
         $page        = $request->page ?? 1;
-        $perPage     = 10;
+        $perPage     = 25;
         $targetEmail = "pitperabdin";
         $canNext     = false;
 
