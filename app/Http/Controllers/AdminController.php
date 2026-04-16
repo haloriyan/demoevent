@@ -168,7 +168,10 @@ class AdminController extends Controller
     public function speaker(Request $request) {
         $me = me('admin');
         $message = Session::get('message');
-        $speakers = Speaker::orderBy('name', 'ASC')->get();
+        $speakers = Speaker::orderBy('is_featured', 'DESC')
+        ->orderBy('updated_at', 'DESC')
+        ->orderBy('priority', 'DESC')
+        ->orderBy('name', 'ASC')->get();
 
         return view('admin.speaker.index', [
             'me' => $me,

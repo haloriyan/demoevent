@@ -53,6 +53,7 @@ Route::group(['prefix' => "admin"], function () {
             Route::post('{id}/update', [SpeakerController::class, 'update'])->name('admin.speaker.update');
             Route::get('{id}/delete', [SpeakerController::class, 'delete'])->name('admin.speaker.delete');
             Route::get('{id}/featured', [SpeakerController::class, 'featured'])->name('admin.speaker.featured');
+            Route::get('{id}/priority/{action}', [SpeakerController::class, 'priority'])->name('admin.speaker.priority');
             Route::get('/', [AdminController::class, 'speaker'])->name('admin.speaker');
         });
         Route::group(['prefix' => "schedule"], function () {

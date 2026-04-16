@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Speaker extends Model
 {
     protected $fillable = [
-        'name', 'photo', 'credential', 'is_featured'
+        'name', 'photo', 'credential', 'priority', 'is_featured'
     ];
 }

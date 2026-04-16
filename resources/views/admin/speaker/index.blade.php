@@ -13,44 +13,63 @@
     </div>
 
     @include('partials.flash_message')
-    
-    <div class="grid grid-cols-3 gap-4">
-        @foreach ($speakers as $speaker)
-            <div class="bg-white flex items-center gap-4 bg-white rounded-lg shadow-sm p-4">
-                <a href="{{ route('admin.speaker.featured', $speaker->id) }}" class="w-10 rounded-full p-1 flex {{ $speaker->is_featured ? 'bg-green-500 justify-end' : 'bg-slate-200' }}">
-                    <div class="h-4 w-4 bg-white rounded-full"></div>
-                </a>
-                @if ($speaker->photo == null)
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center bg-slate-100">
-                        <ion-icon name="person-outline" class="text-xl text-slate-700"></ion-icon>
-                    </div>
-                @else
-                    <img src="/storage/speaker_photos/{{ $speaker->photo }}" alt="{{ $speaker->name }}" class="h-14 w-14 rounded-full object-cover">
-                @endif
 
-                <div class="flex flex-col grow gap-1">
-                    <h3 class="text-sm text-slate-700 font-medium">{{ $speaker->name }}</h3>
-                    <div class="text-xs text-slate-500">{{ $speaker->credential }}</div>
-                </div>
-                <div class="group relative">
-                    <div class="w-8 h-8 rounded-lg border flex items-center justify-center cursor-pointer">
-                        <ion-icon name="ellipsis-horizontal-outline" class="text-lg text-slate-500"></ion-icon>
-                    </div>
-
-                    <div class="absolute top-0 right-0 bg-white rounded border py-2 hidden group-hover:flex flex-col">
-                        <a href="{{ route('admin.speaker.update', $speaker->id) }}" class="flex items-center gap-2 p-2 px-4 text-green-500 hover:bg-slate-100" onclick="EditSpeaker(event, '{{ $speaker }}')">
-                            <ion-icon name="create-outline" class="text-lg"></ion-icon>
-                            <div class="text-xs">Edit</div>
-                        </a>
-                        <a href="{{ route('admin.speaker.delete', $speaker->id) }}" class="flex items-center gap-2 p-2 px-4 text-red-500 hover:bg-slate-100" onclick="DeleteSpeaker(event, '{{ $speaker }}')">
-                            <ion-icon name="trash-outline" class="text-lg"></ion-icon>
-                            <div class="text-xs">Hapus</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+    <div class="bg-white p-8 shadow rounded-lg">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="border-b">
+                    <th class="py-4"></th>
+                    <th class="text-sm text-slate-800 font-medium py-4">Speaker</th>
+                    <th class="text-sm text-slate-800 font-medium py-4">Kredensial</th>
+                    <th class="text-sm text-slate-800 font-medium py-4">Tampil di Depan</th>
+                    <th class="py-4"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($speakers as $s => $speaker)
+                    <tr>
+                        <td class="py-4 text-sm text-slate-600">
+                            <div class="flex items-center gap-3">
+                                <a href="{{ $loop->first ? '#' : route('admin.speaker.priority', [$speaker->id, 'increase']) }}" class="flex items-center {{ $loop->first ? 'opacity-0' : '' }}">
+                                    <ion-icon name="arrow-up-outline"></ion-icon>
+                                </a>
+                                <a href="{{ $loop->last ? '#' : route('admin.speaker.priority', [$speaker->id, 'decrease']) }}" class="flex items-center {{ $loop->last ? 'opacity-0' : '' }}">
+                                    <ion-icon name="arrow-down-outline"></ion-icon>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="py-4 text-sm text-slate-600">
+                            <div class="flex items-center gap-4">
+                                <img src="/storage/speaker_photos/{{ $speaker->photo }}" alt="{{ $speaker->name }}" class="h-10 w-10 rounded-full object-cover">
+                                {{ $speaker->name }}
+                            </div>
+                        </td>
+                        <td class="py-4 text-sm text-slate-600">
+                            {{ $speaker->credential }}
+                        </td>
+                        <td class="py-4 text-sm text-slate-600">
+                            <a href="{{ route('admin.speaker.featured', $speaker->id) }}" class="w-10 rounded-full p-1 flex {{ $speaker->is_featured ? 'bg-green-500 justify-end' : 'bg-slate-200' }}">
+                                <div class="h-4 w-4 bg-white rounded-full"></div>
+                            </a>
+                        </td>
+                        <td class="py-4 text-sm text-slate-600">
+                            <div class="flex items-center gap-3">
+                                <a href="{{ route('admin.speaker.update', $speaker->id) }}" class="flex items-center gap-2 p-2 px-4 text-green-500 hover:bg-slate-100 border rounded-lg" onclick="EditSpeaker(event, '{{ $speaker }}')">
+                                    <ion-icon name="create-outline" class="text-lg"></ion-icon>
+                                    <div class="text-xs">Edit</div>
+                                </a>
+                                <a href="{{ route('admin.speaker.delete', $speaker->id) }}" class="flex items-center gap-2 p-2 px-4 text-red-500 hover:bg-slate-100 border rounded-lg" onclick="DeleteSpeaker(event, '{{ $speaker }}')">
+                                    <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+                                    <div class="text-xs">Hapus</div>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
+    
 </div>
 @endsection
 

@@ -86,16 +86,26 @@
         <h3 class="text-4xl font-bold"><span class="text-coklat-muda underline">PEMBICARA</span> - INSTRUKTUR - MODERATOR</h3>
     </div>
 
-    <div class="grid grid-cols-4 mobile:grid-cols-2 gap-8 mobile:gap-4">
+    <div class="grid grid-cols-4 mobile:grid-cols-2 gap-8 mobile:gap-4" id="speakersGrid">
         @foreach ($speakers as $speaker)
-            <div class="bg-white p-10 mobile:p-4 rounded-xl flex flex-col gap-2 CustomRadius">
-                <img src="/storage/speaker_photos/{{ $speaker['photo'] }}" alt="{{ $speaker['name'] }}" class="w-full aspect-square rounded-xl CustomRadius">
+            <div class="bg-white p-10 mobile:p-4 rounded-xl flex flex-col gap-2 CustomRadius speaker-item">
+                <img src="/storage/speaker_photos/{{ $speaker['photo'] }}" alt="{{ $speaker['name'] }}" class="w-full aspect-square object-cover rounded-xl CustomRadius">
                 <h4 class="mt-4 text-xl text-slate-700 font-medium">{{ $speaker['name'] }}</h4>
                 <div class="text-xs text-slate-600">
                     {{ $speaker['credential'] }}
                 </div>
             </div>
         @endforeach
+    </div>
+
+    <div class="flex items-center justify-center gap-4 mt-8">
+        <button id="prevBtn" class="p-3 px-6 rounded-full text-sm font-medium bg-white text-primary disabled:opacity-50" disabled>
+            <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
+        <div id="pageInfo" class="text-white text-sm">Page 1</div>
+        <button id="nextBtn" class="p-3 px-6 rounded-full text-sm font-medium bg-white text-primary disabled:opacity-50">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
     </div>
 </section>
 
@@ -247,5 +257,40 @@
             block: 'center'
         })
     }
+
+    // Speaker pagination
+    const itemsPerPage = 8;
+    let currentPage = 0;
+    const speakerItems = document.querySelectorAll('.speaker-item');
+    const totalPages = Math.ceil(speakerItems.length / itemsPerPage);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageInfo = document.getElementById('pageInfo');
+
+    function showPage(page) {
+        speakerItems.forEach((item, index) => {
+            item.style.display = (index >= page * itemsPerPage && index < (page + 1) * itemsPerPage) ? 'block' : 'none';
+        });
+        pageInfo.textContent = `${page + 1} dari ${totalPages}`;
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page === totalPages - 1;
+    }
+
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+
+    // Initialize
+    showPage(0);
 </script>
 @endsection

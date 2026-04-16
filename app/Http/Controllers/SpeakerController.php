@@ -27,11 +27,33 @@ class SpeakerController extends Controller
 
         return redirect()->back();
     }
+    public function priority(Request $request, $id, $action) {
+        $speak = Speaker::where('id', $id);
+        $speaker = $speak->first();
+
+        if ($action == "increase") {
+            $max = Speaker::max('priority');
+            $speaker->update(['priority' => $max + 1]);
+        } else {
+            $min = Speaker::min('priority');
+            $speaker->update(['priority' => $min - 1]);
+        }
+
+        // Reorder priorities to be sequential
+        $speakers = Speaker::orderBy('priority', 'DESC')->get();
+        $priority = count($speakers);
+        foreach ($speakers as $sp) {
+            $sp->update(['priority' => $priority--]);
+        }
+
+        return redirect()->back();
+    }
     public function store(Request $request) {
         $toCreate = [
             'name' => $request->name,
             'credential' => $request->credential,
             'is_featured' => false,
+            'priority' => 0,
         ];
 
         if ($request->hasFile('photo')) {
@@ -45,6 +67,13 @@ class SpeakerController extends Controller
         }
 
         $speaker = Speaker::create($toCreate);
+
+        // Reorder priorities to be sequential
+        $speakers = Speaker::orderBy('priority', 'DESC')->get();
+        $priority = count($speakers);
+        foreach ($speakers as $sp) {
+            $sp->update(['priority' => $priority--]);
+        }
 
         return redirect()->back()->with([
             'message' => "Berhasil menambahkan " . $speaker->name,
@@ -85,6 +114,13 @@ class SpeakerController extends Controller
         $speak->delete();
         if ($speaker->photo != null) {
             Storage::delete('public/speaker_photos/' . $speaker->photo);
+        }
+
+        // Reorder priorities to be sequential
+        $speakers = Speaker::orderBy('priority', 'DESC')->get();
+        $priority = count($speakers);
+        foreach ($speakers as $sp) {
+            $sp->update(['priority' => $priority--]);
         }
 
         return redirect()->back()->with([
