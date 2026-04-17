@@ -106,11 +106,13 @@
         select("#EditWorkshop form").setAttribute('action', link.href);
         select("#EditWorkshop #title").value = data.title;
         select("#EditWorkshop #quantity").value = data.quantity;
+
         if (data.rundown_id != null) {
             select("#EditWorkshop #rundown_id").value = data.rundown_id;
             rundown = data.rundown;
-            select(`#EditWorkshop #schedule_id option[value='${data?.rundown?.schedule_id}']`)?.selected = true;
+            select(`#EditWorkshop #schedule_id option[value='${data.rundown.schedule_id}']`).selected = true;
             renderRundown(rundown.schedule_id, "#EditWorkshop");
+            
         }
 
         toggleHidden("#EditWorkshop");
