@@ -314,13 +314,23 @@ class AdminController extends Controller
     public function workshop(Request $request) {
         $me = me();
         $message = Session::get('message');
-        $categories = WsCategory::with(['workshops' => function ($query) use ($request) {
-            if ($request->ticket_category != "") {
-                $query->where('workshops.ticket_category_id', $request->ticket_category);
+        $categories = WsCategory::with([
+            'workshops.rundown.speakers',
+            'workshops' => function ($query) use ($request) {
+                if ($request->ticket_category != "") {
+                    $query->where('ticket_category_id', $request->ticket_category);
+                }
             }
-        }])
+        ])
         ->get();
         $ticketCategories = TicketCategory::orderBy('name', 'ASC')->get();
+        $schedules = Schedule::orderBy('date', 'ASC')
+        ->with([
+            'rundowns' => function ($query) {
+                $query->orderBy('start_time', 'ASC');
+            }
+        ])
+        ->get();
 
         return view('admin.workshop.index', [
             'me' => $me,
@@ -328,6 +338,7 @@ class AdminController extends Controller
             'request' => $request,
             'categories' => $categories,
             'ticketCategories' => $ticketCategories,
+            'schedules' => $schedules,
         ]);
     }
     public function registrasiCheckin(Request $request) {
@@ -1045,6 +1056,13 @@ class AdminController extends Controller
             'message' => "Berhasil mengubah mode Midtrans"
         ]);
     }
+    public function dokuMode($mode) {
+        changeEnv('DOKU_MODE', strtolower($mode));
+        
+        return redirect()->back()->with([
+            'message' => "Berhasil mengubah mode Midtrans"
+        ]);
+    }
     public function midtransSettings(Request $request) {
         if ($request->method() == "GET") {
             $message = Session::get('message');
@@ -1057,6 +1075,29 @@ class AdminController extends Controller
                 'MIDTRANS_MERCHANT_ID',
                 'MIDTRANS_SERVER_KEY_' . $mode,
                 'MIDTRANS_CLIENT_KEY_' . $mode,
+            ];
+
+            foreach ($keysToChange as $key) {
+                changeEnv($key, $request->{$key});
+            }
+
+            return redirect()->back()->with([
+                'message' => "Berhasil menyimpan pengaturan Midtrans"
+            ]);
+        }
+    }
+    public function dokuSettings(Request $request) {
+        if ($request->method() == "GET") {
+            $message = Session::get('message');
+            return view('admin.settings.doku', [
+                'message' => $message,
+            ]);
+        } else {
+            $mode = env('MIDTRANS_MODE');
+            $keysToChange = [
+                'DOKU_CLIENT_ID',
+                'DOKU_SECRET_KEY',
+                'DOKU_API_KEY'
             ];
 
             foreach ($keysToChange as $key) {

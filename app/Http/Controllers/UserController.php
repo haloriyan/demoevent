@@ -269,9 +269,13 @@ class UserController extends Controller
                         ]);
                     }
                 ])->get();
-                $workshops = WsCategory::with(['workshops' => function ($query) {
-                    $query->where('quantity', '>', 0);
-                }])->get();
+                $workshops = WsCategory::with([
+                    'workshops.rundown.speakers',
+                    'workshops' => function ($query) {
+                        $query->where('quantity', '>', 0);
+                    }
+                ])
+                ->get();
 
                 return view('register', [
                     'step' => $step,

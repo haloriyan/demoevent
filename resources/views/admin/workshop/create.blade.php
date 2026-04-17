@@ -13,6 +13,17 @@
         <div class="text-xs text-slate-500 mt-2">Kapasitas (peserta) :</div>
         <input type="number" name="quantity" id="quantity" class="w-full h-12 -mt-2 border rounded-lg px-4 text-sm text-slate-600 outline-none" min="1" required>
 
+        <div class="text-xs text-slate-500 mt-2">Jadwal :</div>
+        <select name="schedule_id" id="schedule_id" class="w-full h-12 px-4 border rounded-lg px-4 text-sm text-slate-600 outline-none" onchange="handleSchedule('#CreateWorkshop', event)" required>
+            <option value="">Pilih Jadwal...</option>
+            @foreach ($schedules as $sched)
+                <option value="{{ $sched->id }}" data-rundowns="{{ $sched->rundowns }}">{{ $sched->title }}</option>
+            @endforeach
+        </select>
+
+        <input type="hidden" name="rundown_id" id="rundown_id">
+        <div id="RundownArea" class="flex flex-col gap-4 max-h-[200px] overflow-y-auto"></div>
+
         <div class="flex items-center justify-end gap-4 mt-4">
             <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#CreateWorkshop')">Batal</button>
             <button class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">Tambahkan</button>

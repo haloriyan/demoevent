@@ -54,6 +54,7 @@
 @endsection
 
 @section('javascript')
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script>
     let maxWorkshops = 2;
     let WSCategories = @json($workshops);
@@ -130,13 +131,27 @@
 
                 cat.workshops.map((ws, w) => {
                     let WSItem = document.createElement('DIV');
-                    WSItem.classList.add('workshop-item', 'cursor-pointer', 'border', 'rounded-lg', 'p-3', 'px-4', 'text-sm');
+                    WSItem.classList.add('workshop-item', 'cursor-pointer', 'border', 'rounded-lg', 'p-3', 'px-4', 'text-sm', 'flex', 'items-center', 'gap-3');
                     WSItem.setAttribute('data-id', ws.id);
                     WSItem.setAttribute('data-title', ws.title);
                     WSItem.addEventListener('click', function (e) {
                         ChooseWorkshop(e);
                     });
-                    WSItem.innerHTML = ws.title;
+                    // WSItem.innerHTML = ws.title;
+                    let speakersContent = "<div class='flex items-center gap-4 text-xs'>";
+                    ws.rundown?.speakers?.map((speaker, s) => {
+                        speakersContent += `<div class='flex items-center gap-2'>
+                            <div class="w-1 h-1 rounded-full bg-primary"></div>
+                            ${speaker.name}
+                        </div>`;
+                    })
+                    speakersContent += "</div>";
+
+                    WSItem.innerHTML = `<div class='flex flex-col gap-1 basis-24 grow'>
+                        <div class='text-sm font-medium'>${ws.title}</div>
+                        ${speakersContent}
+                    </div>
+                    <div class='text-xs'>${ws.rundown?.start_time.split(':').slice(0, 2).join(':') ?? '-'}</div>`
 
                     select(`#WorkshopItemArea_${cat.id}`).appendChild(WSItem);
                 })

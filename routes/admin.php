@@ -139,7 +139,9 @@ Route::group(['prefix' => "admin"], function () {
             Route::get('admin', [AdminController::class, 'admins'])->name('admin.settings.admin');
             Route::match(['get', 'post'], '/', [AdminController::class, 'generalSettings'])->name('admin.settings.general');
             Route::match(['get', 'post'], 'midtrans', [AdminController::class, 'midtransSettings'])->name('admin.settings.midtrans');
+            Route::match(['get', 'post'], 'doku', [AdminController::class, 'dokuSettings'])->name('admin.settings.doku');
             Route::get('midtrans-mode/{mode}', [AdminController::class, 'midtransMode'])->name('admin.settings.midtrans.mode');
+            Route::get('doku-mode/{mode}', [AdminController::class, 'dokuMode'])->name('admin.settings.doku.mode');
         });
 
         Route::group(['prefix' => "broadcast"], function () {

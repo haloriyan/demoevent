@@ -9,6 +9,7 @@ class WorkshopController extends Controller
 {
     public function store(Request $request) {
         $ws = Workshop::create([
+            'rundown_id' => $request->rundown_id,
             'category_id' => $request->category_id,
             'ticket_category_id' => $request->ticket_category_id,
             'title' => $request->title,
@@ -25,6 +26,7 @@ class WorkshopController extends Controller
         $ws->update([
             'title' => $request->title,
             'quantity' => $request->quantity,
+            'rundown_id' => $request->rundown_id,
         ]);
         
         $workshop = $ws->first();

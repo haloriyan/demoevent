@@ -13,4 +13,7 @@ class Rundown extends Model
     public function speakers() {
         return $this->belongsToMany(Speaker::class, 'rundown_speakers');
     }
+    public function schedule() {
+        return $this->belongsTo(Schedule::class, 'schedule_id');
+    }
 }

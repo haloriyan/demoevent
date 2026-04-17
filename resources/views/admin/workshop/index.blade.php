@@ -36,7 +36,7 @@
 
                     <div class="bg-white rounded-lg p-8 shadow flex flex-col gap-4">
                         <div class="flex items-center gap-4">
-                            <h4 class="flex grow text-lg text-slate-700">{{ $ws->title }}</h4>
+                            <h4 class="flex basis-32 grow text-lg text-slate-700">{{ $ws->title }}</h4>
                             @if ($me->role == "admin")
                                 <a href="{{ route('admin.workshop.update', $ws->id) }}" class="w-8 h-8 bg-green-500 text-white flex items-center justify-center rounded-lg" onclick="Edit('{{ $ws }}', event)">
                                     <ion-icon name="create-outline" class="text-lg"></ion-icon>
@@ -46,6 +46,16 @@
                                 </a>
                             @endif
                         </div>
+                        @if ($ws->rundown_id != null)
+                            <div class="flex items-center gap-3 text-xs">
+                                @foreach (@$ws->rundown->speakers as $speaker)
+                                    <li class="text-primary flex items-center gap-1">
+                                        <div class="w-1 h-1 rounded-full bg-primary"></div>
+                                        {{ $speaker->name }}
+                                    </li>
+                                @endforeach
+                            </div>
+                        @endif
                         <div class="text-xs text-slate-500">Kapastas : {{ $ws->count }} dari {{ $totalSales }}</div>
                         <div class="flex bg-slate-200">
                             <div class="h-2 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500"></div>
@@ -68,6 +78,9 @@
 
 @section('javascript')
 <script>
+    let schedules = @json($schedules);
+    let rundown = null;
+
     const CreateWorkshop = cat => {
         cat = JSON.parse(cat);
 
@@ -89,12 +102,54 @@
         e.preventDefault();
         data = JSON.parse(data);
         let link = e.currentTarget;
+        rundown = data.rundown;
 
         select("#EditWorkshop form").setAttribute('action', link.href);
         select("#EditWorkshop #title").value = data.title;
         select("#EditWorkshop #quantity").value = data.quantity;
+        select("#EditWorkshop #rundown_id").value = data.rundown_id;
+        select(`#EditWorkshop #schedule_id option[value='${data.rundown.schedule_id}']`).selected = true;
+        renderRundown(rundown.schedule_id, "#EditWorkshop");
 
         toggleHidden("#EditWorkshop");
+    }
+
+    const renderRundown = (scheduleID, prefix) => {
+        let rundowns = [];
+        schedules.map((sched, s) => {
+            if (sched.id == scheduleID) {
+                rundowns = sched.rundowns;
+            }
+        });
+
+        select(`${prefix} #RundownArea`).innerHTML = "";
+        select(`${prefix} #rundown_id`).value = "";
+        rundowns.map((rund, r) => {
+            let item = document.createElement('div');
+            item.classList.add('border', 'rounded-lg', 'p-4', 'flex', 'items-center', 'gap-3', 'cursor-pointer', 'rundown-item');
+            if (rundown?.id == rund.id) {
+                item.classList.add('border-primary');
+                select(`${prefix} #rundown_id`).value = rundown?.id;
+            }
+            item.addEventListener('click', () => selectRundown(rund, prefix));
+            item.setAttribute('id', `rundown_${rund.id}`);
+            item.innerHTML = `<h4 class="text-sm text-slate-600 flex grow">${rund.title}</h4>
+            <div class="text-xs text-slate-500">${rund.start_time} - ${rund.end_time}</div>`;
+
+            select(`${prefix} #RundownArea`).appendChild(item);
+        });
+    }
+    const handleSchedule = (prefix, event) => {
+        let input = event.currentTarget;
+        renderRundown(input.value, prefix);
+    }
+    const selectRundown = (rundown, prefix) => {
+        let item = select(`${prefix} #rundown_${rundown.id}`);
+        
+        selectAll(`${prefix} .rundown-item`).forEach(div => div.classList.remove('border-primary'));
+        item.classList.add('border-primary');
+
+        select(`${prefix} #rundown_id`).value = rundown.id;
     }
 </script>
 @endsection
