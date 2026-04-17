@@ -108,7 +108,7 @@
         select("#EditWorkshop #title").value = data.title;
         select("#EditWorkshop #quantity").value = data.quantity;
         select("#EditWorkshop #rundown_id").value = data.rundown_id;
-        select(`#EditWorkshop #schedule_id option[value='${data?.rundown?.schedule_id}']`).selected = true;
+        select(`#EditWorkshop #schedule_id option[value='${data?.rundown?.schedule_id}']`)?.selected = true;
         renderRundown(rundown.schedule_id, "#EditWorkshop");
 
         toggleHidden("#EditWorkshop");
