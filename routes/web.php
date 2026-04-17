@@ -5,19 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/imap-test', function () {
-    $mailbox = @imap_open(
-        "{imap.mail.me.com:993/imap/ssl/novalidate-cert}INBOX",
-        env('IMAP_USERNAME'),
-        env('IMAP_PASSWORD')
-    );
-
-    if (!$mailbox) {
-        return "❌ " . imap_last_error();
-    }
-
-    return "✅ Connected";
-});
+Route::get('test', [UserController::class, 'doku']);
 
 Route::match(['get', 'post'], 'tes', function (Request $request) {
     if ($request->method() == "GET") {

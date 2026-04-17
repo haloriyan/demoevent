@@ -26,6 +26,7 @@ Route::group(['prefix' => "callback"], function () {
     Route::post('wa', [AdminController::class, 'callbackWa']);
     Route::post('midtrans', [AdminController::class, 'callbackMidtrans']);
     Route::post('ramayana', [RamayanaController::class, 'callback']);
+    Route::post('doku/{method?}', [AdminController::class, 'callbackDoku']);
 });
 
 Route::group(['prefix' => "v2"], function () {

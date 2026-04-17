@@ -22,6 +22,7 @@ use App\Notifications\Expiring;
 use App\Notifications\OrderCreated;
 use App\Notifications\SubmissionNotifySystem;
 use App\Notifications\SubmissionNotifyUser;
+use App\Services\Doku;
 use App\Services\Midtrans;
 use App\Services\MidtransService;
 use App\Services\Xendit;
@@ -33,6 +34,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -41,6 +43,18 @@ class UserController extends Controller
     public function __construct(Midtrans $mid)
     {
         $this->midtrans = $mid;
+    }
+    public function doku(Request $request, Doku $doku) {
+        $trx = $doku->checkout([
+            'invoice_number' => "CO123123",
+            'amount' => 12500,
+            'customer' => [
+                'name' => "Riyan Satria",
+                'email' => "riyan.satria.619@gmail.com"
+            ]
+        ]);
+
+        return $trx;
     }
     public function generateSignature($merchantCode, $merchantRef, $amount, $privateKey) {
         $signature = hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey);
@@ -142,7 +156,7 @@ class UserController extends Controller
                 'submission' => $submission,
             ])
         );
-        Mail::to('riyan.satria.619@gmail.com')->send(
+        Mail::to('halo@pitperabdinasarelc2026.com')->send(
             new MailSubmissionNotifySystem([
                 'submission' => $submission,
             ])
@@ -355,23 +369,21 @@ class UserController extends Controller
                 ]);
 
                 $orderID = "PIT_" . date('Ymd') . $trx->id;
-                $midtrans = $this->midtrans->snap([
-                    'transaction' => [
-                        'order_id' => $orderID,
-                        'gross_amount' => $payload['ticket']['price'],
-                    ],
+                $doku = new Doku();
+                $payment = $doku->checkout([
+                    'invoice_number' => $orderID,
+                    'amount' => env('DOKU_MODE') == "live" ? $payload['ticket']['price'] : 10000,
                     'customer' => [
-                        'first_name' => $names[0],
-                        'last_name' => @$names[count($names) - 1] ?? "",
-                        'email' => $user->email,
-                        'phone' => $user->whatsapp,
+                        'name' => $user->name,
+                        'email' => $user->email
                     ]
                 ]);
-                $midtrans['order_id'] = $orderID;
+                $payment['order_id'] = $orderID;
 
                 $trx = Transaction::where('id', $trx->id);
                 $trx->update([
-                    'payment_payload' => json_encode($midtrans),
+                    'payment_payload' => json_encode($payment),
+                    'invoice_number' => $orderID,
                 ]);
 
                 $trx = $trx->with(['ticket', 'user'])
@@ -420,7 +432,7 @@ class UserController extends Controller
                 }
 
                 return redirect(
-                    $midtrans['redirect_url']
+                    $payment['response']['payment']['url']
                 );
 
                 return redirect()->route('register', [

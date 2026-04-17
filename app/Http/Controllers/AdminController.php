@@ -1122,6 +1122,22 @@ class AdminController extends Controller
             'message' => "Berhasil menjadikan perangkat " . $device->name . " sebagai utama",
         ]);
     }
+    public function callbackDoku(Request $request, $method = 'va') {
+        $requestID = $request->paymentRequestId;
+        $trxID = $request->trxId;
+
+        $trx = Transaction::where('invoice_number', $requestID)
+        ->orWhere('invocie_number', $trxID);
+        $transaction = $trx->first();
+
+        $trx->update([
+            'payment_status' => "PAID"
+        ]);
+
+        return response()->json([
+            'message' => "ok"
+        ]);
+    }
     public function callbackMidtrans(Request $request) {
         $status = strtoupper($request->transaction_status);
         $orderID = $request->order_id;
