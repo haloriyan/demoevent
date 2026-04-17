@@ -47,7 +47,7 @@
                             @endif
                         </div>
                         @if ($ws->rundown_id != null)
-                            <div class="flex items-center gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-4 text-xs">
                                 @foreach (@$ws->rundown->speakers as $speaker)
                                     <li class="text-primary flex items-center gap-1">
                                         <div class="w-1 h-1 rounded-full bg-primary"></div>

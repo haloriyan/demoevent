@@ -138,9 +138,9 @@
                         ChooseWorkshop(e);
                     });
                     // WSItem.innerHTML = ws.title;
-                    let speakersContent = "<div class='flex items-center gap-4 text-xs'>";
+                    let speakersContent = "<div class='flex flex-col gap-2 text-xs'>";
                     ws.rundown?.speakers?.map((speaker, s) => {
-                        speakersContent += `<div class='flex items-center gap-2'>
+                        speakersContent += `<div class='flex items-center gap-1'>
                             <div class="w-1 h-1 rounded-full bg-primary"></div>
                             ${speaker.name}
                         </div>`;
