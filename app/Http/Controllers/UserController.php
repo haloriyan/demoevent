@@ -184,10 +184,8 @@ class UserController extends Controller
     }
     public function index() {
         $speakers = Speaker::where('is_featured', true)
-        ->orderBy('is_featured', 'DESC')
-        ->orderBy('updated_at', 'DESC')
-        ->orderBy('priority', 'DESC')
-        ->orderBy('name', 'ASC')->get();
+        ->orderBy('priority', 'ASC')
+        ->get();
         
         $schedules = Schedule::orderBy('date', 'ASC')
         ->with(['rundowns' => function ($query) {

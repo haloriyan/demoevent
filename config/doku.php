@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'mode' => env('DOKU_MODE'),
     'secret_key' => env("DOKU_SECRET_KEY"),
     'api_key' => env("DOKU_API_KEY"),
     'public_key' => env('DOKU_PUBLIC_KEY'),

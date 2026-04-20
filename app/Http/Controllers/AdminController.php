@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 use Webklex\IMAP\Client as ClientCore;
 use Webklex\PHPIMAP\Client;
 use Webklex\PHPIMAP\ClientManager;
@@ -169,9 +170,8 @@ class AdminController extends Controller
         $me = me('admin');
         $message = Session::get('message');
         $speakers = Speaker::orderBy('is_featured', 'DESC')
-        ->orderBy('updated_at', 'DESC')
-        ->orderBy('priority', 'DESC')
-        ->orderBy('name', 'ASC')->get();
+        ->orderBy('priority', 'ASC')
+        ->get();
 
         return view('admin.speaker.index', [
             'me' => $me,

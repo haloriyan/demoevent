@@ -24,10 +24,39 @@ class SpeakerController extends Controller
         $speaker = $speak->first();
 
         $speak->update(['is_featured' => !$speaker->is_featured]);
+        $this->reorder();
 
         return redirect()->back();
     }
     public function priority(Request $request, $id, $action) {
+        $speakers = Speaker::orderBy('is_featured', 'DESC')
+        ->orderBy('priority', 'ASC')
+        ->get();
+
+        $currentSpeaker = null;
+        $subtituteSpeaker = null;
+
+        foreach ($speakers as $s => $speak) {
+            if ($speak->id == $id) {
+                $currentSpeaker = $speak;
+                if ($action == "decrease") {
+                    $subtituteSpeaker = $speakers[$s + 1];
+                } else {
+                    $subtituteSpeaker = $speakers[$s - 1];
+                }
+            }
+        }
+
+        Speaker::where('id', $currentSpeaker->id)->update([
+            'priority' => $subtituteSpeaker->priority
+        ]);
+        Speaker::where('id', $subtituteSpeaker->id)->update([
+            'priority' => $currentSpeaker->priority
+        ]);
+
+        return redirect()->back();
+    }
+    public function priorityx(Request $request, $id, $action) {
         $speak = Speaker::where('id', $id);
         $speaker = $speak->first();
 
@@ -49,11 +78,13 @@ class SpeakerController extends Controller
         return redirect()->back();
     }
     public function store(Request $request) {
+        $lastSpeaker = Speaker::orderBy('priority', 'DESC')->take(1)->get(['id', 'priority']);
+
         $toCreate = [
             'name' => $request->name,
             'credential' => $request->credential,
             'is_featured' => false,
-            'priority' => 0,
+            'priority' => $lastSpeaker->priority + 1,
         ];
 
         if ($request->hasFile('photo')) {
@@ -107,6 +138,15 @@ class SpeakerController extends Controller
             'message' => "Berhasil menambahkan " . $speaker->name,
         ]);
     }
+    public function reorder() {
+        $speakers = Speaker::orderBy('priority', 'ASC')->get(['id', 'priority']);
+
+        foreach ($speakers as $s => $speak) {
+            Speaker::where('id', $speak->id)->update([
+                'priority' => $s + 1,
+            ]);
+        }
+    }
     public function delete($id) {
         $speak = Speaker::where('id', $id);
         $speaker = $speak->first();
@@ -117,11 +157,7 @@ class SpeakerController extends Controller
         }
 
         // Reorder priorities to be sequential
-        $speakers = Speaker::orderBy('priority', 'DESC')->get();
-        $priority = count($speakers);
-        foreach ($speakers as $sp) {
-            $sp->update(['priority' => $priority--]);
-        }
+        $this->reorder();
 
         return redirect()->back()->with([
             'message' => "Berhasil menghapus " . $speaker->name,

@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('title', "Workshops")
+
+@section('head')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+@endsection
     
 @section('content')
 <div class="p-10 flex flex-col gap-8">
@@ -46,17 +51,11 @@
                                 </a>
                             @endif
                         </div>
-                        @if ($ws->rundown_id != null)
-                            <div class="flex flex-wrap items-center gap-4 text-xs">
-                                @foreach (@$ws->rundown->speakers as $speaker)
-                                    <li class="text-primary flex items-center gap-1">
-                                        <div class="w-1 h-1 rounded-full bg-primary"></div>
-                                        {{ $speaker->name }}
-                                    </li>
-                                @endforeach
-                            </div>
-                        @endif
-                        <div class="text-xs text-slate-500">Kapastas : {{ $ws->count }} dari {{ $totalSales }}</div>
+
+                        <div class="flex items-center gap-4">
+                            <ion-icon name="time-outline" class="text-lg text-slate-500"></ion-icon>
+                        </div>
+                        <div class="text-xs text-slate-500">Kapasitas : {{ $ws->count }} dari {{ $totalSales }}</div>
                         <div class="flex bg-slate-200">
                             <div class="h-2 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500"></div>
                         </div>
@@ -77,9 +76,17 @@
 @endsection
 
 @section('javascript')
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     let schedules = @json($schedules);
     let rundown = null;
+    const flatpickrTimeConfig = {
+        dateFormat: "H:i",
+        noCalendar: true,
+        enableTime: true,
+        time_24hr: true,
+    };
 
     const CreateWorkshop = cat => {
         cat = JSON.parse(cat);
@@ -106,54 +113,49 @@
         select("#EditWorkshop form").setAttribute('action', link.href);
         select("#EditWorkshop #title").value = data.title;
         select("#EditWorkshop #quantity").value = data.quantity;
+        select("#EditWorkshop #speakers").value = data.speakers;
 
-        if (data.rundown_id != null) {
-            select("#EditWorkshop #rundown_id").value = data.rundown_id;
-            rundown = data.rundown;
-            select(`#EditWorkshop #schedule_id option[value='${data.rundown.schedule_id}']`).selected = true;
-            renderRundown(rundown.schedule_id, "#EditWorkshop");
-            
-        }
+        flatpickr("#EditWorkshop #start_time_picker", {
+            ...flatpickrTimeConfig,
+            defaultDate: data.start_time,
+            onChange: selectedTime => {
+                selectedTime = dayjs(selectedTime).format('HH:mm');
+                select("#EditWorkshop #start_time").value = selectedTime;
+                RenderEndTime(selectedTime, '#EditWorkshop');
+            }
+        });
+        flatpickr("#EditWorkshop #end_time_picker", {
+            ...flatpickrTimeConfig,
+            defaultDate: data.end_time,
+            minTime: data.start_time,
+            onChange: selectedTime => {
+                selectedTime = dayjs(selectedTime).format('HH:mm');
+                select("#EditWorkshop #end_time").value = selectedTime;
+            }
+        });
 
         toggleHidden("#EditWorkshop");
     }
 
-    const renderRundown = (scheduleID, prefix) => {
-        let rundowns = [];
-        schedules.map((sched, s) => {
-            if (sched.id == scheduleID) {
-                rundowns = sched.rundowns;
+    const RenderEndTime = (minTime, prefix = '#CreateWorkshop') => {
+        flatpickr(`${prefix} #end_time_picker`, {
+            ...flatpickrTimeConfig,
+            minTime,
+            onChange: selectedTime => {
+                select(`${prefix} #end_time`).value = dayjs(selectedTime).format('HH:mm');
             }
         });
-
-        select(`${prefix} #RundownArea`).innerHTML = "";
-        select(`${prefix} #rundown_id`).value = "";
-        rundowns.map((rund, r) => {
-            let item = document.createElement('div');
-            item.classList.add('border', 'rounded-lg', 'p-4', 'flex', 'items-center', 'gap-3', 'cursor-pointer', 'rundown-item');
-            if (rundown?.id == rund.id) {
-                item.classList.add('border-primary');
-                select(`${prefix} #rundown_id`).value = rundown?.id;
-            }
-            item.addEventListener('click', () => selectRundown(rund, prefix));
-            item.setAttribute('id', `rundown_${rund.id}`);
-            item.innerHTML = `<h4 class="text-sm text-slate-600 flex grow">${rund.title}</h4>
-            <div class="text-xs text-slate-500">${rund.start_time} - ${rund.end_time}</div>`;
-
-            select(`${prefix} #RundownArea`).appendChild(item);
-        });
     }
-    const handleSchedule = (prefix, event) => {
-        let input = event.currentTarget;
-        renderRundown(input.value, prefix);
-    }
-    const selectRundown = (rundown, prefix) => {
-        let item = select(`${prefix} #rundown_${rundown.id}`);
-        
-        selectAll(`${prefix} .rundown-item`).forEach(div => div.classList.remove('border-primary'));
-        item.classList.add('border-primary');
 
-        select(`${prefix} #rundown_id`).value = rundown.id;
-    }
+    flatpickr("#CreateWorkshop #start_time_picker", {
+        ...flatpickrTimeConfig,
+        onChange: selectedTime => {
+            selectedTime = dayjs(selectedTime).format('HH:mm');
+            select("#CreateWorkshop #start_time").value = selectedTime;
+            RenderEndTime(selectedTime);
+        }
+    });
+
+
 </script>
 @endsection

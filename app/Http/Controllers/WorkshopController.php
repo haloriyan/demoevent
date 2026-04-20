@@ -15,6 +15,9 @@ class WorkshopController extends Controller
             'title' => $request->title,
             'count' => 0,
             'quantity' => $request->quantity,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'speakers' => $request->speakers,
         ]);
 
         return redirect()->back()->with([
@@ -27,6 +30,9 @@ class WorkshopController extends Controller
             'title' => $request->title,
             'quantity' => $request->quantity,
             'rundown_id' => $request->rundown_id,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'speakers' => $request->speakers,
         ]);
         
         $workshop = $ws->first();

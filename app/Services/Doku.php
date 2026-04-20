@@ -16,9 +16,10 @@ class Doku {
     }
 
     public function signature($props) {
-        $clientID = $this->config['client_id'];
         $body = $props['body'];
+        $mode = strtoupper(env('DOKU_MODE'));
         // $this->ksortRecursive($body);
+        $clientID = env('DOKU_CLIENT_ID_'.$mode);
         $minifiedBody = json_encode($body);
         $target = "/checkout/v1/payment";
 
@@ -30,7 +31,7 @@ class Doku {
                             hash('sha256', $minifiedBody, true)
                         );
 
-        $signature = hash_hmac('sha256', $signPayload, $this->config['secret_key'], true);
+        $signature = hash_hmac('sha256', $signPayload, env('DOKU_SECRET_KEY_' . $mode), true);
 
         return base64_encode($signature);
     }
@@ -38,11 +39,12 @@ class Doku {
     public function checkout($props) {
         $requestID = (string) Str::uuid();
         $timestamp = now()->utc()->format('Y-m-d\TH:i:s\Z');
-        $mode = strtolower(env('DOKU_MODE'));
+        $mode = strtoupper(env('DOKU_MODE'));
+        $clientID = env('DOKU_CLIENT_ID_'.$mode);
         
         $body = [
             'client' => [
-                'id' => $this->config['client_id']
+                'id' => $clientID
             ],
             'order' => [
                 'invoice_number' => $props['invoice_number'],
@@ -65,12 +67,12 @@ class Doku {
         ]);
 
         $headers = [
-            'Client-Id' => $this->config['client_id'],
+            'Client-Id' => $clientID,
             'Request-Id' => $requestID,
             'Request-Timestamp' => $timestamp,
             'Signature' => "HMACSHA256=" . $signature,
         ];
-        $endpoint = $mode == "live" ? 'https://api.doku.com/checkout/v1/payment' : 'https://api-sandbox.doku.com/checkout/v1/payment';
+        $endpoint = $mode == "LIVE" ? 'https://api.doku.com/checkout/v1/payment' : 'https://api-sandbox.doku.com/checkout/v1/payment';
 
         $response = Http::withHeaders($headers)
         ->post($endpoint, $body);
