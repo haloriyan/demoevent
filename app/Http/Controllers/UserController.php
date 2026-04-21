@@ -176,7 +176,11 @@ class UserController extends Controller
         return view('ramayana.index');
     }
     public function program() {
-        $schedules = Schedule::orderBy('date', 'ASC')->with('rundowns')->get();
+        $schedules = Schedule::orderBy('date', 'ASC')
+        ->with(['rundowns' => function ($query) {
+            $query->orderBy('start_time', 'ASC');
+        }])
+        ->get();
 
         return view('program', [
             'schedules' => $schedules,

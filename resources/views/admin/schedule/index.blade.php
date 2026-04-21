@@ -44,14 +44,22 @@
                                 <div class="flex flex-col gap-1 grow">
                                     <div class="text-sm text-slate-600">{{ $rundown->title }}</div>
                                     <div class="text-xs text-slate-500">
-                                        {{ Carbon::parse($rundown->start_time)->format('H:i') }} -
-                                        {{ Carbon::parse($rundown->end_time)->format('H:i') }}
+                                        @if ($rundown->end_time != null)
+                                            {{ Carbon::parse($rundown->start_time)->format('H:i') }} -
+                                            {{ Carbon::parse($rundown->end_time)->format('H:i') }}
+                                        @else
+                                            {{ Carbon::parse($rundown->start_time)->format('H:i') }}
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="text-xs text-slate-500">
-                                    {{ Carbon::parse($rundown->start_time)->diffInMinutes(
-                                        Carbon::parse($rundown->end_time)
-                                    ) }} menit
+                                    @if ($rundown->end_time != null)
+                                        {{ Carbon::parse($rundown->start_time)->diffInMinutes(
+                                            Carbon::parse($rundown->end_time)
+                                        ) }} menit
+                                    @else
+                                        -
+                                    @endif
                                 </div>
                                 <div class="w-8 h-8 flex items-center justify-center group relative">
                                     <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
