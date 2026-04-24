@@ -120,13 +120,14 @@
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Instansi</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Email</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">No. Telepon</th>
+                    
+                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Tiket</th>
+                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Status Pembayaran</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">
                         <div class="flex items-center">
                             <ion-icon name="time-outline" class="text-lg text-slate-500"></ion-icon>
                         </div>
                     </th>
-                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Tiket</th>
-                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Pembayaran</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Actions</th>
                 </tr>
             </thead>
@@ -165,6 +166,9 @@
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="flex items-center gap-3">
                                 #{{ $user->transaction->id }}
+                                <div class="p-1 px-3 rounded-full border border-{{ $color }}-500 text-{{ $color }}-500 bg-{{ $color }}-100 text-xs font-medium">
+                                    {{ $user->transaction->payment_status }}
+                                </div>
                                 @if ($user->transaction->payment_status == "PENDING" && $user->transaction->payment_evidence != null)
                                     <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="p-1 px-4 border-[0.5px] border-green-500 hover:bg-green-500 rounded-full text-xs text-green-500 hover:text-white" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
                                         Konfirmasi
@@ -188,9 +192,6 @@
                             0{{ $user->whatsapp }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ Carbon::parse($user->created_at)->isoFormat('DD MMMM Y HH:mm:ss') }}
-                        </td>
-                        <td class="py-3 px-4 text-sm text-slate-600">
                             {{ $user->transaction->ticket->name }}
                             @if ($workshops)
                                 <div class="flex items-center gap-2 mt-1">
@@ -208,6 +209,9 @@
                                     {{ $user->transaction->payment_status }}
                                 </div>
                             </div>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-slate-600">
+                            {{ Carbon::parse($user->created_at)->isoFormat('DD MMMM Y HH:mm:ss') }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="w-8 h-8 flex items-center justify-center bg-white border rounded cursor-pointer group relative">

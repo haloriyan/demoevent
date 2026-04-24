@@ -75,7 +75,16 @@
         URL.revokeObjectURL(url); // cleanup
     }
 
-    const expand = (msg) => {
+    const expand = async (uid) => {
+        // Fetch full email details
+        const response = await fetch(`/api/mail/outbox/${uid}`);
+        const msg = await response.json();
+
+        if (msg.error) {
+            alert('Email not found');
+            return;
+        }
+
         let headers = msg.headers;
         let bodies = msg.bodies;
         let from = parseFromHeader(headers.To);
@@ -85,7 +94,7 @@
         select("#MailContent #from_email").innerHTML = from.email;
         select("#MailContent #body").innerHTML = bodies.html ?? bodies.plain;
 
-        if (msg.attachments.length > 0) {
+        if (msg.attachments && msg.attachments.length > 0) {
             select("#AttachmentsArea").classList.remove('hidden');
             select("#AttachmentsArea").innerHTML = "";
             msg.attachments.forEach((file, f) => {
@@ -126,22 +135,20 @@
         LoadingArea.classList.add('hidden');
 
         messages.forEach(msg => {
-            console.log(msg.bodies);
-            
-            let parsedTimestamp = dayjs(msg.headers.Date, "ddd, D MMM YYYY HH:mm:ss ZZ");
+            let parsedTimestamp = dayjs(msg.date);
             let item = document.createElement("div");
             // <div class="item flex items-center gap-4 p-4 px-8 hover:bg-slate-200 cursor-pointer ">
             item.classList.add('item', 'flex', 'items-center', 'gap-4', 'p-4', 'px-8', 'hover:bg-slate-200', 'cursor-pointer');
             item.innerHTML = `<div class="w-10 h-10 flex items-center justify-center bg-primary rounded-full text-white font-bold">
-                ${Initial(msg.headers.To)}
+                ${Initial(msg.from)}
             </div>
             <div class="flex flex-col gap-1 grow">
-                <div class="text-sm mobile:text-xs text-slate-700 font-medium">${msg.headers.Subject}</div>
-                <div class="text-xs text-slate-500">${msg.bodies.plain?.substr(0, 100)}...</div>
+                <div class="text-sm mobile:text-xs text-slate-700 font-medium">${msg.subject}</div>
+                <div class="text-xs text-slate-500">Click to view content</div>
             </div>
-            <div class="text-xs text-slate-500">${parsedTimestamp.fromNow()}</div>`;
+            <div class="text-xs text-slate-500">${parsedTimestamp?.fromNow()}</div>`;
             item.addEventListener("click", () => {
-                expand(msg);
+                expand(msg.uid);
             });
             select("#RenderArea").appendChild(item);
         })

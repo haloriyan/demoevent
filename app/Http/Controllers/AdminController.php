@@ -655,6 +655,7 @@ class AdminController extends Controller
     public function mailInboxFetch(Request $request) {
         $cfg = config('imap.accounts.default');
 
+        Log::info('a');
         $cm = new ClientManager(config('imap'));
         $client = $cm->make([
             'host'          => $cfg['host'],
@@ -666,13 +667,16 @@ class AdminController extends Controller
             'protocol'      => 'imap',
         ]);
         $client->connect();
+        Log::info('b');
 
         $page        = $request->page ?? 1;
         $perPage     = 25;
         $targetEmail = "pitperabdin";
         $canNext     = false;
 
+        Log::info('c');
         $folder      = $client->getFolder('INBOX');
+        Log::info('d');
         $messagesRaw = $folder->messages()
             ->all()
             ->setFetchOrder('desc')
@@ -681,6 +685,7 @@ class AdminController extends Controller
             ->leaveUnread()
             ->get();
 
+            Log::info('e');
         $imapStream = imap_open(
             '{imap.mail.me.com:993/imap/ssl/novalidate-cert}INBOX',
             env('IMAP_USERNAME'),
@@ -688,7 +693,7 @@ class AdminController extends Controller
         );
 
         $messages = [];
-
+        Log::info('f');
         foreach ($messagesRaw as $msg) {
             $raw     = $msg->header->raw;
             $uid     = $msg->getUid();
@@ -703,7 +708,7 @@ class AdminController extends Controller
             $bodies      = ['plain' => null, 'html' => null];
             $attachments = [];
 
-            $this->parseImapParts($imapStream, $uid, $structure, '', $bodies, $attachments);
+            $this->parseImapParts($imapStream, $uid, $structure, '', $bodies, $attachments, true);
 
             $messages[] = [
                 'uid'         => $uid,
@@ -713,8 +718,10 @@ class AdminController extends Controller
                 'attachments' => $attachments,
             ];
         }
+        Log::info('g');
 
         imap_close($imapStream);
+        Log::info('h');
 
         $messages = array_reverse($messages);
 
@@ -734,7 +741,8 @@ class AdminController extends Controller
         object $structure,
         string $partNum,
         array &$bodies,
-        array &$attachments
+        array &$attachments,
+        bool $loadAttachmentData = true
     ): void {
         // If this part has sub-parts, recurse into them
         if (isset($structure->parts)) {
@@ -743,7 +751,7 @@ class AdminController extends Controller
                     ? (string) ($index + 1)
                     : $partNum . '.' . ($index + 1);
 
-                $this->parseImapParts($imapStream, $uid, $part, $childPartNum, $bodies, $attachments);
+                $this->parseImapParts($imapStream, $uid, $part, $childPartNum, $bodies, $attachments, $loadAttachmentData);
             }
             return;
         }
@@ -773,12 +781,15 @@ class AdminController extends Controller
         }
 
         if ($filename) {
-            $attachments[] = [
+            $attachment = [
                 'filename' => $filename,
                 'mimeType' => strtolower($structure->subtype ?? ''),
                 'size'     => strlen($decoded),
-                'data'     => base64_encode($decoded),
             ];
+            if ($loadAttachmentData) {
+                $attachment['data'] = base64_encode($decoded);
+            }
+            $attachments[] = $attachment;
             return;
         }
 
@@ -801,79 +812,122 @@ class AdminController extends Controller
             default => $body,
         };
     }
-    public function mailOutboxFetch(Request $request) {
-        $cfg = config('imap.accounts.default');
+    public function mailOutboxList(Request $request) {
+        try {
+            $cfg = config('imap.accounts.default');
 
-        $cm = new ClientManager(config('imap'));
-        $client = $cm->make([
-            'host'          => $cfg['host'],
-            'port'          => $cfg['port'],
-            'encryption'    => $cfg['encryption'],
-            'validate_cert' => false,
-            'username'      => env('IMAP_USERNAME'),
-            'password'      => env('IMAP_PASSWORD'),
-            'protocol'      => 'imap',
-        ]);
-        $client->connect();
+            $cm = new ClientManager(config('imap'));
+            $client = $cm->make([
+                'host'          => $cfg['host'],
+                'port'          => $cfg['port'],
+                'encryption'    => $cfg['encryption'],
+                'validate_cert' => false,
+                'username'      => env('IMAP_USERNAME'),
+                'password'      => env('IMAP_PASSWORD'),
+                'protocol'      => 'imap',
+            ]);
+            $client->connect();
 
-        $page        = $request->page ?? 1;
-        $perPage     = 25;
-        $targetEmail = "pitperabdin";
-        $canNext     = false;
+            $page        = $request->page ?? 1;
+            $perPage     = 25;
+            $targetEmail = "pitperabdin";
+            $canNext     = false;
 
-        $folder      = $client->getFolder('Sent Messages');
-        $messagesRaw = $folder->messages()
+            $folder      = $client->getFolder('Sent Messages');
+            $messagesRaw = $folder->messages()
             ->all()
-            ->setFetchOrder('desc')
-            ->limit($perPage, $page)
-            ->setFetchFlags(true)
-            ->leaveUnread()
-            ->get();
+                ->limit($perPage, $page)
+                ->setFetchFlags(true)
+                ->leaveUnread()
+                ->get();
 
-        $imapStream = imap_open(
-            '{imap.mail.me.com:993/imap/ssl/novalidate-cert}Sent Messages',
-            env('IMAP_USERNAME'),
-            env('IMAP_PASSWORD')
-        );
+            $messages = [];
 
-        $messages = [];
+            foreach ($messagesRaw as $msg) {
+                $uid     = $msg->getUid();
+                $subject = $msg->getSubject();
+                $from    = $msg->getFrom()[0]->mail ?? '';
+                $date    = $msg->getDate();
+                $flags   = $msg->getFlags();
 
-        foreach ($messagesRaw as $msg) {
+                if (!strpos($from, $targetEmail)) {
+                    continue;
+                }
+
+                $messages[] = [
+                    'uid'     => $uid,
+                    'subject' => $subject,
+                    'from'    => $from,
+                    'date'    => $date,
+                    'flags'   => $flags,
+                ];
+            }
+
+            $messages = array_reverse($messages);
+
+            if (count($messages) === $perPage) {
+                $canNext = true;
+            }
+
+            return response()->json([
+                'messages' => $messages,
+                'can_next' => $canNext,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function mailOutboxDetail(Request $request, $uid) {
+        try {
+            $cfg = config('imap.accounts.default');
+
+            $cm = new ClientManager(config('imap'));
+            $client = $cm->make([
+                'host'          => $cfg['host'],
+                'port'          => $cfg['port'],
+                'encryption'    => $cfg['encryption'],
+                'validate_cert' => false,
+                'username'      => env('IMAP_USERNAME'),
+                'password'      => env('IMAP_PASSWORD'),
+                'protocol'      => 'imap',
+            ]);
+            $client->connect();
+
+            $folder = $client->getFolder('Sent Messages');
+            $msg = $folder->messages()->getMessage($uid);
+
+            if (!$msg) {
+                return response()->json(['error' => 'Message not found'], 404);
+            }
+
             $raw     = $msg->header->raw;
-            $uid     = $msg->getUid();
             $headers = $this->parseMailHeader($raw);
 
-            if (!strpos($headers['From'] ?? '', $targetEmail)) {
-                continue;
-            }
+            $imapStream = imap_open(
+                '{imap.mail.me.com:993/imap/ssl/novalidate-cert}Sent Messages',
+                env('IMAP_USERNAME'),
+                env('IMAP_PASSWORD')
+            );
 
             $structure   = imap_fetchstructure($imapStream, $uid, FT_UID);
             $bodies      = ['plain' => null, 'html' => null];
             $attachments = [];
 
-            $this->parseImapParts($imapStream, $uid, $structure, '', $bodies, $attachments);
+            $this->parseImapParts($imapStream, $uid, $structure, '', $bodies, $attachments, true); // Load attachment data
 
-            $messages[] = [
+            imap_close($imapStream);
+
+            return response()->json([
                 'uid'         => $uid,
                 'headers'     => $headers,
                 'bodies'      => $bodies,
                 'flags'       => $msg->flags,
                 'attachments' => $attachments,
-            ];
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        imap_close($imapStream);
-
-        $messages = array_reverse($messages);
-
-        if (count($messages) === $perPage) {
-            $canNext = true;
-        }
-
-        return response()->json([
-            'messages' => $messages,
-            'can_next' => $canNext,
-        ]);
     }
     public function mailInbox(Request $request) {
         $me = me('admin');

@@ -115,6 +115,7 @@
         let messages = res.messages;
 
         LoadingArea.classList.add('hidden');
+        console.log(messages);
 
         messages.forEach(msg => {
             let parsedTimestamp = dayjs(msg.headers.Date, "ddd, D MMM YYYY HH:mm:ss ZZ");
@@ -126,7 +127,7 @@
             </div>
             <div class="flex flex-col gap-1 grow">
                 <div class="text-xs text-slate-700 font-medium">${msg.headers.Subject}</div>
-                <div class="text-xs text-slate-500">${msg.bodies.plain.substr(0, 100)}...</div>
+                <div class="text-xs text-slate-500">${msg.bodies?.plain?.substr(0, 100)}...</div>
             </div>
             <div class="text-xs text-slate-500">${parsedTimestamp.fromNow()}</div>`;
             item.addEventListener("click", () => {
