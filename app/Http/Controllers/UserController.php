@@ -375,10 +375,15 @@ class UserController extends Controller
                 ]);
 
                 $orderID = "PIT_" . date('Ymd') . $trx->id;
+                $emailDomain = explode("@", $user->email)[1];
+                $amount = $payload['ticket']['price'];
+                if (env('DOKU_MODE') != "live" || $emailDomain == 'pitperabdinasarelc2026.com' ) {
+                    $amount = 10000;
+                }
                 $doku = new Doku();
                 $payment = $doku->checkout([
                     'invoice_number' => $orderID,
-                    'amount' => env('DOKU_MODE') == "live" ? $payload['ticket']['price'] : 10000,
+                    'amount' => $amount,
                     'customer' => [
                         'name' => $user->name,
                         'email' => $user->email
