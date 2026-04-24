@@ -54,6 +54,7 @@ class UserController extends Controller
             ]
         ]);
 
+	// tes
         return $trx;
     }
     public function generateSignature($merchantCode, $merchantRef, $amount, $privateKey) {
