@@ -1218,16 +1218,42 @@ class AdminController extends Controller
         ]);
     }
     public function callbackDoku(Request $request, $method = 'va') {
-        $requestID = $request->paymentRequestId;
-        $trxID = $request->trxId;
+        $order = $request->order;
 
-        $trx = Transaction::where('invoice_number', $requestID)
-        ->orWhere('invocie_number', $trxID);
-        $transaction = $trx->first();
+        $trx = Transaction::where('invoice_number', $order['invoice_number']);
+        $transaction = $trx->with(['user', 'ticket'])->first();
+        $user = $transaction->user;
 
         $trx->update([
             'payment_status' => "PAID"
         ]);
+
+        Mail::to($transaction->user->email)->send(new PaymentConfirmed([
+            'trx' => $transaction
+        ]));
+
+        $device = WaDevice::where('is_primary', true)->first();
+
+        $qrString = base64_encode(json_encode([
+            'trx_id' => $transaction->id,
+            'user_id' => $user->id,
+        ]));
+        $qrLink = "https://api.qrserver.com/v1/create-qr-code/?data=$qrString&size=256x256";
+
+        if ($device != null) {
+            Http::post(env('WA_URL') . "/send", [
+                'client_id' => $device->client_id,
+                'destination' => "62".$user->whatsapp,
+                'image' => $qrLink,
+                'message' => "Yth. " . $user->name . "\n\n" .
+                                'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.'.
+                                'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
+                                "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
+                                "Terima kasih atas partisipasi Anda\n\n".
+                                "Hormat Kami,\n ".
+                                "Panitia PIT PERAMI"
+            ]);
+        }
 
         return response()->json([
             'message' => "ok"

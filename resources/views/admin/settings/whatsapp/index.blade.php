@@ -126,7 +126,7 @@
             console.log(res);
             QRArea.innerHTML = `<img src='${res.qr_url}' class='w-full aspect-square' />`;
             clientID = res.client_id;
-            select("#LoadingOverlay").classList.add('hidden');
+            select("#LoadingOverlay")?.classList.add('hidden');
             
         } catch (err) {
             console.error(err);
