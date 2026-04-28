@@ -415,33 +415,31 @@ class UserController extends Controller
 
                     if ($user->whatsapp != null) {
                         $device = WaDevice::where('is_primary', true)->first();
-                        
+
                         Http::post(env('WA_URL') . "/send", [
                             'client_id' => $device->client_id,
                             'destination' => "62".$user->whatsapp,
                             'message' => "Yth. " . $user->name . "\n\n" .
-                                         "Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.\n\n" . 
+                                         "Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk PIT PERABDIN - ASAR ELC 2026 telah berhasil.\n\n" . 
                                          "Berikut adalah detail pendaftaran Anda :\n".
-                                         "NIK : " . $user->nik ?? '-'. "\n" .
-                                         "Nama Lengkap : " . $user->name. "\n". 
-                                         "Alamat Email : ". $user->email ?? '-' . "\n" .
-                                         "No. Telepon : ". $user->whatsapp ?? '-' . "\n" .
+                                         "NIK : " . ($user->nik ?? '-') . "\n" .
+                                         "Nama Lengkap : " . $user->name. "\n".
+                                         "Alamat Email : ". ($user->email ?? '-') . "\n" .
+                                         "No. Telepon : ". ($user->whatsapp ?? '-') . "\n" .
                                          "Tiket : " . $trx->ticket->name . "\n" . 
                                          "No. Pendaftaran : " . $trx->id . "\n\n" .
-                                         "Pertemuan Ilmiah Tahunan PERAMI akan diselenggarakan pada :\n" .
+                                         "PIT PERABDIN - ASAR ELC 20216 akan diselenggarakan pada :\n" .
                                          "- Tanggal : " . $trx->ticket->start_date . "\n\n" .
                                          "Pembayaran dapat dilakukan dengan transfer ke rekening PERAMI \n".
                                          "- Nominal : " . currency_encode($trx->payment_amount). "\n". 
                                          "- No. Rekening : " . env('BANK_NUMBER') . "\n". 
                                          "- Bank : " . env('BANK_NAME'). "\n\n".
-                                         "Kemudian mohon kirim foto bukti pembayaran melalui link berikut :\n".
-                                         route('pembayaran', $trx->id) . "\n\n" .
-                                         "Anda juga dapat melakukan pembayaran instan melalui link ini :\n" .
+                                         "Kemudian mohon lakukan pembayaran melalui link berikut ini :\n".
                                          route('pembayaran.instan', $trx->id) . "\n\n" .
                                          "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
                                          "Terima kasih atas partisipasi Anda\n\n".
                                          "Hormat Kami,\n ".
-                                         "Panitia PIT PERAMI"
+                                         "Panitia PIT PERABDIN - ASAR ELC 2026"
                         ]);
                     }
                 }

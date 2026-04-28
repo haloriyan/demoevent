@@ -1246,12 +1246,12 @@ class AdminController extends Controller
                 'destination' => "62".$user->whatsapp,
                 'image' => $qrLink,
                 'message' => "Yth. " . $user->name . "\n\n" .
-                                'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.'.
+                                'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk PIT PERABDIN - ASAR ELC 2026 telah berhasil.'.
                                 'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
                                 "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
                                 "Terima kasih atas partisipasi Anda\n\n".
                                 "Hormat Kami,\n ".
-                                "Panitia PIT PERAMI"
+                                "Panitia PIT PERABDIN - ASAR ELC 2026"
             ]);
         }
 
