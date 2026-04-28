@@ -16,6 +16,7 @@ use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\WaDevice;
 use App\Models\Workshop;
 use App\Models\WsCategory;
 use App\Notifications\Expiring;
@@ -413,8 +414,10 @@ class UserController extends Controller
                     ]));
 
                     if ($user->whatsapp != null) {
+                        $device = WaDevice::where('is_primary', true)->first();
+                        
                         Http::post(env('WA_URL') . "/send", [
-                            'client_id',
+                            'client_id' => $device->client_id,
                             'destination' => "62".$user->whatsapp,
                             'message' => "Yth. " . $user->name . "\n\n" .
                                          "Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk Pertemuan Ilmiah Tahunan Perkumpulan Subspesialis Radiologi Muskuloskeletal Indonesia (PIT PERAMI) telah berhasil.\n\n" . 
