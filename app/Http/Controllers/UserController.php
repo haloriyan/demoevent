@@ -430,10 +430,6 @@ class UserController extends Controller
                                          "No. Pendaftaran : " . $trx->id . "\n\n" .
                                          "PIT PERABDIN - ASAR ELC 20216 akan diselenggarakan pada :\n" .
                                          "- Tanggal : " . $trx->ticket->start_date . "\n\n" .
-                                         "Pembayaran dapat dilakukan dengan transfer ke rekening PERAMI \n".
-                                         "- Nominal : " . currency_encode($trx->payment_amount). "\n". 
-                                         "- No. Rekening : " . env('BANK_NUMBER') . "\n". 
-                                         "- Bank : " . env('BANK_NAME'). "\n\n".
                                          "Kemudian mohon lakukan pembayaran melalui link berikut ini :\n".
                                          route('pembayaran.instan', $trx->id) . "\n\n" .
                                          "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
@@ -469,7 +465,7 @@ class UserController extends Controller
         $transaction = $trx->with(['user', 'ticket'])->first();
         $payload = json_decode($transaction->payment_payload, false);
 
-        return redirect($payload->redirect_url);
+        return redirect($payload->payment['url']);
     }
     public function pembayaran(Request $request, $trxID) {
         $trx = Transaction::where('id', $trxID);
