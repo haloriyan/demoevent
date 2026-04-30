@@ -7,9 +7,13 @@
     <div class="h-[10vh] mobile:h-[20vh]"></div>
     <h2 class="text-4xl font-bold">Tiket Ramayana</h2>
     <div class="flex">
-        <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
-            Beli Tiket
-        </button>
+        @if (env('RAMAYANA_ENABLE') == "1")
+            <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
+                Beli Tiket
+            </button>
+        @else 
+            <div class="text-primary text-sm">Mohon maaf, pembelian Tiket Ramayana belum tersedia.</div>
+        @endif
     </div>
     <div class="mobile:h-[10vh]"></div>
 </div>
@@ -71,12 +75,20 @@
     <img src="/images/ramayana2.jpg" alt="Ramayana" class="h-[300px] w-full object-cover">
     <img src="/images/ramayana3.jpg" alt="Ramayana 2" class="h-[300px] w-full object-cover">
 
-    <div class="absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/50 group-hover:backdrop-blur-md text-white p-20 mobile:p-8 flex flex-col gap-4 items-center justify-center">
-        <h4 class="text-3xl font-bold">Dapatkan Tiketnya Sekarang!</h4>
-        <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
-            Beli Tiket
-        </button>
-    </div>
+    @if (env('RAMAYANA_ENABLE') == "1")
+        <div class="absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/50 group-hover:backdrop-blur-md text-white p-20 mobile:p-8 flex flex-col gap-4 items-center justify-center">
+            <h4 class="text-3xl font-bold">Dapatkan Tiketnya Sekarang!</h4>
+            <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
+                Beli Tiket
+            </button>
+        </div>
+    @else
+        <div class="absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/50 group-hover:backdrop-blur-md text-white p-20 mobile:p-8 flex flex-col gap-4 items-center justify-center">
+            <h4 class="text-3xl font-bold">Pembelian Tiket Belum Tersedia</h4>
+            <div>Mohon menunggu informasi selanjutnya dari panitia. Terima kasih atas kesabarannya.</div>
+        </div>
+    @endif
+
 </section>
 
 

@@ -4,6 +4,7 @@
 
 @php
     use Carbon\Carbon;
+    $logos = config('logos');
 @endphp
 
 @section('head')
@@ -109,6 +110,25 @@
     </div>
 </section>
 
+<section class="p-20 mobile:p-8 flex flex-col gap-10">
+    <div class="flex flex-wrap justify-center items-center gap-10">
+        @foreach ($logos['sponsors'] as $logo)
+            <div class="basis-[9%] flex items-center justify-center ">
+                <img src="/images/sponsor/{{ $logo }}" alt="{{ $logo }}" class="">
+            </div>
+        @endforeach
+    </div>
+    <div></div>
+    <div class="flex flex-wrap justify-center items-center gap-10">
+        @foreach ($logos['umkm'] as $logo)
+            <div class="basis-[9%] flex items-center justify-center ">
+                <img src="/images/umkm/{{ $logo }}" alt="{{ $logo }}" class="">
+            </div>
+        @endforeach
+    </div>
+    
+</section>
+
 <section id="schedules" class="p-20 mobile:p-8 flex flex-col gap-8 items-center">
     <h3 class="text-4xl font-bold"><span class="text-secondary underline">Programs</span></h3>
     <div class="grid grid-cols-3 mobile:grid-cols-1 gap-10 w-full">
@@ -133,7 +153,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="text-xs text-slate-500">
+                                <div class="text-xs text-slate-500 hidden">
                                     @if ($rundown->end_time != null)
                                         {{ Carbon::parse($rundown->start_time)->diffInMinutes(
                                             Carbon::parse($rundown->end_time)
