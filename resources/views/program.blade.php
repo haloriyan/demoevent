@@ -33,7 +33,7 @@
                                         {{ Carbon::parse($rundown->end_time)->format('H:i') }}
                                     </div>
                                 </div>
-                                <div class="text-xs text-slate-500">
+                                <div class="text-xs text-slate-500 hidden">
                                     {{ Carbon::parse($rundown->start_time)->diffInMinutes(
                                         Carbon::parse($rundown->end_time)
                                     ) }} menit
