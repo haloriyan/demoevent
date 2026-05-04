@@ -30,6 +30,12 @@ function Substring($text, $count) {
     }
     return $toReturn;
 }
+function escapeName($name) {
+	$name = preg_replace('/[^a-zA-Z0-9\s]/', '', $name);
+	$name = preg_replace('/\s+/', ' ', $name);
+
+	return trim($name);
+}
 
 function RandomInt($length = 4) {
     $pattern = [0,1,2,3,4,5,6,7,8,9];

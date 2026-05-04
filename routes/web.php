@@ -8,12 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('test', [UserController::class, 'doku']);
 
 Route::match(['get', 'post'], 'tes', function (Request $request) {
-    if ($request->method() == "GET") {
-        return view('del');
-    } else {
-        $file = $request->file('berkas');
-        return $file->getClientOriginalName();
-    }
+    return escapeName("dr. vininta SpRad(K) TR,");
 })->name('del');
 Route::group(['middleware' => "Construction"], function () {
     Route::get('/', [UserController::class, 'index'])->name('index');

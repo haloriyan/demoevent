@@ -52,7 +52,7 @@ class Doku {
                 'currency' => 'IDR'
             ],
             'customer' => [
-                'name' => @$props['customer']['name'] ?? "John Doe",
+                'name' => escapeName(@$props['customer']['name'] ?? "John Doe"),
                 'email' => @$props['customer']['email'] ?? 'john@example.com'
             ],
             'payment' => [
