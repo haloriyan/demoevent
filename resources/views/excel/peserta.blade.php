@@ -14,21 +14,31 @@
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">No. Telepon</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">NIK</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Keikutsertaan</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Status Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Timestamp</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($peserta as $user)
+            @php
+                $paymentStatus = $user->transaction->payment_status;
+                $statusColor = "#e6be10";
+                if ($paymentStatus == 'PAID') {
+                    $statusColor = "#2ecc71";
+                }
+            @endphp
             <tr>
                 <td>{{ $user->transaction->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->instansi ?? '-' }}</td>
                 <td>{{ $user->email ?? '-' }}</td>
-                <td>{{ $user->whatsapp ?? '-' }}</td>
-                <td>{{ $user->instansi ?? '-' }}</td>
-                <td>{{ $user->nik }}</td>
+                <td>{{ (string) $user->whatsapp ?? '-' }}</td>
+                <td >{{ (string) $user->nik }}</td>
                 <td>
                     {{ $user->transaction->ticket->name }}
+                </td>
+                <td style="background-color: {{ $statusColor }};color: #fff">
+                    {{ $user->transaction->payment_status }}
                 </td>
                 <td>{{ Carbon::parse($user->created_at)->isoFormat('DD MMM YYYY, HH:mm') }}</td>
             </tr>

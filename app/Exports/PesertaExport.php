@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Override;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class PesertaExport implements FromView, ShouldAutoSize
+class PesertaExport implements FromView, ShouldAutoSize, WithMapping
 {
     protected $peserta;
 
@@ -16,6 +20,15 @@ class PesertaExport implements FromView, ShouldAutoSize
     {
         $this->peserta = $props['peserta'];
     }
+
+    public function map($row): array
+    {
+        return [
+            (string) $row->nik,
+            (string) $row->whatsapp,
+        ];
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */

@@ -211,7 +211,7 @@ class AdminController extends Controller
         ->paginate(25);
 
         if ($request->download == 1) {
-            $filename = "Data_Peserta-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y') . ".xlsx";
+            $filename = "Data_Peserta-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y HH:mm:ss') . ".xlsx";
 
             return Excel::download(
                 new PesertaExport([
