@@ -304,6 +304,7 @@
         select("#EditPeserta #name").value = data.name;
         select("#EditPeserta #email").value = data.email;
         select("#EditPeserta #whatsapp").value = data.whatsapp;
+        select("#EditPeserta #instansi").value = data.instansi;
 
         toggleHidden("#EditPeserta")
     }

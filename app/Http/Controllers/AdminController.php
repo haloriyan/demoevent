@@ -250,6 +250,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'whatsapp' => $request->whatsapp,
             'nik' => $request->nik,
+            'instansi' => $request->instansi,
         ]);
 
         if ($request->email != $user->email) {
