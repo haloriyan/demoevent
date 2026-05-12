@@ -8,7 +8,9 @@ use App\Exports\RamayanaPurchase;
 use App\Exports\RegistrasiCheckin;
 use App\Exports\SubmissionExport;
 use App\Mail\EmailChanged as MailEmailChanged;
+use App\Mail\OrderCreated as MailOrderCreated;
 use App\Mail\PaymentConfirmed;
+use App\Services\Doku;
 use App\Mail\RamayanaCreated;
 use App\Mail\Webmail;
 use App\Models\Admin;
@@ -1309,6 +1311,72 @@ class AdminController extends Controller
 
         return response()->json([
             'ok',
+        ]);
+    }
+
+    public function recreateRegistration(Request $request) {
+        $users = collect();
+        if ($request->filled('name')) {
+            $users = User::where('name', 'LIKE', '%' . $request->name . '%')
+                ->with(['transaction.ticket'])
+                ->get();
+        }
+
+        return view('admin.recreate_registration', [
+            'users' => $users,
+            'request' => $request,
+            'message' => session('message'),
+        ]);
+    }
+
+    public function recreateRegistrationConfirm(Request $request, $id) {
+        $transaction = Transaction::where('id', $id)->with(['user', 'ticket'])->firstOrFail();
+
+        return view('admin.recreate_registration_confirm', [
+            'transaction' => $transaction,
+        ]);
+    }
+
+    public function recreateRegistrationExecute(Request $request, $id) {
+        $trx = Transaction::where('id', $id);
+        $transaction = $trx->with(['user', 'ticket'])->firstOrFail();
+        $user = $transaction->user;
+
+        $orderID = "PIT_" . date('Ymd') . $transaction->id;
+        $emailDomain = explode("@", $user->email)[1];
+        $amount = $transaction->payment_amount;
+        if (env('DOKU_MODE') != "live" || $emailDomain == 'pitperabdinasarelc2026.com') {
+            $amount = 10000;
+        }
+
+        $doku = new Doku();
+        $payment = $doku->checkout([
+            'invoice_number' => $orderID,
+            'amount' => $amount,
+            'customer' => [
+                'name' => $user->name,
+                'email' => $user->email,
+            ]
+        ]);
+        $payment['order_id'] = $orderID;
+        
+        Log::info(json_encode($payment));
+        $trx->update([
+            'payment_payload' => json_encode($payment),
+            'invoice_number' => $orderID,
+            'payment_status' => 'PENDING',
+            'expired_at' => Carbon::now()->addMinutes((int)env('PAYMENT_EXPIRATION'))->format('Y-m-d H:i:s'),
+        ]);
+
+        $transaction = $trx->with(['ticket', 'user'])->first();
+
+        Mail::to($user->email)->send(new MailOrderCreated([
+            'user' => $user,
+            'trx' => $transaction,
+        ]));
+
+        return redirect()->route('admin.recreate-registration')->with([
+            'message' => "Berhasil membuat ulang invoice DOKU dan mengirim email notifikasi ke " . $user->email,
         ]);
     }
 

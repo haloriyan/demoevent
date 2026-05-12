@@ -153,5 +153,11 @@ Route::group(['prefix' => "admin"], function () {
         Route::group(['prefix' => "export"], function () {
             // Route::get('peserta', [])
         });
+
+        Route::group(['prefix' => "recreate-registration"], function () {
+            Route::get('/', [AdminController::class, 'recreateRegistration'])->name('admin.recreate-registration');
+            Route::get('{id}', [AdminController::class, 'recreateRegistrationConfirm'])->name('admin.recreate-registration.confirm');
+            Route::post('{id}', [AdminController::class, 'recreateRegistrationExecute'])->name('admin.recreate-registration.execute');
+        });
     });
 });
