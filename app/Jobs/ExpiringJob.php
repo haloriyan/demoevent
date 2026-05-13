@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Mail\Expiring;
+use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Workshop;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -35,6 +37,12 @@ class ExpiringJob implements ShouldQueue
             if ($expired) {
                 $u = User::where('id', $order->user_id);
                 $user = $u->first();
+
+                Ticket::where('id', $order->ticket_id)->increment('quantity');
+
+                foreach (json_decode($order->workshops ?? '[]') as $ws) {
+                    Workshop::where('id', $ws->id)->increment('quantity');
+                }
 
                 Transaction::where('id', $order->id)->delete();
                 $u->delete();

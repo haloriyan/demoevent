@@ -244,9 +244,11 @@ class UserController extends Controller
 
         foreach ($transactions as $trx) {
             if (env('DO_BROADCAST') == 1) {
-                Mail::to($trx->user->email)->send(new MailExpiring([
-                    'trx' => $trx,
-                ]));
+                try {
+                    Mail::to($trx->user->email)->send(new MailExpiring([
+                        'trx' => $trx,
+                    ]));
+                } catch (\Exception $e) {}
             }
 
             Transaction::where('id', $trx->id)->update([
