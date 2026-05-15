@@ -26,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             Cors::class,
         ]);
         $middleware->appendToGroup('Construction', [
-            ConstructionPreview::class,
+            // ConstructionPreview::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

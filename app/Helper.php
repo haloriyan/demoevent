@@ -5,6 +5,7 @@ use App\Models\City;
 use App\Models\Sponsor;
 use App\Models\SponsorStatistic;
 use App\Models\User;
+use App\Models\WaDevice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -16,8 +17,22 @@ function me($guard = 'admin') {
     $user = Auth::guard($guard)->user();
 	return $user;
 }
-function wasap() {
-	// 
+function wa_device() {
+	return WaDevice::where('is_primary', true)->first();
+}
+function send_wa($to, $message, $image = null) {
+	$device = wa_device();
+	$payload = [
+		'client_id' => $device->client_id,
+		'destination' => $to,
+		'message' => $message,
+	];
+	if ($image != null) {
+		$payload['image'] = $image;
+	}
+	$response = Http::post(env('WA_URL')."/send", $payload);
+
+	return $response->json();
 }
 function nullify($value) {
 	return $value === "null" ? null : $value;
