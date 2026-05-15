@@ -82,11 +82,22 @@
             Ada yang Salah. Ulangi dari Awal
         </a>
         <div class="flex grow"></div>
-        <button class="p-3 px-5 rounded-lg bg-primary text-white font-medium text-sm">
+        <button id="submitBtn" class="p-3 px-5 rounded-lg bg-primary text-white font-medium text-sm">
             Benar. Konfirmasi Pendaftaran
         </button>
     </div>
     
 </form>
 
+@endsection
+
+@section('javascript')
+<script>
+    document.querySelector('form').addEventListener('submit', function () {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Memproses...';
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+</script>
 @endsection
