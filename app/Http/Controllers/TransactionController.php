@@ -59,7 +59,7 @@ class TransactionController extends Controller
                     'message' => "Yth. " . $user->name . "\n\n" .
                                     'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk PIT PERABDIN - ASAR ELC 2026 telah berhasil.'.
                                     'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
-                                    "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
+                                    "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau kontak WhatsApp ini.\n\n" .
                                     "Terima kasih atas partisipasi Anda\n\n".
                                     "Hormat Kami,\n ".
                                     "Panitia PIT PERABDIN - ASAR ELC 2026"

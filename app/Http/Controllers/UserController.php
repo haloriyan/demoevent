@@ -450,7 +450,7 @@ class UserController extends Controller
                                          "- Tanggal : " . $trx->ticket->start_date . "\n\n" .
                                          "Kemudian mohon lakukan pembayaran melalui link berikut ini :\n".
                                          route('pembayaran.instan', $trx->id) . "\n\n" .
-                                         "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
+                                         "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau melalui kontak WhatsApp ini.\n\n" .
                                          "Terima kasih atas partisipasi Anda\n\n".
                                          "Hormat Kami,\n ".
                                          "Panitia PIT PERABDIN - ASAR ELC 2026"
