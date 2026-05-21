@@ -6,6 +6,13 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
 @endsection
+
+@section('header.right')
+    <a href="{{ route('admin.syncQty') }}" class="p-3 px-5 bg-blue-500 text-white rounded-full flex items-center justify-center gap-3 text-xs font-medium">
+        <ion-icon name="sync-outline"></ion-icon>
+        Sync Quantity
+    </a>
+@endsection
     
 @section('content')
 <div class="p-10 flex flex-col gap-8">
