@@ -54,6 +54,8 @@
             @yield('subtitle')
         </div>
 
+        @yield('header.right')
+
         <button class="p-3 px-6 rounded-lg bg-primary text-white text-xs font-bold flex items-center justify-center gap-4" onclick="InitScanQR()">
             <ion-icon name="scan-outline" class="text-lg"></ion-icon>
             Scan QR
@@ -62,8 +64,7 @@
             <ion-icon name="log-out-outline" class="text-lg"></ion-icon>
             Logout
         </a>
-        
-        @yield('header.right')
+    
     </div>
 </div>
 

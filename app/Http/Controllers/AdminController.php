@@ -30,6 +30,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\WaDevice;
 use App\Models\Winner;
+use App\Models\Workshop;
 use App\Models\WsCategory;
 use App\Notifications\EmailChanged;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -55,6 +56,67 @@ use function Symfony\Component\Clock\now;
 
 class AdminController extends Controller
 {
+    public function syncQty() {
+        $transactions = Transaction::where([
+            ['payment_status', 'PAID']
+        ])
+        ->get();
+
+        $ticketQuantities = [];
+        $wsQuantities = [];
+        foreach ($transactions as $trx) {
+            $ticketID = strval($trx->ticket_id);
+            $workshops = json_decode($trx->workshops) ?? [];
+
+            if (!isset($ticketQuantities[$ticketID])) {
+                $ticketQuantities[$ticketID] = 0;
+            }
+
+            $ticketQuantities[$ticketID] += 1;
+
+            foreach ($workshops as $ws) {
+                $wsID = strval($ws->id);
+                $theWorkshop = Workshop::where('id', $ws->id)->first();
+                if ($theWorkshop != null) {
+                    if (!isset($wsQuantities[$wsID])) {
+                        $wsQuantities[$wsID] = 0;
+                    }
+                    $wsQuantities[$wsID] += 1;
+                }
+            }
+        }
+
+        foreach ($ticketQuantities as $q => $qty) {
+            $tick = Ticket::where('id', $q);
+            $ticket = $tick->first();
+
+            $tick->update([
+                'quantity' => $ticket->start_quantity - $qty,
+            ]);
+        }
+
+        foreach ($wsQuantities as $q => $qty) {
+            // Log::info($b);
+            $ws = Workshop::where('id', $q);
+            $workshop = $ws->first();
+            Log::info($workshop->title);
+
+            if (!$workshop) {
+                Log::info($q . " skipped");
+            } else {
+                $startQuantity = $workshop->count + $workshop->quantity;
+
+                $ws->update([
+                    'quantity' => $startQuantity - $qty,
+                    'count' => $qty,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with([
+            'message' => "Quantity tiket dan workshop berhasil disinkronkan dengan transaksi valid"
+        ]);
+    }
     public function spinnerStore(Request $request) {
         $userID = $request->user_id;
 
