@@ -57,15 +57,17 @@ use function Symfony\Component\Clock\now;
 class AdminController extends Controller
 {
     public function syncQty() {
-        $transactions = Transaction::where([
-            ['payment_status', 'PAID']
+        $transactions = Transaction::where('payment_status', 'PAID')
+        ->orWhere('payment_status', 'PENDING')
+        ->with([
+            'ticket', 'user'
         ])
         ->get();
 
         $ticketQuantities = [];
         $wsQuantities = [];
         foreach ($transactions as $trx) {
-            $ticketID = strval($trx->ticket_id);
+            $ticketID = $trx->ticket_id;
             $workshops = json_decode($trx->workshops) ?? [];
 
             if (!isset($ticketQuantities[$ticketID])) {
@@ -99,7 +101,6 @@ class AdminController extends Controller
             // Log::info($b);
             $ws = Workshop::where('id', $q);
             $workshop = $ws->first();
-            Log::info($workshop->title);
 
             if (!$workshop) {
                 Log::info($q . " skipped");
@@ -248,7 +249,10 @@ class AdminController extends Controller
         $me = me('admin');
         $message = Session::get('message');
         $filterCount = 0;
-        $tickets = Ticket::orderBy('name', 'ASC')->get();
+        $tickets = Ticket::with(['category'])
+        ->orderBy('category_id', 'ASC')
+        ->get();
+        // return $tickets;
 
         $u = new User();
         if ($request->q != "") {
@@ -270,20 +274,31 @@ class AdminController extends Controller
             });
         }
 
-        $users = $u->orderBy('created_at', 'DESC')
-        ->with(['transaction.ticket'])
-        ->paginate(25);
+        $u = $u->orderBy('created_at', 'DESC')
+        ->with(['transaction.ticket']);
 
         if ($request->download == 1) {
+            $users = $u->get();
             $filename = "Data_Peserta-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y HH:mm:ss') . ".xlsx";
+
+            $activeFilters = [];
+            if ($request->q != "") $activeFilters[] = "Pencarian: " . $request->q;
+            if ($request->ticket_id != null) {
+                $ticket = $tickets->firstWhere('id', $request->ticket_id);
+                $activeFilters[] = "Tiket: " . ($ticket ? $ticket->name : $request->ticket_id);
+            }
+            if ($request->payment_status != null) $activeFilters[] = "Status: " . $request->payment_status;
 
             return Excel::download(
                 new PesertaExport([
-                    'peserta' => $users
+                    'peserta' => $users,
+                    'filters' => $activeFilters,
                 ]),
                 $filename
             );
         }
+
+        $users = $u->paginate(25)->withQueryString();
 
         if ($request->qr == 1) {
             $filename = "QR_Peserta.pdf";

@@ -114,7 +114,7 @@
             <thead>
                 <tr class="text-left">
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400"></th>
-                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">No. Pendaftaran</th>
+                    <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">No.</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">NIK</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Nama</th>
                     <th class="sticky top-0 backdrop-blur-md py-3 px-4 text-sm font-medium tracking-wider border-b border-slate-400">Instansi</th>
@@ -165,7 +165,7 @@
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="flex items-center gap-3">
-                                #{{ $user->transaction->id }}
+                                {{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
                                 <div class="p-1 px-3 rounded-full border border-{{ $color }}-500 text-{{ $color }}-500 bg-{{ $color }}-100 text-xs font-medium">
                                     {{ $user->transaction->payment_status }}
                                 </div>
@@ -192,7 +192,12 @@
                             0{{ $user->whatsapp }}
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $user->transaction->ticket->name }}
+                            @if ($user->transaction->ticket->category_id != null)
+                                <b>&lt;{{ $user->transaction->ticket->category->name }}&gt;</b> {{ $user->transaction->ticket->name }}
+                            @else
+                                {{ $user->transaction->ticket->name }}
+                            @endif
+                            : {{ $user->transaction->ticket->id }}
                             @if ($workshops)
                                 <div class="flex items-center gap-2 mt-1">
                                     @foreach (json_decode($workshops) ?? [] as $ws)
@@ -237,6 +242,8 @@
             </tbody>
         </table>
     </div>
+
+    {{ $users->links() }}
 </div>
 @endsection
 

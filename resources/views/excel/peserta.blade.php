@@ -7,7 +7,7 @@
             <th colspan="9" style="text-align: center; font-size: 24px; font-weight: medium;">DATA PESERTA</th>
         </tr>
         <tr>
-            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">No. Pendaftaran</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">No.</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Nama</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Instansi</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Email</th>
@@ -17,6 +17,11 @@
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Status Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Timestamp</th>
         </tr>
+        @if (!empty($filters))
+        <tr>
+            <th colspan="9">Filter: {{ implode(' | ', $filters) }}</th>
+        </tr>
+        @endif
     </thead>
     <tbody>
         @foreach ($peserta as $user)
@@ -28,7 +33,7 @@
                 }
             @endphp
             <tr>
-                <td>{{ $user->transaction->id }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->instansi ?? '-' }}</td>
                 <td>{{ $user->email ?? '-' }}</td>

@@ -15,7 +15,13 @@
             <select name="ticket_id" id="ticket_id" class="border rounded-lg h-12 px-4 text-sm text-slate-700 font-medium cursor-pointer">
                 <option value="">Semua</option>
                 @foreach ($tickets as $tick)
-                    <option value="{{ $tick->id }}" {{ $request->ticket_id == $tick->id ? "selected='selected'" : "" }}>{{ $tick->name }}</option>
+                    <option value="{{ $tick->id }}" {{ $request->ticket_id == $tick->id ? "selected='selected'" : "" }}>
+                        @if ($tick->category_id != null)
+                            &lt;{{ $tick->category->name }}&gt; {{ $tick->name }}
+                        @else
+                            {{ $tick->name }}
+                        @endif
+                    </option>
                 @endforeach
             </select>
         </div>

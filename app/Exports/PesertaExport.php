@@ -15,10 +15,12 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 class PesertaExport implements FromView, ShouldAutoSize, WithMapping
 {
     protected $peserta;
+    protected $filters;
 
     public function __construct($props)
     {
         $this->peserta = $props['peserta'];
+        $this->filters = $props['filters'] ?? [];
     }
 
     public function map($row): array
@@ -35,7 +37,8 @@ class PesertaExport implements FromView, ShouldAutoSize, WithMapping
     public function view(): View
     {
         return view('excel.peserta', [
-            'peserta' => $this->peserta
+            'peserta' => $this->peserta,
+            'filters' => $this->filters,
         ]);
     }
 }
