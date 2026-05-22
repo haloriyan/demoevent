@@ -243,29 +243,29 @@ class UserController extends Controller
         ->get();
 
         foreach ($transactions as $trx) {
-            // if (env('DO_BROADCAST') == 1) {
-            //     try {
-            //         $user = $trx->user;
-            //         Mail::to($user->email)->send(new MailExpiring([
-            //             'trx' => $trx,
-            //         ]));
-            //         if ($user->whatsapp) {
-            //             send_wa(
-            //                 $user->whatsapp,
-            //                 "Yth. " . $user->name . "\n",
-            //                 "Kami dari panitia " . env('EVENT_NAME') . "ingin menyampaikan terima kasih atas pendaftaran Anda.\n".
-            //                 "Namun, kami mohon maaf untuk memberitahukan bahwa pendaftaran Anda terpaksa kami batalkan karena telah melewati batas waktu pembayaran. Sesuai dengan ketentuan yang berlaku, pendaftaran yang tidak disertai pembayaran dalam batas waktu yang ditentukan akan otomatis dibatalkan oleh sistem.\n".
-            //                 "Kami memahami bahwa hal ini mungkin menimbulkan ketidaknyamanan. Jika Anda masih berminat untuk mengikuti " . env('EVENT_NAME') . ", Anda dapat melakukan pendaftaran ulang.\n\n".
-            //                 route('register') . "\n\n".
-            //                 "Kami sangat menghargai minat Anda untuk berpartisipasi dalam acara ini dan berharap Anda dapat bergabung bersama kami di ". env('EVENT_NAME') ." mendatang.\n" . 
-            //                 "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env('EMAIL') . " atau " . env('PHONE') . ". \n\n" .
-            //                 "Terima kasih atas partisipasi Anda.\n\n". 
-            //                 "Hormat Kami,\n" . 
-            //                 "Panitia ". env('EVENT_NAME')
-            //             );
-            //         }
-            //     } catch (\Exception $e) {}
-            // }
+            if (env('DO_BROADCAST') == 1) {
+                try {
+                    $user = $trx->user;
+                    Mail::to($user->email)->send(new MailExpiring([
+                        'trx' => $trx,
+                    ]));
+                    if ($user->whatsapp) {
+                        send_wa(
+                            $user->whatsapp,
+                            "Yth. " . $user->name . "\n",
+                            "Kami dari panitia " . env('EVENT_NAME') . "ingin menyampaikan terima kasih atas pendaftaran Anda.\n".
+                            "Namun, kami mohon maaf untuk memberitahukan bahwa pendaftaran Anda terpaksa kami batalkan karena telah melewati batas waktu pembayaran. Sesuai dengan ketentuan yang berlaku, pendaftaran yang tidak disertai pembayaran dalam batas waktu yang ditentukan akan otomatis dibatalkan oleh sistem.\n".
+                            "Kami memahami bahwa hal ini mungkin menimbulkan ketidaknyamanan. Jika Anda masih berminat untuk mengikuti " . env('EVENT_NAME') . ", Anda dapat melakukan pendaftaran ulang.\n\n".
+                            route('register') . "\n\n".
+                            "Kami sangat menghargai minat Anda untuk berpartisipasi dalam acara ini dan berharap Anda dapat bergabung bersama kami di ". env('EVENT_NAME') ." mendatang.\n" . 
+                            "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env('EMAIL') . " atau " . env('PHONE') . ". \n\n" .
+                            "Terima kasih atas partisipasi Anda.\n\n". 
+                            "Hormat Kami,\n" . 
+                            "Panitia ". env('EVENT_NAME')
+                        );
+                    }
+                } catch (\Exception $e) {}
+            }
 
             Transaction::where('id', $trx->id)->update([
                 'payment_status' => "EXPIRED"
