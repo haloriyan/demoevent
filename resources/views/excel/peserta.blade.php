@@ -13,7 +13,8 @@
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Email</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">No. Telepon</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">NIK</th>
-            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Keikutsertaan</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;" colspan="2">Tiket</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Status Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Timestamp</th>
         </tr>
@@ -31,6 +32,11 @@
                 if ($paymentStatus == 'PAID') {
                     $statusColor = "#2ecc71";
                 }
+                $workshops = json_decode($user->transaction->workshops) ?? [];
+                $wsNames = [];
+                foreach ($workshops as $w => $workshop) {
+                    array_push($wsNames, $workshop->title);
+                }
             @endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
@@ -38,9 +44,19 @@
                 <td>{{ $user->instansi ?? '-' }}</td>
                 <td>{{ $user->email ?? '-' }}</td>
                 <td>{{ (string) $user->whatsapp ?? '-' }}</td>
-                <td >{{ (string) $user->nik }}</td>
+                <td> {{ (string) $user->nik }}</td>
                 <td>
                     {{ $user->transaction->ticket->name }}
+                </td>
+                <td>
+                    {{ $user->transaction->ticket->category->name }}
+                </td>
+                <td>
+                    @if (count($workshops) == 0)
+                        -
+                    @else
+                        {{ implode(",", $wsNames) }}
+                    @endif
                 </td>
                 <td style="background-color: {{ $statusColor }};color: #fff">
                     {{ $user->transaction->payment_status }}

@@ -41,6 +41,7 @@ Route::group(['prefix' => "admin"], function () {
             Route::post('store', [WorkshopController::class, 'store'])->name('admin.workshop.store');
             Route::post('{id}/update', [WorkshopController::class, 'update'])->name('admin.workshop.update');
             Route::get('{id}/delete', [WorkshopController::class, 'delete'])->name('admin.workshop.delete');
+            Route::get('export/{id?}', [WorkshopController::class, 'export'])->name('admin.workshop.export');
             Route::get('/', [AdminController::class, 'workshop'])->name('admin.workshop');
         });
 

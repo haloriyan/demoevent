@@ -76,8 +76,8 @@
                 <!-- ITEM WITH SUBMENU -->
                 <div class="relative group/item">
                     <button class="flex items-center gap-3 p-2 px-4 w-full text-sm text-slate-600 hover:bg-slate-100" onclick="addFilter({download: 1})">
-                        <i class="bx bx-table text-lg text-green-500"></i>
-                        Unduh Excel
+                        <ion-icon name="people-outline" class="text-xl text-green-500"></ion-icon>
+                        Data Peserta
                     </button>
 
                     @if ($request->q != "" || $request->payment_status != "" || $request->ticket_id != "")
@@ -102,6 +102,10 @@
                     <i class="bx bx-qr text-lg text-green-500"></i>
                     Unduh QR Peserta
                 </button>
+                <a href="{{ route('admin.workshop.export') }}" class="flex items-center gap-3 p-2 px-4 w-full text-sm text-slate-600 hover:bg-slate-100">
+                    <ion-icon name="clipboard-outline" class="text-xl text-green-500"></ion-icon>
+                    Peserta Workshop
+                </a>
 
             </div>
         </div>

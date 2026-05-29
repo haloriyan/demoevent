@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\WorkshopExport;
+use App\Models\Transaction;
 use App\Models\Workshop;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WorkshopController extends Controller
 {
@@ -52,5 +56,59 @@ class WorkshopController extends Controller
         return redirect()->back()->with([
             'message' => "Berhasil menghapus workshop " . $workshop->title
         ]);
+    }
+    public function export() {
+        $workshops = Workshop::orderBy('title', 'ASC')->get();
+        foreach ($workshops as $w => $ws) {
+            $workshops[$w]->users = [];
+        }
+
+        $transactionsRaw = Transaction::whereNotNull('workshops')
+        ->whereNotNull('user_id')
+        ->with([
+            'user'
+        ])
+        ->get();
+
+        $users = [];
+
+        foreach ($transactionsRaw as $t => $trx) {
+            if ($trx->user != null) {
+                $uworkshops = collect(json_decode($trx->workshops));
+                $user = $trx->user;
+                $user->transaction = $trx;
+                $user->workshops = $uworkshops;
+                $user->workshop_ids = $uworkshops->pluck('id')->toArray();
+
+                unset($user->transaction->user);
+
+                $users[] = $user;
+            }
+        }
+
+        foreach ($users as $u => $user) {
+            foreach ($workshops as $w => $ws) {
+                if (in_array($ws->id, $user->workshop_ids)) {
+                    $cleanUser = clone $user;
+
+                    unset($cleanUser->workshops);
+                    unset($cleanUser->workshop_ids);
+
+                    $tempUsers = $ws->users;
+                    $tempUsers[] = $cleanUser;
+
+                    $ws->users = $tempUsers;
+                }
+            }
+        }
+
+        $filename = "Peserta_Workshop-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y HH:mm:ss') . ".xlsx";
+
+        return Excel::download(
+            new WorkshopExport([
+                'workshops' => $workshops
+            ]),
+            $filename,
+        );
     }
 }
