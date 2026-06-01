@@ -116,4 +116,5 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'email_log' => env('EMAIL_LOG'),
 ];
