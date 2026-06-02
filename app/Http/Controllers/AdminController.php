@@ -57,67 +57,62 @@ use function Symfony\Component\Clock\now;
 class AdminController extends Controller
 {
     public function syncQty() {
-        $transactions = Transaction::where('payment_status', 'PAID')
-        ->orWhere('payment_status', 'PENDING')
-        ->with([
-            'ticket', 'user'
-        ])
-        ->get();
-
-        $ticketQuantities = [];
-        $wsQuantities = [];
-        foreach ($transactions as $trx) {
-            $ticketID = $trx->ticket_id;
-            $workshops = json_decode($trx->workshops) ?? [];
-
-            if (!isset($ticketQuantities[$ticketID])) {
-                $ticketQuantities[$ticketID] = 0;
-            }
-
-            $ticketQuantities[$ticketID] += 1;
-
-            foreach ($workshops as $ws) {
-                $wsID = strval($ws->id);
-                $theWorkshop = Workshop::where('id', $ws->id)->first();
-                if ($theWorkshop != null) {
-                    if (!isset($wsQuantities[$wsID])) {
-                        $wsQuantities[$wsID] = 0;
-                    }
-                    $wsQuantities[$wsID] += 1;
-                }
-            }
-        }
-
-        foreach ($ticketQuantities as $q => $qty) {
-            $tick = Ticket::where('id', $q);
-            $ticket = $tick->first();
-
-            $tick->update([
-                'quantity' => $ticket->start_quantity - $qty,
-            ]);
-        }
-
-        foreach ($wsQuantities as $q => $qty) {
-            // Log::info($b);
-            $ws = Workshop::where('id', $q);
-            $workshop = $ws->first();
-
-            if (!$workshop) {
-                Log::info($q . " skipped");
-            } else {
-                $startQuantity = $workshop->count + $workshop->quantity;
-
-                $ws->update([
-                    'quantity' => $startQuantity - $qty,
-                    'count' => $qty,
-                ]);
-            }
-        }
+        $this->syncTicketQuantities();
+        $this->syncWorkshopQuantities();
 
         return redirect()->back()->with([
             'message' => "Quantity tiket dan workshop berhasil disinkronkan dengan transaksi valid"
         ]);
     }
+
+    private function syncTicketQuantities() {
+        $transactions = Transaction::where('payment_status', 'PAID')
+        ->orWhere('payment_status', 'PENDING')
+        ->with(['ticket', 'user'])
+        ->get();
+
+        $ticketQuantities = [];
+        foreach ($transactions as $trx) {
+            $ticketID = $trx->ticket_id;
+            $ticketQuantities[$ticketID] = ($ticketQuantities[$ticketID] ?? 0) + 1;
+        }
+
+        foreach ($ticketQuantities as $q => $qty) {
+            $tick = Ticket::where('id', $q)->first();
+            if ($tick) {
+                $tick->update([
+                    'quantity' => $tick->start_quantity - $qty,
+                ]);
+            }
+        }
+    }
+
+    private function syncWorkshopQuantities() {
+        $transactions = Transaction::where('payment_status', 'PAID')
+        ->orWhere('payment_status', 'PENDING')
+        ->get();
+
+        $wsQuantities = [];
+        foreach ($transactions as $trx) {
+            $workshops = json_decode($trx->workshops) ?? [];
+            foreach ($workshops as $ws) {
+                $wsID = strval($ws->id);
+                $wsQuantities[$wsID] = ($wsQuantities[$wsID] ?? 0) + 1;
+            }
+        }
+
+        foreach ($wsQuantities as $q => $qty) {
+            $workshop = Workshop::where('id', $q)->first();
+            if ($workshop) {
+                $startQuantity = $workshop->count + $workshop->quantity;
+                $workshop->update([
+                    'quantity' => $startQuantity - $qty,
+                    'count' => $qty,
+                ]);
+            }
+        }
+    }
+
     public function spinnerStore(Request $request) {
         $userID = $request->user_id;
 
@@ -298,6 +293,7 @@ class AdminController extends Controller
             );
         }
 
+        $workshops = WsCategory::with(['workshops.rundown.speakers'])->get();
         $users = $u->paginate(25)->withQueryString();
 
         if ($request->qr == 1) {
@@ -317,13 +313,14 @@ class AdminController extends Controller
             'request' => $request,
             'users' => $users,
             'tickets' => $tickets,
+            'workshops' => $workshops,
             'filterCount' => $filterCount,
         ]);
     }
     public function updatePeserta(Request $request, $id) {
         $u = User::where('id', $id);
         $user = $u->first();
-
+ 
         $u->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -331,7 +328,14 @@ class AdminController extends Controller
             'nik' => $request->nik,
             'instansi' => $request->instansi,
         ]);
-
+ 
+        if ($request->has('workshops')) {
+            $user->transaction()->update([
+                'workshops' => $request->workshops
+            ]);
+            $this->syncWorkshopQuantities();
+        }
+ 
         if ($request->email != $user->email) {
             // Send notif
             Mail::to($user->email)->send(new MailEmailChanged([
@@ -339,7 +343,7 @@ class AdminController extends Controller
                 'email' => $request->email,
             ]));
         }
-
+ 
         return redirect()->back()->with([
             'message' => "Berhasil mengubah data peserta"
         ]);

@@ -139,7 +139,7 @@
                 @foreach ($users as $user)
                     @php
                         $color = $statusColors[strtoupper($user->transaction->payment_status)];
-                        $workshops = $user->transaction->workshops;
+                        $userWorkshops = $user->transaction->workshops;
                     @endphp
                     <tr class="hover:bg-slate-100 transition-colors">
                         <td class="py-3 px-4 text-sm text-slate-600">
@@ -201,17 +201,17 @@
                             @else
                                 {{ $user->transaction->ticket->name }}
                             @endif
-                            : {{ $user->transaction->ticket->id }}
-                            @if ($workshops)
-                                <div class="flex items-center gap-2 mt-1">
-                                    @foreach (json_decode($workshops) ?? [] as $ws)
-                                        <div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">
-                                            {{ $ws->title }}
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </td>
+                             : {{ $user->transaction->ticket->id }}
+                             @if ($userWorkshops)
+                                 <div class="flex items-center gap-2 mt-1">
+                                     @foreach (json_decode($userWorkshops) ?? [] as $ws)
+                                         <div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">
+                                             {{ $ws->title }}
+                                         </div>
+                                     @endforeach
+                                 </div>
+                             @endif
+                             </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="flex">
                                 <div class="p-1 px-4 rounded-full border border-{{ $color }}-500 text-{{ $color }}-500 bg-{{ $color }}-100 text-xs font-medium">
@@ -256,6 +256,7 @@
 @include('admin.peserta.ConfirmTransaction')
 @include('admin.peserta.filter')
 @include('admin.peserta.edit')
+@include('WorkshopSelector')
     
 @endsection
 
@@ -289,6 +290,11 @@
         toggleHidden("#ConfirmTrx");
     }
 
+    let currentUser = null;
+    let maxWorkshops = 2;
+    let selectedWorkshops = {};
+    let WSCategories = @json($workshops);
+
     const parseJsonData = (data) => {
         if (typeof data === 'string') {
             try {
@@ -307,17 +313,175 @@
         if (!data) {
             return;
         }
+        currentUser = data;
         const link = event.currentTarget;
-
+ 
         select("#EditPeserta form").setAttribute('action', link.href);
-
+ 
         select("#EditPeserta #nik").value = data.nik;
         select("#EditPeserta #name").value = data.name;
         select("#EditPeserta #email").value = data.email;
         select("#EditPeserta #whatsapp").value = data.whatsapp;
         select("#EditPeserta #instansi").value = data.instansi;
 
+        const workshops = parseJsonData(data.transaction.workshops) ?? [];
+        select("#EditPeserta #workshops").value = JSON.stringify(workshops);
+        
+        const wsArea = select("#EditPeserta #SelectedWSArea");
+        wsArea.innerHTML = "";
+        workshops.forEach(ws => {
+            wsArea.innerHTML += `<div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">${ws.title}</div>`;
+        });
+ 
         toggleHidden("#EditPeserta")
+    }
+
+    const getAngka = text => {
+        let texts = text.split(' ');
+        let toReturn = null;
+        texts.forEach((txt, t) => {
+            if (!isNaN(txt)) {
+                toReturn = txt;
+            }
+        });
+        return toReturn !== null ? parseInt(toReturn) : null;
+    }
+
+    const OpenWorkshopPicker = () => {
+        if (!currentUser) return;
+        
+        const ticket = currentUser.transaction.ticket;
+        const jumlahWS = getAngka(ticket.name);
+        
+        if (jumlahWS !== null) {
+            maxWorkshops = jumlahWS;
+            const ticketCategoryID = ticket.category_id;
+            
+            // Filter and render workshop categories
+            select("#WSCategoryRender").innerHTML = "";
+            const filteredCategories = WSCategories.map(cat => ({
+                ...cat,
+                workshops: cat.workshops.filter(ws => ws.ticket_category_id === ticketCategoryID)
+            })).filter(cat => cat.workshops.length > 0);
+
+            filteredCategories.map((cat, c) => {
+                let WSCat = document.createElement('DIV');
+                WSCat.classList.add('flex', 'flex-col', 'gap-4');
+                WSCat.setAttribute('data-category', cat.id);
+                WSCat.setAttribute('data-category-name', cat.name);
+                WSCat.innerHTML = `<div class="p-3 px-4 bg-primary text-white text-sm font-medium">
+                    ${cat.name}
+                </div>
+                <div id="WorkshopItemArea_${cat.id}" class='flex flex-col gap-4'></div>`;
+                select("#WSCategoryRender").appendChild(WSCat);
+ 
+                cat.workshops.map((ws, w) => {
+                    let WSItem = document.createElement('DIV');
+                    let speakers = ws.speakers?.split(',') ?? [];
+                    WSItem.classList.add('workshop-item', 'cursor-pointer', 'border', 'rounded-lg', 'p-3', 'px-4', 'text-sm', 'flex', 'items-center', 'gap-3');
+                    WSItem.setAttribute('data-id', ws.id);
+                    WSItem.setAttribute('data-title', ws.title);
+                    WSItem.addEventListener('click', function (e) {
+                        ChooseWorkshop(e);
+                    });
+                    
+                    let speakersContent = "<div class='flex flex-col gap-2 text-xs'>";
+                    speakers.map((speaker, s) => {
+                        speakersContent += `<div class='flex items-center gap-1'>
+                            <div class="w-1 h-1 rounded-full bg-primary"></div>
+                            ${speaker}
+                        </div>`;
+                    })
+                    speakersContent += "</div>";
+ 
+                    WSItem.innerHTML = `<div class='flex flex-col gap-1 basis-24 grow'>
+                        <div class='text-sm font-medium'>${ws.title}</div>
+                        ${speakersContent}
+                    </div>
+                    <div class='text-xs'>${ws?.start_time?.split(':').slice(0, 2).join(':') ?? '-'}</div>`
+ 
+                    select(`#WorkshopItemArea_${cat.id}`).appendChild(WSItem);
+                })
+            })
+            
+            select("#WSPickerSubmitArea")?.classList.add('hidden');
+            select("#WorkshopPicker #ModalTitle").innerHTML = `Pilih ${jumlahWS} Workshop`;
+            
+            // Initialize current selections
+            selectedWorkshops = {};
+            const currentWorkshops = parseJsonData(select("#EditPeserta #workshops").value) ?? [];
+            currentWorkshops.forEach(work => {
+                const element = select(`.workshop-item[data-id='${work.id}']`);
+                if (element) element.click();
+            });
+
+            toggleHidden('#WorkshopPicker');
+        } else {
+            alert("Tiket ini tidak memiliki kuota workshop");
+        }
+    }
+
+    function ChooseWorkshop(event) {
+        const element = event.currentTarget;
+        const categoryWrapper = element.closest('[data-category]');
+        if (!categoryWrapper) return;
+ 
+        const categoryId = categoryWrapper.dataset.category;
+        const categoryName = categoryWrapper.dataset.categoryName;
+        const workshopId = element.dataset.id;
+        const workshopTitle = element.dataset.title;
+        const isSelected = element.classList.contains("border-primary");
+ 
+        if (isSelected) {
+            element.classList.remove("border-primary", "bg-primary", "text-white");
+            delete selectedWorkshops[categoryId];
+            return;
+        }
+ 
+        const totalSelected = Object.keys(selectedWorkshops).length;
+        const isReplacingSameCategory = !!selectedWorkshops[categoryId];
+ 
+        if (totalSelected >= maxWorkshops && !isReplacingSameCategory) {
+            const previousCategoryId = Object.keys(selectedWorkshops)[0];
+            const previousSelectedElement = select(`[data-category="${previousCategoryId}"] .border-primary`);
+            if (previousSelectedElement) {
+                previousSelectedElement.classList.remove("border-primary", "bg-primary", "text-white");
+            }
+            delete selectedWorkshops[previousCategoryId];
+        }
+ 
+        if (selectedWorkshops[categoryId]) {
+            const previous = categoryWrapper.querySelector(".border-primary");
+            if (previous) {
+                previous.classList.remove("border-primary", "bg-primary", "text-white");
+            }
+        }
+ 
+        element.classList.add("border-primary", "bg-primary", "text-white");
+        selectedWorkshops[categoryId] = {
+            id: workshopId,
+            title: workshopTitle,
+            category: { id: categoryId, name: categoryName }
+        };
+        
+        if (Object.keys(selectedWorkshops).length === maxWorkshops) {
+            select("#WSPickerSubmitArea")?.classList.remove('hidden');
+        }
+    }
+ 
+    const ConfirmWorkshop = (e) => {
+        e.preventDefault();
+        let output = Object.values(selectedWorkshops);
+        select("input#workshops").value = JSON.stringify(output);
+        
+        // Update the UI in EditPeserta modal
+        const wsArea = select("#EditPeserta #SelectedWSArea");
+        wsArea.innerHTML = "";
+        output.forEach(ws => {
+            wsArea.innerHTML += `<div class="p-1 px-3 border border-primary rounded-full text-xs text-primary">${ws.title}</div>`;
+        });
+        
+        toggleHidden("#WorkshopPicker");
     }
 </script>
 @endsection

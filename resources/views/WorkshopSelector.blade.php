@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-75 flex items-center justify-center hidden" id="WorkshopPicker">
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50" id="WorkshopPicker">
     <form class="bg-white shadow-lg rounded-lg w-5/12 mobile:w-10/12 flex flex-col gap-0 mt-4 max-h-[90vh]" onsubmit="ConfirmWorkshop(event)">
         @csrf
 

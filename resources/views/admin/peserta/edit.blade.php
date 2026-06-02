@@ -26,12 +26,21 @@
             </div>
         </div>
 
-        <div>
-            <div class="text-xs text-slate-500 mb-2">Instansi</div>
-            <input type="text" name="instansi" id="instansi" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
-        </div>
-
-        <div class="flex items-center justify-end gap-4 mt-4">
+         <div>
+             <div class="text-xs text-slate-500 mb-2">Instansi</div>
+             <input type="text" name="instansi" id="instansi" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
+         </div>
+ 
+         <div class="flex flex-col gap-2 p-4 border rounded-lg bg-slate-50">
+             <div class="text-xs text-slate-500 font-medium">Workshop yang dipilih:</div>
+             <div id="SelectedWSArea" class="flex flex-wrap gap-2"></div>
+             <button type="button" class="p-2 px-4 rounded-lg text-xs bg-primary text-white font-medium w-fit mt-2" onclick="OpenWorkshopPicker()">
+                 Atur Workshop
+             </button>
+             <input type="hidden" name="workshops" id="workshops">
+         </div>
+ 
+         <div class="flex items-center justify-end gap-4 mt-4">
             <div class="flex grow"></div>
             <button class="p-3 px-6 rounded-lg text-sm bg-slate-200 text-slate-700" type="button" onclick="toggleHidden('#EditPeserta')">Batal</button>
             <button class="p-3 px-6 rounded-lg text-sm bg-green-500 text-white font-medium">Simpan</button>
