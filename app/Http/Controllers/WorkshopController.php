@@ -63,7 +63,10 @@ class WorkshopController extends Controller
             $workshops[$w]->users = [];
         }
 
-        $transactionsRaw = Transaction::whereNotNull('workshops')
+        $transactionsRaw = Transaction::where([
+            ['payment_status', 'PAID']
+        ])
+        ->whereNotNull('workshops')
         ->whereNotNull('user_id')
         ->with([
             'user'

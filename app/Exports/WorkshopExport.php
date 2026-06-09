@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use Illuminate\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class WorkshopExport implements FromView
+class WorkshopExport implements FromView, ShouldAutoSize
 {
     public $workshops;
 

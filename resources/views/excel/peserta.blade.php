@@ -14,7 +14,8 @@
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">No. Telepon</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">NIK</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;" colspan="2">Tiket</th>
-            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop Pagi</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop Siang</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Status Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Timestamp</th>
         </tr>
@@ -52,10 +53,45 @@
                     {{ $user->transaction->ticket->category->name }}
                 </td>
                 <td>
+                    {{-- PAGI --}}
                     @if (count($workshops) == 0)
                         -
                     @else
-                        {{ implode(",", $wsNames) }}
+                        @php
+                            $hasWorkshop = false;
+                        @endphp
+                        @foreach ($workshops as $ws)
+                            @if ($ws && $ws->category->name == "Workshop Pagi")
+                                @php
+                                    $hasWorkshop = true;
+                                @endphp
+                                <div>{{ $ws->title }}</div>
+                            @endif
+                        @endforeach
+                        @if ($hasWorkshop == false)
+                            -
+                        @endif
+                    @endif
+                </td>
+                <td>
+                    {{-- SIANG --}}
+                    @if (count($workshops) == 0)
+                        -
+                    @else
+                        @php
+                            $hasWorkshop = false;
+                        @endphp
+                        @foreach ($workshops as $ws)
+                            @if ($ws && $ws->category->name == "Workshop Siang")
+                                @php
+                                    $hasWorkshop = true;
+                                @endphp
+                                <div>{{ $ws->title }}</div>
+                            @endif
+                        @endforeach
+                        @if ($hasWorkshop == false)
+                            -
+                        @endif
                     @endif
                 </td>
                 <td style="background-color: {{ $statusColor }};color: #fff">

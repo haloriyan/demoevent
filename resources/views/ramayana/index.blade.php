@@ -39,11 +39,12 @@
             Tari dan drama tanpa dialog ini mengangkat kisah Ramayana yang diadaptasi ke dalam budaya Jawa, menjadikannya pengalaman yang khas dan penuh keindahan. Sejak 1961, lebih dari 200 penari dan musisi tampil di panggung terbuka dengan Candi Prambanan sebagai latar megah, setiap gerakan, kostum, dan alunan gamelan memadukan tradisi dan cerita dalam harmoni yang memukau. 
         </div>
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
-            Kami menyediakan pembelian tiket kolektif melalui website ini, dengan harga Rp. TBA, sudah termasuk tiket masuk dan transportasi ke lokasi (PP).
+            Kami menyediakan pembelian tiket kolektif melalui website ini, dengan harga Rp. {{ currency_encode(env('RAMAYANA_PRICE')) }}, sudah termasuk tiket masuk dan transportasi ke lokasi (PP).
         </div>
         <div class="text-sm text-slate-600 leading-7 mobile:leading-8">
             Bagi peserta dan keluarga yang mendaftar diharapkan bersiap untuk penjemputan menuju lokasi pada; <br />
             Tempat 	: {{ env('RAMAYANA_PLACE') }}<br />
+            Tanggal : 8 Oktober 2026<br />
             Waktu	: {{ env('RAMAYANA_TIME') }}
         </div>
     </div>
