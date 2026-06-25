@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaymentConfirmed as MailPaymentConfirmed;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Models\Workshop;
 use App\Models\WaDevice;
 use App\Notifications\PaymentConfirmed;
+use App\Notifications\TransactionCancelled;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -69,6 +73,49 @@ class TransactionController extends Controller
 
         return redirect()->back()->with([
             'message' => $message,
+        ]);
+    }
+
+    public function cancelByAdmin(Request $request, $id) {
+        $trx = Transaction::where('id', $id)->with(['user', 'ticket'])->first();
+        if (!$trx) {
+            return redirect()->back()->withErrors(['Transaksi tidak ditemukan.']);
+        }
+
+        $user = $trx->user;
+        $ticket = $trx->ticket;
+
+        DB::beginTransaction();
+        try {
+            $trx->update(['payment_status' => 'CANCELLED']);
+            $ticket->increment('quantity');
+
+            $workshops = json_decode($trx->workshops, true);
+            if ($workshops) {
+                foreach ($workshops as $wsData) {
+                    $workshop = Workshop::where('id', $wsData['id'])->first();
+                    if ($workshop) {
+                        $workshop->decrement('count');
+                        $workshop->increment('quantity');
+                    }
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Terjadi kesalahan saat membatalkan transaksi.']);
+        }
+
+        if (env('DO_BROADCAST') == 1) {
+            $user->notify(new TransactionCancelled([
+                'user' => $user,
+                'trx' => $trx,
+            ]));
+        }
+
+        return redirect()->back()->with([
+            'message' => "Berhasil membatalkan transaksi #" . $trx->id,
         ]);
     }
 }

@@ -328,13 +328,22 @@ class UserController extends Controller
                     'request' => $request,
                 ]);
             } else {
-                $request->validate([
-                    'email' => "unique:users",
-                    'nik' => "unique:users"
-                ], [
-                    'email.unique' => "Alamat email telah digunakan. Mohon gunakan yang lain",
-                    'nik.unique' => "NIK telah digunakan.",
-                ]);
+                $email = $request->email;
+                $nik = $request->nik;
+
+                $userByEmail = User::where('email', $email)->with('transaction')->first();
+                if ($userByEmail && $userByEmail->transaction && !in_array($userByEmail->transaction->payment_status, ['CANCELLED', 'EXPIRED'])) {
+                    return redirect()->back()->withErrors([
+                        'email.unique' => "Alamat email telah digunakan. Mohon gunakan yang lain",
+                    ]);
+                }
+
+                $userByNik = User::where('nik', $nik)->with('transaction')->first();
+                if ($userByNik && $userByNik->transaction && !in_array($userByNik->transaction->payment_status, ['CANCELLED', 'EXPIRED'])) {
+                    return redirect()->back()->withErrors([
+                        'nik.unique' => "NIK telah digunakan.",
+                    ]);
+                }
 
                 $payload['nik'] = $request->nik;
                 $payload['name'] = $request->name;

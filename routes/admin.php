@@ -74,6 +74,7 @@ Route::group(['prefix' => "admin"], function () {
 
         Route::group(['prefix' => "transaksi/{id}"], function () {
             Route::match(['get', 'post'], 'confirm', [TransactionController::class, 'confirmByAdmin'])->name('admin.transaction.confirm');
+            Route::get('cancel', [TransactionController::class, 'cancelByAdmin'])->name('admin.transaction.cancel');
         });
 
         Route::group(['prefix' => "ticket"], function () {
