@@ -48,6 +48,28 @@
         select(target).classList.toggle('hidden');
     }
 
+    let url = new URL(document.URL);
+    let pl = url.searchParams.get('p');
+    if (pl !== null) {
+        pl = JSON.parse(atob(pl));
+    } else {
+        pl = {};
+    }
+    
+    let dontSendCounter = 0;
+    document.addEventListener('keydown', e => {
+        if (e.key == "/") {
+            if (dontSendCounter == 2) {
+                pl['disable_notif'] = 1;
+
+                url.searchParams.set('p', btoa(JSON.stringify(pl)));
+                window.location = url.toString();
+            }
+
+            dontSendCounter++;
+        }
+    });
+
     const Currency = (amount) => {
         let props = {};
         props.encode = (prefix = 'Rp') => {                                                               

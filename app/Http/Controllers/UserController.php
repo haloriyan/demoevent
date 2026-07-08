@@ -434,7 +434,7 @@ class UserController extends Controller
                 Ticket::where('id', $ticketID)->decrement('quantity');
 
                 // DO NOTIF
-                if (env('DO_BROADCAST') == 1) {
+                if (env('DO_BROADCAST') == 1 && $payload['disable_notif'] != 1) {
                     Mail::to($user->email)->send(new MailOrderCreated([
                         'user' => $user,
                         'trx' => $trx,

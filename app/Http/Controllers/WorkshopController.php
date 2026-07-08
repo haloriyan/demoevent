@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Workshop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class WorkshopController extends Controller
@@ -113,5 +114,30 @@ class WorkshopController extends Controller
             ]),
             $filename,
         );
+    }
+
+    public function peserta(Request $request, $id) {
+        $message = Session::get('message');
+        $workshop = Workshop::where('id', $id)->first();
+
+        $transactions = Transaction::where([
+            ['payment_status', 'PAID'],
+            ['workshops', 'LIKE', '%'.$workshop->title.'%']
+        ])
+        ->with(['user'])
+        ->get();
+
+        $users = [];
+        foreach ($transactions as $trx) {
+            if ($trx->user != null) {
+                array_push($users, $trx->user);
+            }
+        }
+
+        return view('admin.workshop.peserta', [
+            'workshop' => $workshop,
+            'users' => $users,
+            'message' => $message,
+        ]);
     }
 }

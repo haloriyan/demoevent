@@ -270,7 +270,11 @@ class AdminController extends Controller
         }
 
         $u = $u->orderBy('created_at', 'DESC')
-        ->with(['transaction.ticket']);
+        ->with([
+            'transaction.ticket' => function ($query) {
+                $query->orderBy('created_at', 'DESC');
+            }
+        ]);
 
         if ($request->download == 1) {
             $users = $u->get();

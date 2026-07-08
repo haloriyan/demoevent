@@ -47,9 +47,13 @@
                     @endphp
 
                     <div class="bg-white rounded-lg p-8 shadow flex flex-col gap-4">
-                        <div class="flex items-center gap-4">
-                            <h4 class="flex basis-32 grow text-lg text-slate-700">{{ $ws->title }}</h4>
+                        <div class="flex items-start gap-4">
+                            <h4 class="flex basis-32 grow text-md text-slate-700">{{ $ws->title }}</h4>
                             @if ($me->role == "admin")
+                                <a href="{{ route('admin.workshop.peserta', $ws->id) }}" class="p-2 px-4 bg-primary text-white flex items-center justify-center gap-2 rounded-lg">
+                                    <ion-icon name="people-outline" class="text-lg"></ion-icon>
+                                    <div class="text-xs">Peserta</div>
+                                </a>
                                 <a href="{{ route('admin.workshop.update', $ws->id) }}" class="w-8 h-8 bg-green-500 text-white flex items-center justify-center rounded-lg" onclick="Edit('{{ $ws }}', event)">
                                     <ion-icon name="create-outline" class="text-lg"></ion-icon>
                                 </a>
