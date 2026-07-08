@@ -120,18 +120,36 @@ class WorkshopController extends Controller
         $message = Session::get('message');
         $workshop = Workshop::where('id', $id)->first();
 
-        $transactions = Transaction::where([
-            ['payment_status', 'PAID'],
-            ['workshops', 'LIKE', '%'.$workshop->title.'%']
+        $transactionsRaw = Transaction::where([
+            ['payment_status', 'PAID']
         ])
-        ->with(['user'])
+        ->whereNotNull('workshops')
+        ->whereNotNull('user_id')
+        ->with([
+            'user'
+        ])
         ->get();
 
         $users = [];
-        foreach ($transactions as $trx) {
+        foreach ($transactionsRaw as $trx) {
             if ($trx->user != null) {
-                array_push($users, $trx->user);
+                $uworkshops = collect(json_decode($trx->workshops));
+                if (in_array($workshop->id, $uworkshops->pluck('id')->toArray())) {
+                    $users[] = $trx->user;
+                }
             }
+        }
+
+        if ($request->download == 1) {
+            $filename = "Peserta_" . $workshop->title . "-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y HH:mm:ss') . ".xlsx";
+            
+            $workshop->users = $users;
+            return Excel::download(
+                new WorkshopExport([
+                    'workshops' => [$workshop]
+                ]),
+                $filename
+            );
         }
 
         return view('admin.workshop.peserta', [
