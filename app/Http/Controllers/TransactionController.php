@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderCreated as MailOrderCreated;
 use App\Mail\PaymentConfirmed as MailPaymentConfirmed;
 use App\Models\Transaction;
 use App\Models\User;
@@ -116,6 +117,52 @@ class TransactionController extends Controller
 
         return redirect()->back()->with([
             'message' => "Berhasil membatalkan transaksi #" . $trx->id,
+        ]);
+    }
+
+    public function resendOrderConfirmation(Request $request, $id) {
+        $trx = Transaction::where('id', $id)->with(['user', 'ticket'])->first();
+        if (!$trx) {
+            return redirect()->back()->withErrors(['Transaksi tidak ditemukan.']);
+        }
+
+        $user = $trx->user;
+
+        if (env('DO_BROADCAST') == 1) {
+            Mail::to($user->email)->send(new MailOrderCreated([
+                'user' => $user,
+                'trx' => $trx,
+            ]));
+
+            if ($user->whatsapp != null) {
+                $device = WaDevice::where('is_primary', true)->first();
+
+                Http::post(env('WA_URL') . "/send", [
+                    'client_id' => $device->client_id,
+                    'destination' => "62".$user->whatsapp,
+                    'message' => "Yth. " . $user->name . "\n\n" .
+                                 "Kami ingin mengkonfirmasi bahwa pendaftaran Anda untuk PIT PERABDIN - ASAR ELC 2026 telah berhasil.\n\n" . 
+                                 "Berikut adalah detail pendaftaran Anda :\n".
+                                 "NIK : " . ($user->nik ?? '-') . "\n" .
+                                 "Nama Lengkap : " . $user->name. "\n".
+                                 "Alamat Email : ". ($user->email ?? '-') . "\n" .
+                                 "No. Telepon : ". ($user->whatsapp ?? '-') . "\n" .
+                                 "Tiket : " . $trx->ticket->name . "\n" . 
+                                 "No. Pendaftaran : " . $trx->id . "\n\n" .
+                                 "PIT PERABDIN - ASAR ELC 20216 akan diselenggarakan pada :\n" .
+                                 "- Tanggal : " . $trx->ticket->start_date . "\n\n" .
+                                 "Kemudian mohon lakukan pembayaran melalui link berikut ini :\n".
+                                 route('pembayaran.instan', $trx->id) . "\n\n" .
+                                 "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau melalui kontak WhatsApp ini.\n\n" .
+                                 "Terima kasih atas partisipasi Anda\n\n".
+                                 "Hormat Kami,\n ".
+                                 "Panitia PIT PERABDIN - ASAR ELC 2026"
+                ]);
+            }
+        }
+
+        return redirect()->back()->with([
+            'message' => "Berhasil mengirim ulang konfirmasi pendaftaran kepada " . $user->name,
         ]);
     }
 }

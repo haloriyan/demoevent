@@ -146,24 +146,29 @@
                             <div class="w-8 h-8 flex items-center justify-center bg-white border rounded cursor-pointer group relative">
                                 <ion-icon name="ellipsis-horizontal" class="text-slate-600"></ion-icon>
                                  <div class="absolute top-0 left-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
-                                     @if ($user->transaction->payment_status == "PENDING")
-                                         <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
-                                             <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
-                                             Konfirmasi Pembayaran
-                                         </a>
-                                     @endif
-                                     @if ($user->transaction->payment_status == "PAID")
-                                         <a href="{{ route('admin.transaction.confirm', ['id' => $user->transaction->id, 'is_resend' => 'y']) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
-                                             <ion-icon name="qr-code-outline" class="text-lg text-green-500"></ion-icon>
-                                             Kirim Ulang QR
-                                         </a>
-                                     @endif
-                                     @if ($me->role == "admin")
-                                         <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
-                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
-                                             Edit Peserta
-                                         </a>
-                                     @endif
+                                        @if ($user->transaction->payment_status == "PENDING")
+                                            <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
+                                                <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
+                                                Konfirmasi Pembayaran
+                                            </a>
+                                            <a href="{{ route('admin.transaction.resend-order', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                                <ion-icon name="mail-outline" class="text-lg text-primary"></ion-icon>
+                                                Kirim Ulang Konfirmasi
+                                            </a>
+                                        @endif
+                                      @if ($user->transaction->payment_status == "PAID")
+                                          <a href="{{ route('admin.transaction.confirm', ['id' => $user->transaction->id, 'is_resend' => 'y']) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                              <ion-icon name="qr-code-outline" class="text-lg text-green-500"></ion-icon>
+                                              Kirim Ulang QR
+                                          </a>
+                                      @endif
+                                      
+                                      @if ($me->role == "admin")
+                                          <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
+                                              <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
+                                              Edit Peserta
+                                          </a>
+                                      @endif
                                      @if ($user->transaction->payment_status == "PENDING")
                                          <div class="my-2 border-t border-slate-100"></div>
                                          <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}')">
@@ -234,18 +239,22 @@
                             <div class="w-8 h-8 flex items-center justify-center bg-white border rounded cursor-pointer group relative">
                                 <ion-icon name="ellipsis-horizontal" class="text-slate-600"></ion-icon>
                                  <div class="absolute top-0 right-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
-                                     @if ($user->transaction->payment_status == "PENDING")
-                                         <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
-                                             <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
-                                             Konfirmasi Pembayaran
-                                         </a>
-                                     @endif
-                                     @if ($me->role == "admin")
-                                         <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
-                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
-                                             Edit Peserta
-                                         </a>
-                                     @endif
+                                      @if ($user->transaction->payment_status == "PENDING")
+                                          <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
+                                              <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
+                                              Konfirmasi Pembayaran
+                                          </a>
+                                      @endif
+                                      <a href="{{ route('admin.transaction.resend-order', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                          <ion-icon name="mail-outline" class="text-lg text-primary"></ion-icon>
+                                          Kirim Ulang Konfirmasi
+                                      </a>
+                                      @if ($me->role == "admin")
+                                          <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
+                                              <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
+                                              Edit Peserta
+                                          </a>
+                                      @endif
                                      @if ($user->transaction->payment_status == "PENDING")
                                          <div class="my-2 border-t border-slate-100"></div>
                                          <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}')">
