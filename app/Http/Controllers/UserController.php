@@ -158,7 +158,7 @@ class UserController extends Controller
                 'submission' => $submission,
             ])
         );
-        Mail::to('halo@pitperabdinasarelc2026.com')->send(
+        Mail::to('asarelcposter2026@gmail.com')->send(
             new MailSubmissionNotifySystem([
                 'submission' => $submission,
             ])

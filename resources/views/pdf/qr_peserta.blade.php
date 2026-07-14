@@ -38,8 +38,8 @@
 
         .card {
             display: table-cell;
-            width: 90mm;
-            height: 118mm;
+            width: 105mm;
+            height: 138mm;
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: top;
@@ -57,8 +57,7 @@
             align-items: center;
             justify-content: flex-start;
 
-            padding-top: 50px;
-            padding-bottom: 30px;
+            padding: 80px 25px 30px 25px;
         }
 
         .spacer {
