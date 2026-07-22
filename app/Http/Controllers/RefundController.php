@@ -69,17 +69,17 @@ class RefundController extends Controller
             ]));
 
             if ($device) {
-                // Http::post(env('WA_URL') . "/send", [
-                //     'client_id' => $device->client_id,
-                //     'destination' => "62".$user->whatsapp,
-                //     'image' => env('APP_URL') . '/storage/refund_evidences/' . $refund->payment_payload,
-                //     'message' => "Yth. " . $user->name . "\n\n" .
-                //                     "Kami ingin memberitahu bahwa permintaan pembatalan Anda telah sepenuhnya berhasil dan dana telah dikembalikan ke rekening sesuai permintaan.\n\n".
-                //                     "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
-                //                     "Terima kasih atas partisipasi Anda\n\n".
-                //                     "Hormat Kami,\n ".
-                //                     "Panitia PIT PERABDIN - ASAR ELC 2026"
-                // ]);
+                Http::post(env('WA_URL') . "/send", [
+                    'client_id' => $device->client_id,
+                    'destination' => "62".$user->whatsapp,
+                    'image' => env('APP_URL') . '/storage/refund_evidences/' . $refund->payment_payload,
+                    'message' => "Yth. " . $user->name . "\n\n" .
+                                    "Kami ingin memberitahu bahwa permintaan pembatalan Anda telah sepenuhnya berhasil dan dana telah dikembalikan ke rekening sesuai permintaan.\n\n".
+                                    "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
+                                    "Terima kasih atas partisipasi Anda\n\n".
+                                    "Hormat Kami,\n ".
+                                    "Panitia PIT PERABDIN - ASAR ELC 2026"
+                ]);
             }
         }
 
