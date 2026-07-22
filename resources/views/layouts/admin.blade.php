@@ -73,7 +73,7 @@
         $routeName = Route::currentRouteName();
         $routes = explode(".", $routeName);
         $masterRoutes = [
-            'peserta', 'speaker', 'schedule', 'ticket', 'booth', 'workshop'
+            'peserta', 'speaker', 'schedule', 'ticket', 'booth', 'workshop', 'refund'
         ];
         $me = me('admin');
         $role = $me->role;
@@ -123,6 +123,11 @@
                     <div class="h-10 w-1 bg-white"></div>
                     <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'workshop' ? 'text-primary' : '' }}"></ion-icon>
                     <div class="text-sm flex grow {{ @$routes[1] == 'workshop' ? 'text-primary' : '' }}">Workshop</div>
+                </a>
+                <a href="{{ route('admin.refund') }}" class="flex items-center gap-4 text-slate-500">
+                    <div class="h-10 w-1 bg-white"></div>
+                    <ion-icon name="ellipse-outline" class="text-[8px] {{ @$routes[1] == 'refund' ? 'text-primary' : '' }}"></ion-icon>
+                    <div class="text-sm flex grow {{ @$routes[1] == 'refund' ? 'text-primary' : '' }}">Refund</div>
                 </a>
             @endif
         </div>

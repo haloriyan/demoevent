@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrderCreated as MailOrderCreated;
 use App\Mail\PaymentConfirmed as MailPaymentConfirmed;
+use App\Models\Refund;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Workshop;
 use App\Models\WaDevice;
 use App\Notifications\PaymentConfirmed;
 use App\Notifications\TransactionCancelled;
+use App\Services\Doku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -77,7 +79,8 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function cancelByAdmin(Request $request, $id) {
+    // public function
+    public function cancelByAdmin(Request $request, Doku $doku, $id) {
         $trx = Transaction::where('id', $id)->with(['user', 'ticket'])->first();
         if (!$trx) {
             return redirect()->back()->withErrors(['Transaksi tidak ditemukan.']);
@@ -88,7 +91,21 @@ class TransactionController extends Controller
 
         DB::beginTransaction();
         try {
-            $trx->update(['payment_status' => 'CANCELLED']);
+            $toUpdate = ['payment_status' => 'CANCELLED'];
+            if ($trx->payment_status == "PAID") {
+                $refund = Refund::create([
+                    'transaction_id' => $trx->id,
+                    'user_id' => $trx->user_id,
+                    'ticket_id' => $trx->ticket_id,
+                    'bank_name' => $request->bank_name,
+                    'bank_account' => $request->bank_account,
+                    'bank_number' => $request->bank_number,
+                    'payment_status' => "PENDING",
+                ]);
+                $toUpdate['refund_id'] = $refund->id;
+            }
+            
+            $trx->update($toUpdate);
             $ticket->increment('quantity');
 
             $workshops = json_decode($trx->workshops, true);
@@ -105,7 +122,7 @@ class TransactionController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['Terjadi kesalahan saat membatalkan transaksi.']);
+            return redirect()->back()->withErrors(['Terjadi kesalahan saat membatalkan transaksi. ' . $e->getMessage()]);
         }
 
         if (env('DO_BROADCAST') == 1) {

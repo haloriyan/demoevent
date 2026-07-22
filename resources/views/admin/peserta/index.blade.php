@@ -145,39 +145,42 @@
                         <td class="py-3 px-4 text-sm text-slate-600">
                             <div class="w-8 h-8 flex items-center justify-center bg-white border rounded cursor-pointer group relative">
                                 <ion-icon name="ellipsis-horizontal" class="text-slate-600"></ion-icon>
-                                 <div class="absolute top-0 left-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
-                                        @if ($user->transaction->payment_status == "PENDING")
-                                            <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
-                                                <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
-                                                Konfirmasi Pembayaran
-                                            </a>
-                                            <a href="{{ route('admin.transaction.resend-order', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
-                                                <ion-icon name="mail-outline" class="text-lg text-primary"></ion-icon>
-                                                Kirim Ulang Konfirmasi
-                                            </a>
-                                        @endif
-                                      @if ($user->transaction->payment_status == "PAID")
-                                          <a href="{{ route('admin.transaction.confirm', ['id' => $user->transaction->id, 'is_resend' => 'y']) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
-                                              <ion-icon name="qr-code-outline" class="text-lg text-green-500"></ion-icon>
-                                              Kirim Ulang QR
-                                          </a>
-                                      @endif
-                                      
-                                      @if ($me->role == "admin")
-                                          <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
-                                              <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
-                                              Edit Peserta
-                                          </a>
-                                      @endif
-                                     @if ($user->transaction->payment_status == "PENDING")
-                                         <div class="my-2 border-t border-slate-100"></div>
-                                         <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}')">
-                                             <ion-icon name="close-circle-outline" class="text-lg text-red-500"></ion-icon>
-                                             Batalkan Transaksi
-                                         </a>
-                                     @endif
-                                 </div>
+                                <div class="absolute top-0 left-0 bg-white border rounded py-3 hidden group-hover:flex flex-col z-10">
+                                    @if ($user->transaction->payment_status == "PENDING")
+                                        <a href="{{ route('admin.transaction.confirm', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmTrx(event, '{{ base64_encode(json_encode($user)) }}')">
+                                            <ion-icon name="checkmark-circle-outline" class="text-lg text-green-500"></ion-icon>
+                                            Konfirmasi Pembayaran
+                                        </a>
+                                        <a href="{{ route('admin.transaction.resend-order', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                            <ion-icon name="mail-outline" class="text-lg text-primary"></ion-icon>
+                                            Kirim Ulang Konfirmasi
+                                        </a>
+                                    @endif
+                                    @if ($user->transaction->payment_status == "PAID")
+                                        <a href="{{ route('admin.transaction.confirm', ['id' => $user->transaction->id, 'is_resend' => 'y']) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap">
+                                            <ion-icon name="qr-code-outline" class="text-lg text-green-500"></ion-icon>
+                                            Kirim Ulang QR
+                                        </a>
+                                    @endif
+                                    
+                                    @if ($me->role == "admin")
+                                        <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
+                                            <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
+                                            Edit Peserta
+                                        </a>
+                                    @endif
+                                    @if (
+                                        $user->transaction->payment_status == "PENDING" ||
+                                        $user->transaction->payment_status == "PAID"
+                                    )
+                                        <div class="my-2 border-t border-slate-100"></div>
+                                        <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}', '{{ $user->transaction->payment_status }}')">
+                                            <ion-icon name="close-circle-outline" class="text-lg text-red-500"></ion-icon>
+                                            Batalkan Transaksi
+                                        </a>
+                                    @endif
 
+                                </div>
                             </div>
                         </td>
                         <td class="py-3 px-4 text-sm text-slate-600">
@@ -255,9 +258,9 @@
                                               Edit Peserta
                                           </a>
                                       @endif
-                                     @if ($user->transaction->payment_status == "PENDING")
+                                     @if ($user->transaction->payment_status == "PENDING" || $user->transaction->payment_status == "PAID")
                                          <div class="my-2 border-t border-slate-100"></div>
-                                         <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}')">
+                                         <a href="{{ route('admin.transaction.cancel', $user->transaction->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick="ConfirmCancel(event, '{{ $user->name }}', '{{ $user->transaction->id }}', '{{ $user->transaction->payment_status }}')">
                                              <ion-icon name="close-circle-outline" class="text-lg text-red-500"></ion-icon>
                                              Batalkan Transaksi
                                          </a>
@@ -283,7 +286,8 @@
 @include('admin.peserta.edit')
 @include('WorkshopSelector')
 
-<div id="ConfirmCancel" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+<form id="CancelForm" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    @csrf
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
         <div class="p-6 flex flex-col gap-6">
             <div class="flex items-center gap-4">
@@ -292,21 +296,39 @@
                 </div>
                 <div class="text-lg font-bold text-slate-800">Batalkan Transaksi?</div>
             </div>
-            <div class="text-sm text-slate-600 leading-relaxed">
+            <div class="text-sm text-slate-600 leading-relaxed" id="UnpaidForm">
                 Apakah Anda yakin ingin membatalkan transaksi untuk <b id="CancelUser"></b> (ID: <span id="CancelTrxID"></span>)? 
+            </div>
+            <div id="PaidForm" class="flex flex-col gap-4 hidden">
+                <div class="text-sm text-slate-600">
+                    Masukkan informasi bank tujuan pengembalian dana :
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-xs text-slate-500">Bank Tujuan</div>
+                    <input type="text" name="bank_name" class="w-full h-12 border rounded-lg px-4 text-sm text-slate-600">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-xs text-slate-500">No. Rekening</div>
+                    <input type="text" name="bank_number" class="w-full h-12 border rounded-lg px-4 text-sm text-slate-600">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-xs text-slate-500">Atas nama</div>
+                    <input type="text" name="bank_account" class="w-full h-12 border rounded-lg px-4 text-sm text-slate-600">
+                </div>
+            </div>
+            <div class="text-xs text-slate-500">
                 Tindakan ini akan mengembalikan kuota tiket dan workshop, serta mengizinkan peserta untuk mendaftar kembali menggunakan email dan NIK yang sama.
             </div>
             <div class="flex justify-end gap-3">
-                <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg" onclick="toggleHidden('#ConfirmCancel')">
+                <button type="button" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg" onclick="toggleHidden('#CancelForm')">
                     Batal
                 </button>
                 <button type="submit" form="CancelForm" class="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg">
-                    Ya, Batalkan
+                    Batalkan Transaksi
                 </button>
             </div>
         </div>
     </div>
-    <form id="CancelForm" method="GET" action=""></form>
 </div>
 
 @endsection
@@ -342,13 +364,22 @@
         toggleHidden("#ConfirmTrx");
     }
 
-    const ConfirmCancel = (event, name, trxId) => {
+    const ConfirmCancel = (event, name, trxId, paymentStatus) => {
         event.preventDefault();
         const link = event.currentTarget;
-        select("#ConfirmCancel #CancelUser").innerHTML = name;
-        select("#ConfirmCancel #CancelTrxID").innerHTML = trxId;
+        console.log(paymentStatus);
+        
+        select("#CancelForm #CancelUser").innerHTML = name;
+        select("#CancelForm #CancelTrxID").innerHTML = trxId;
         select("#CancelForm").setAttribute('action', link.href);
-        toggleHidden("#ConfirmCancel");
+
+        if (paymentStatus == "PAID") {
+            select("#CancelForm #PaidForm").classList.remove('hidden');
+        } else {
+            select("#CancelForm #PaidForm").classList.add('hidden');
+        }
+
+        toggleHidden("#CancelForm");
     }
 
     let currentUser = null;

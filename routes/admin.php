@@ -10,6 +10,7 @@ use App\Http\Controllers\SpeakerController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\RefundController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => "fo"], function () {
@@ -35,6 +36,11 @@ Route::group(['prefix' => "admin"], function () {
         Route::group(['prefix' => "peserta"], function () {
             Route::post('{id}/update', [AdminController::class, 'updatePeserta'])->name('admin.peserta.update');
             Route::get('/', [AdminController::class, 'peserta'])->name('admin.peserta');
+        });
+
+        Route::group(['prefix' => "refund"], function () {
+            Route::post('{id}/confirm', [RefundController::class, 'confirm'])->name('admin.refund.confirm');
+            Route::get('/', [RefundController::class, 'index'])->name('admin.refund');
         });
 
         Route::group(['prefix' => "workshop"], function () {
@@ -76,6 +82,7 @@ Route::group(['prefix' => "admin"], function () {
         Route::group(['prefix' => "transaksi/{id}"], function () {
             Route::match(['get', 'post'], 'confirm', [TransactionController::class, 'confirmByAdmin'])->name('admin.transaction.confirm');
             Route::get('cancel', [TransactionController::class, 'cancelByAdmin'])->name('admin.transaction.cancel');
+            Route::get('cancel-paid', [TransactionController::class, 'cancelPaid'])->name('admin.transaction.cancelPaid');
             Route::get('resend-order', [TransactionController::class, 'resendOrderConfirmation'])->name('admin.transaction.resend-order');
         });
 

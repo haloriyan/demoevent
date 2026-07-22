@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Doku\Snap\Snap;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -15,10 +16,34 @@ class Doku {
         $this->config = config('doku');
     }
 
+    public function payoutSignature(array $props)
+    {
+        $mode = strtoupper(env('DOKU_MODE'));
+
+        $body = json_encode($props['body']);
+
+        $bodyHash = hash('sha256', $body); // lowercase hex
+
+        $stringToSign = implode(':', [
+            strtoupper($props['method']),      // POST
+            $props['endpoint'],                // /payout/v1/transfer
+            $props['access_token'],
+            $bodyHash,
+            $props['timestamp'],
+        ]);
+
+        return base64_encode(
+            hash_hmac(
+                'sha512',
+                $stringToSign,
+                env('DOKU_SECRET_KEY_'.$mode),
+                true
+            )
+        );
+    }
     public function signature($props) {
         $body = $props['body'];
         $mode = strtoupper(env('DOKU_MODE'));
-        // $this->ksortRecursive($body);
         $clientID = env('DOKU_CLIENT_ID_'.$mode);
         $minifiedBody = json_encode($body);
         $target = "/checkout/v1/payment";
