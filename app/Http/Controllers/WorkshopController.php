@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Workshop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -69,15 +70,15 @@ class WorkshopController extends Controller
         ])
         ->whereNotNull('workshops')
         ->whereNotNull('user_id')
-        ->with([
-            'user'
-        ])
+        ->with(['user'])
+        ->orderBy('created_at', 'DESC')
         ->get();
 
         $users = [];
+        $userIDs = [];
 
         foreach ($transactionsRaw as $t => $trx) {
-            if ($trx->user != null) {
+            if ($trx->user != null && !in_array($trx->user->id, $userIDs)) {
                 $uworkshops = collect(json_decode($trx->workshops));
                 $user = $trx->user;
                 $user->transaction = $trx;
@@ -87,6 +88,7 @@ class WorkshopController extends Controller
                 unset($user->transaction->user);
 
                 $users[] = $user;
+                $userIDs[] = $user->id;
             }
         }
 
