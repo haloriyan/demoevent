@@ -103,7 +103,11 @@ class UserController extends Controller
     public function submissionSubmit(Request $request) {
         $email = $request->email;
         $type = $request->type;
-        $user = User::where('email', $email)->with(['transaction.ticket'])->first();
+        $user = User::where('email', $email)->with(['transaction.ticket'])->orderBy('created_at', 'DESC')->first();
+        if ($user != null) {
+            $trx = Transaction::where('user_id', $user->id)->with(['ticket'])->first();
+            $user->transaction = $trx;
+        }
         $eligible = true;
         $maxSize = 5;
         $maxSizeInKB = $maxSize * 1024;
