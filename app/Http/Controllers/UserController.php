@@ -131,7 +131,6 @@ class UserController extends Controller
             $eligible = false;
         } else {
             if ($user->transaction == null || @$user->transaction->payment_status != "PAID") {
-                Log::info($user->transaction);
                 $eligible = false;
             }
         }

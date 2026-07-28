@@ -154,6 +154,10 @@ Route::group(['prefix' => "admin"], function () {
             Route::match(['get', 'post'], 'doku', [AdminController::class, 'dokuSettings'])->name('admin.settings.doku');
             Route::get('midtrans-mode/{mode}', [AdminController::class, 'midtransMode'])->name('admin.settings.midtrans.mode');
             Route::get('doku-mode/{mode}', [AdminController::class, 'dokuMode'])->name('admin.settings.doku.mode');
+            Route::match(['get', 'post'], 'backup', [AdminController::class, 'backupSettings'])->name('admin.settings.backup');
+            Route::post('restore', [AdminController::class, 'restoreSettings'])->name('admin.settings.restore');
+            Route::post('restore-file', [AdminController::class, 'restoreFromStorage'])->name('admin.settings.restore.file');
+            Route::post('restore-stream', [AdminController::class, 'restoreFromStream'])->name('admin.settings.restore.stream');
         });
 
         Route::group(['prefix' => "broadcast"], function () {

@@ -1,9 +1,16 @@
-# Transaction Cancellation
+# Backup Impoort Feature
 
-You are a senior software engineer with 8 years experience trying to maintain a legacy code with keeping the coding style. You need to add a new feature of "Transaction Cancellation"
+I have created this before. I want you to duplicate what i've wrote into this laravel project. There may are some differences between my codes due to different timeline and experience, and you should implement the coding style i use in this project.
 
-An admin can cancel an order transaction, so the `trnsactions.payment_status` become `CANCELLED` and the quantity restored back as much as the record has. The system already have form validation in the registration flow that the user's credentials like `email` and `nik` could not be used again (for complete column you should check the code). Then if the transaction has been cancelled, this credential can be used again.
+Old project location you should look inside :
+```
+~/gabut/ppdb
+```
 
-Put the cancel button in the existing context menu. Add confirmation before cancelling the transaction. Send a notification to the related user to inform that their transaction was cancelled.
+Take a look at `admin.settings.backup` and `admin.restore` routes (`~/gabut/ppdb/routes/web.php`) to learn what i have wrote previously, learn how i get the data, archive them, and restore back the data to the database.
 
-Make sure it has no conflict of the quantity, no race condition, or any common issues that can be happened.
+And I just realized there may occure an error about the relationship, so this time you may have to ignore the foreign key checks before backing up and restoring the data.
+
+I want you to put this page into the "Pengaturan" sub menu just as in my previous project.
+
+Do not improve that not causing crash in flow, by this mean, ignore security issues or any bad experience, the most important thing is this feature is working fine first.
