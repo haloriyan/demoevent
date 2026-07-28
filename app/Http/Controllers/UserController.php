@@ -105,7 +105,7 @@ class UserController extends Controller
         $type = $request->type;
         $user = User::where('email', $email)->with(['transaction.ticket'])->orderBy('created_at', 'DESC')->first();
         if ($user != null) {
-            $trx = Transaction::where('user_id', $user->id)->with(['ticket'])->first();
+            $trx = Transaction::where('user_id', $user->id)->with(['ticket'])->orderBy('created_at', 'DESC')->first();
             $user->transaction = $trx;
         }
         $eligible = true;
@@ -131,6 +131,7 @@ class UserController extends Controller
             $eligible = false;
         } else {
             if ($user->transaction == null || @$user->transaction->payment_status != "PAID") {
+                Log::info($user->transaction);
                 $eligible = false;
             }
         }
