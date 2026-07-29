@@ -514,7 +514,7 @@ class AdminController extends Controller
             );
             return $submissions;
         }
-        $submissions = $subm->paginate(2);
+        $submissions = $subm->paginate(25);
 
         return view('admin.submission.index', [
             'me' => $me,

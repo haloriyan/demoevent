@@ -498,8 +498,9 @@ class UserController extends Controller
         $trx = Transaction::where('id', $trxID);
         $transaction = $trx->with(['user', 'ticket'])->first();
         $payload = json_decode($transaction->payment_payload, false);
+        $payload = $payload->response;
 
-        return redirect($payload->payment['url']);
+        return redirect($payload->payment->url);
     }
     public function pembayaran(Request $request, $trxID) {
         $trx = Transaction::where('id', $trxID);
