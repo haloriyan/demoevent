@@ -8,7 +8,7 @@
         Carbon::parse('2026-08-11 00:00:01'),
         Carbon::parse('2026-09-10 23:59:59')
     );
-    $isAbstractValid = !Carbon::parse('2026-08-02 23:59:59')->isPast();
+    $isAbstractValid = !Carbon::parse('2026-08-01 23:59:59')->isPast();
 @endphp
     
 @section('content')
