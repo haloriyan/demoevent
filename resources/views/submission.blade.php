@@ -8,6 +8,7 @@
         Carbon::parse('2026-08-11 00:00:01'),
         Carbon::parse('2026-09-10 23:59:59')
     );
+    $isAbstractValid = !Carbon::parse('2026-08-01 23:59:59')->isPast();
 @endphp
     
 @section('content')
@@ -17,48 +18,59 @@
         <h2 class="text-4xl text-white font-bold">Submission Form</h2>
         <form action="{{ route('submission.submit') }}" method="POST" class="p-10 bg-white rounded-lg border-b-8 border-b-primary shadow-lg flex flex-col gap-6" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="type" id="type">
-            <div class="flex items-center gap-4 mobile:justify-center">
-                <div class="flex items-center">
-                    <div class="type-item cursor-pointer text-sm text-primary font-medium p-4 px-8 rounded-lg" id="abstract" onclick="changeType('abstract', this)">
-                        Abstrak
-                    </div>
-                    @if ($isPosterValid)
-                        <div class="type-item cursor-pointer text-sm text-primary font-medium p-4 px-8 rounded-lg" id="poster" onclick="changeType('poster', this)">
-                            Poster
-                        </div>
-                    @endif
-                </div>
-            </div>
+            <input type="hidden" name="type" id="type" value="{{ $isAbstractValid ? "abstract" : "poster" }}">
 
             @include('partials.flash_message')
 
-            <div class="group border focus-within:border-primary rounded-lg p-2 relative">
-                <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama</label>
-                <input type="text" name="name" id="name" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ old('name') }}" required />
-            </div>
-            <div class="group border focus-within:border-primary rounded-lg p-2 relative">
-                <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Email</label>
-                <input type="email" name="email" id="email" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ old('email') }}" required placeholder="Masukkan email yang Anda gunakan untuk mendaftar pada acara ini"/>
-            </div>
-            <div class="text-xs -mt-4">Pengiriman abstrak/e-poster hanya untuk peserta terdaftar dengan status pembayaran lunas.</div>
+            @if ($isAbstractValid || $isPosterValid)
+                <div class="flex items-center gap-4 mobile:justify-center">
+                    <div class="flex items-center">
+                        @if ($isAbstractValid)
+                            <div class="type-item cursor-pointer text-sm text-primary font-medium p-4 px-8 rounded-lg" id="abstract" onclick="changeType('abstract', this)">
+                                Abstrak
+                            </div>
+                        @endif
+                        @if ($isPosterValid)
+                            <div class="type-item cursor-pointer text-sm text-primary font-medium p-4 px-8 rounded-lg" id="poster" onclick="changeType('poster', this)">
+                                Poster
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                
+                <div class="group border focus-within:border-primary rounded-lg p-2 relative">
+                    <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama</label>
+                    <input type="text" name="name" id="name" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ old('name') }}" required />
+                </div>
+                <div class="group border focus-within:border-primary rounded-lg p-2 relative">
+                    <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Email</label>
+                    <input type="email" name="email" id="email" class="w-full h-10 mt-3 outline-none bg-transparent text-sm text-slate-700" value="{{ old('email') }}" required placeholder="Masukkan email yang Anda gunakan untuk mendaftar pada acara ini"/>
+                </div>
+                <div class="text-xs -mt-4">Pengiriman abstrak/e-poster hanya untuk peserta terdaftar dengan status pembayaran lunas.</div>
 
-            <div class="border rounded-lg p-4 flex items-center gap-4 group relative">
-                <div class="text-xs text-slate-500 flex grow" id="filenameArea">Pilih File</div>
-                <button type="button" class="bg-primary text-white text-xs font-medium p-3 px-5 rounded-lg mobile:hidden">Pilih dari Komputer</button>
-                <button type="button" class="bg-primary text-white text-xs font-medium p-3 px-5 rounded-lg desktop:hidden">Pilih</button>
-                <input type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="absolute top-0 left-0 right-0 bottom-0 opacity-0 cursor-pointer" onchange="chooseFile(this)" required>
-            </div>
+                <div class="border rounded-lg p-4 flex items-center gap-4 group relative">
+                    <div class="text-xs text-slate-500 flex grow" id="filenameArea">Pilih File</div>
+                    <button type="button" class="bg-primary text-white text-xs font-medium p-3 px-5 rounded-lg mobile:hidden">Pilih dari Komputer</button>
+                    <button type="button" class="bg-primary text-white text-xs font-medium p-3 px-5 rounded-lg desktop:hidden">Pilih</button>
+                    <input type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="absolute top-0 left-0 right-0 bottom-0 opacity-0 cursor-pointer" onchange="chooseFile(this)" required>
+                </div>
 
-            <div class="text-xs text-slate-500">
-                Dengan mengirimkan abstrak/e-poster, Anda berarti mematuhi dan tunduk pada <a href="{{ route('eposter') }}" class="text-primary underline">Syarat dan Ketentuan</a> yang telah Panitia tetapkan.
-            </div>
+                <div class="text-xs text-slate-500">
+                    Dengan mengirimkan abstrak/e-poster, Anda berarti mematuhi dan tunduk pada <a href="{{ route('eposter') }}" class="text-primary underline">Syarat dan Ketentuan</a> yang telah Panitia tetapkan.
+                </div>
 
-            <div class="flex justify-end">
-                <button class="p-3 px-5 rounded-lg bg-primary text-white text-sm font-medium">
-                    Submit
-                </button>
-            </div>
+                <div class="flex justify-end">
+                    <button class="p-3 px-5 rounded-lg bg-primary text-white text-sm font-medium">
+                        Submit
+                    </button>
+                </div>
+            @else
+                <div class="text-sm text-slate-700">
+                    Maaf, pengiriman submission telah ditutup.
+                </div>
+            @endif
+
+            
         </form>
     </div>
 </div>
@@ -82,7 +94,14 @@
             type === "abstract" ? "application/vnd.openxmlformats-officedocument.wordprocessingml.document" : "application/pdf"
         );
     }
-    changeType('abstract', select(".type-item#abstract"));
+    
+
+    let tipe = select("#type").value;
+    if (tipe == 'abstract') {
+        changeType('abstract', select(".type-item#abstract"));
+    } else {
+        changeType('poster', select(".type-item#poster"));
+    }
 
     const chooseFile = input => {
         let file = input.files[0];

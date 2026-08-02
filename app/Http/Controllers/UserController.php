@@ -41,6 +41,12 @@ class UserController extends Controller
 {
     public $midtrans;
 
+    public function info() {
+        // $key = "xnd_production_4wYtg8AIUj5ypHEWtBIl2fhFHv5SJoINMmoKtDzEkxTF5uSbNlTdwcbutoblGpk"; // Write
+        $key = "xnd_production_uUhHXmhRdrQQb1Rb6LvGRDW7PV5YBcLb1UHpS4lFsQleCtMPWiivhxL4dno3lo4"; // read
+        $response = Http::withBasicAuth($key, '')->get('https://api.xendit.co/transactions');
+        return $response->json();
+    }
     public function __construct(Midtrans $mid)
     {
         $this->midtrans = $mid;
@@ -108,10 +114,11 @@ class UserController extends Controller
             $trx = Transaction::where('user_id', $user->id)->with(['ticket'])->orderBy('created_at', 'DESC')->first();
             $user->transaction = $trx;
         }
+
         $eligible = true;
         $maxSize = 5;
         $maxSizeInKB = $maxSize * 1024;
-        $mimeTypes = $type === "abstract" ? 
+        $mimeTypes = $type == "abstract" ? 
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document" : 
             "application/pdf";
 
@@ -157,16 +164,16 @@ class UserController extends Controller
             $fileName
         );
 
-        Mail::to($email)->send(
-            new MailSubmissionNotifyUser([
-                'submission' => $submission,
-            ])
-        );
-        Mail::to('asarelcposter2026@gmail.com')->send(
-            new MailSubmissionNotifySystem([
-                'submission' => $submission,
-            ])
-        );
+        // Mail::to($email)->send(
+        //     new MailSubmissionNotifyUser([
+        //         'submission' => $submission,
+        //     ])
+        // );
+        // Mail::to('asarelcposter2026@gmail.com')->send(
+        //     new MailSubmissionNotifySystem([
+        //         'submission' => $submission,
+        //     ])
+        // );
 
         return redirect()->back()->with([
             'message' => "Berhasil mengirim submission " . ucwords($type)
@@ -193,6 +200,10 @@ class UserController extends Controller
         ]);
     }
     public function index() {
+        $start = Carbon::now()->startOfYear()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        // $users = User::whereBetween('created_at', [$start, $end])->get();
+        // return $users;
         $speakers = Speaker::where('is_featured', true)
         ->orderBy('priority', 'ASC')
         ->get();
