@@ -3,20 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ramayana;
-use App\Services\Midtrans;
+use App\Services\Doku;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class RamayanaController extends Controller
 {
-    public $midtrans;
-
-    public function __construct(Midtrans $midtrans)
-    {
-        $this->midtrans = $midtrans;
-    }
-
-    public function purchase(Request $request) {
+    public function purchase(Request $request, Doku $doku) {
         $price = env('RAMAYANA_PRICE');
         $qty = $request->qty;
         $totalPay = $price * $qty;
@@ -36,37 +28,43 @@ class RamayanaController extends Controller
             'payment_link' => null,
         ]);
 
-        $names = explode(" ", $request->name);
-
-        $midtrans = $this->midtrans->snap([
-            'transaction' => [
-                'order_id' => $ref,
-                'gross_amount' => $totalPay,
-            ],
+        $payment = $doku->checkout([
+            'invoice_number' => $ref,
+            'amount' => $totalPay,
             'customer' => [
-                'first_name' => $names[0],
-                'last_name' => @$names[count($names) - 1] ?? "",
+                'name' => $request->name,
                 'email' => $request->email,
             ],
         ]);
-        $midtrans['order_id'] = $ref;
+        $payment['order_id'] = $ref;
 
-        $trx = Ramayana::where('id', $store->id);
-        $trx->update([
-            'payment_payload' => json_encode($midtrans)
+        $paymentLink = data_get($payment, 'response.payment.url');
+
+        Ramayana::where('id', $store->id)->update([
+            'payment_payload' => json_encode($payment),
+            'payment_link' => $paymentLink,
         ]);
 
-        $transaction = $trx->first();
-
-        return redirect($midtrans['redirect_url']);
+        return redirect($paymentLink ?: url('/'));
     }
     public function done(Request $request) {
         return view('ramayana.done');
     }
     public function callback(Request $request) {
-        $orderID = $request->order_id;
+        $order = $request->order ?? null;
+        $orderID = $order['invoice_number'] ?? $request->order_id ?? $request->invoice_number ?? null;
 
-        $order = Ramayana::where('ref', $orderID)->first();
+        if ($orderID) {
+            $trx = Ramayana::where('ref', $orderID);
+            $transaction = $trx->first();
+
+            if ($transaction && $transaction->payment_status != 'PAID') {
+                $trx->update([
+                    'payment_status' => 'PAID',
+                    'payment_payload' => json_encode($request->all()),
+                ]);
+            }
+        }
 
         return response()->json(['ok']);
     }

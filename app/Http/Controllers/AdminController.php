@@ -1571,11 +1571,39 @@ class AdminController extends Controller
             'message' => "Berhasil menjadikan perangkat " . $device->name . " sebagai utama",
         ]);
     }
-    public function callbackDoku(Request $request, $method = 'va') {
-        $order = $request->order;
+        public function callbackDoku(Request $request, $method = 'va') {
+        $order = (array) ($request->order ?? []);
+        $invoiceNumber = $order['invoice_number'] ?? $request->invoice_number ?? $request->order_id ?? null;
 
-        $trx = Transaction::where('invoice_number', $order['invoice_number']);
+        if (!$invoiceNumber) {
+            return response()->json(['message' => 'missing invoice_number'], 400);
+        }
+
+        if (str_starts_with($invoiceNumber, 'RMY_')) {
+            $trx = Ramayana::where('ref', $invoiceNumber);
+            $transaction = $trx->first();
+
+            if ($transaction && $transaction->payment_status != 'PAID') {
+                $trx->update([
+                    'payment_status' => 'PAID',
+                    'payment_payload' => json_encode($request->all()),
+                ]);
+
+                Mail::to($transaction->email)->send(new RamayanaCreated([
+                    'data' => $transaction,
+                ]));
+            }
+
+            return response()->json([
+                'message' => 'ok'
+            ]);
+        }
+
+        $trx = Transaction::where('invoice_number', $invoiceNumber);
         $transaction = $trx->with(['user', 'ticket'])->first();
+        if (!$transaction) {
+            return response()->json(['message' => 'transaction not found'], 404);
+        }
         $user = $transaction->user;
 
         $trx->update([
@@ -1599,12 +1627,19 @@ class AdminController extends Controller
                 'client_id' => $device->client_id,
                 'destination' => "62".$user->whatsapp,
                 'image' => $qrLink,
-                'message' => "Yth. " . $user->name . "\n\n" .
+                'message' => "Yth. " . $user->name . "
+
+" .
                                 'Kami ingin mengkonfirmasi bahwa pembayaran Anda untuk PIT PERABDIN - ASAR ELC 2026 telah berhasil.'.
                                 'Sebagai bukti transaksi, kami lampirkan kode QR yang akan digunakan saat registrasi ulang di lokasi acara. Mohon simpan kode QR ini dengan baik dan tunjukkan kepada petugas registrasi saat kedatangan.'.
-                                "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".\n\n" .
-                                "Terima kasih atas partisipasi Anda\n\n".
-                                "Hormat Kami,\n ".
+                                "Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi kami di " . env("EMAIL") . " atau " . env("PHONE") . ".
+
+" .
+                                "Terima kasih atas partisipasi Anda
+
+" .
+                                "Hormat Kami,
+ " .
                                 "Panitia PIT PERABDIN - ASAR ELC 2026"
             ]);
         }
@@ -1613,7 +1648,7 @@ class AdminController extends Controller
             'message' => "ok"
         ]);
     }
-    public function callbackMidtrans(Request $request) {
+public function callbackMidtrans(Request $request) {
         $status = strtoupper($request->transaction_status);
         $orderID = $request->order_id;
         $ords = explode("_", $orderID);

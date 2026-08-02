@@ -164,16 +164,16 @@ class UserController extends Controller
             $fileName
         );
 
-        // Mail::to($email)->send(
-        //     new MailSubmissionNotifyUser([
-        //         'submission' => $submission,
-        //     ])
-        // );
-        // Mail::to('asarelcposter2026@gmail.com')->send(
-        //     new MailSubmissionNotifySystem([
-        //         'submission' => $submission,
-        //     ])
-        // );
+        Mail::to($email)->send(
+            new MailSubmissionNotifyUser([
+                'submission' => $submission,
+            ])
+        );
+        Mail::to('asarelcposter2026@gmail.com')->send(
+            new MailSubmissionNotifySystem([
+                'submission' => $submission,
+            ])
+        );
 
         return redirect()->back()->with([
             'message' => "Berhasil mengirim submission " . ucwords($type)
