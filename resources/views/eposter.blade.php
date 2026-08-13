@@ -17,7 +17,7 @@
     <h2 class="text-4xl font-bold">Kompetisi Abstrak & E-Poster</h2>
     <div class="flex items-center gap-4">
         <a href="{{ route('submission') }}" class="p-3 px-8 rounded-full font-medium text-sm border border-secondary bg-secondary hover:bg-orange-800 hover:border-secondary text-white">
-            KIRIM ABSTRAK
+            KIRIM E-POSTER
         </a>
     </div>
     <div class="mobile:h-[10vh]"></div>
@@ -35,7 +35,8 @@
             <li>Panitia akan menseleksi abstrak yang sesuai dengan tema acara.</li>
             <li>Pengumuman penerimaan abstrak: <b>10 AGUSTUS 2026</b>. Akan dikirim melalui email peserta (mohon hubungi panitia jika Anda belum menerima konfirmasi).</li>
             <li>Batas akhir pengiriman e-poster : <b>10 SEPTEMBER 2026</b>.</li>
-            <li>Format e-poster : ukuran <b>A4 dengan file format PDF</b>.</li>
+            <li>Format e-poster : ukuran <b>A4 Portrait dengan file format PDF</b>.</li>
+            <li>Maks. Ukuran File 15 MB</li>
             <li>Peserta e-poster akan mendapatkan Sertifikat Partisipasi E-Poster.</li>
             <li>Pemenang kompetisi E-Poster akan ditentukan berdasarkan Rapat Dewan Juri. Keputusan Juri bersifat mutlak dan tidak dapat diganggu gugat.</li>
             <li>Pemenang e-poster akan diumumkan pada hari Sabtu, <b>10 OKTOBER 2026</b>, saat Acara Penutupan.</li>

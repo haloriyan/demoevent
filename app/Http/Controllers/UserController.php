@@ -116,7 +116,7 @@ class UserController extends Controller
         }
 
         $eligible = true;
-        $maxSize = 5;
+        $maxSize = 15;
         $maxSizeInKB = $maxSize * 1024;
         $mimeTypes = $type == "abstract" ? 
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document" : 
