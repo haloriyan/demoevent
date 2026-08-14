@@ -261,7 +261,7 @@
             <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#GuidelineDownload')"></ion-icon>
         </div>
 
-        <a href="#" class="flex items-center gap-4 border rounded-lg text-sm p-4 px-5 border-primary text-primary hover:bg-primary hover:text-white">
+        <a href="/1st_Announcement.pdf" class="flex items-center gap-4 border rounded-lg text-sm p-4 px-5 border-primary text-primary hover:bg-primary hover:text-white">
             <ion-icon name="download-outline" class="text-lg"></ion-icon>
             Second Announcement
         </a>
