@@ -66,10 +66,10 @@
                         <div class="flex items-center gap-4">
                             <ion-icon name="time-outline" class="text-lg text-slate-500"></ion-icon>
                         </div>
-                        <div class="text-xs text-slate-500">Kapasitas : {{ $ws->count }} dari {{ $totalSales }}</div>
-                        <div class="flex bg-slate-200">
+                        <div class="text-xs text-slate-500">Tersedia : {{ $ws->quantity }} slot peserta</div>
+                        {{-- <div class="flex bg-slate-200">
                             <div class="h-2 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500"></div>
-                        </div>
+                        </div> --}}
                     </div>
                 @endforeach
             </div>

@@ -12,7 +12,7 @@
 
         <div class="text-xs text-slate-500 mt-2">Judul :</div>
         <input type="text" name="title" id="title" class="w-full h-12 -mt-2 border rounded-lg px-4 text-sm text-slate-600 outline-none" required>
-        <div class="text-xs text-slate-500 mt-2">Kapasitas (peserta) :</div>
+        <div class="text-xs text-slate-500 mt-2">Kapasitas (slot tersedia) :</div>
         <input type="number" name="quantity" id="quantity" class="w-full h-12 -mt-2 border rounded-lg px-4 text-sm text-slate-600 outline-none" min="1" required>
 
         <div class="grid grid-cols-2 gap-10 mt-2">
