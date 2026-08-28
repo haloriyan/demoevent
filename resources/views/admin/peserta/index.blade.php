@@ -416,6 +416,18 @@
         select("#EditPeserta #whatsapp").value = data.whatsapp;
         select("#EditPeserta #instansi").value = data.instansi;
 
+        // $qrString = base64_encode(json_encode([
+        //     'trx_id' => $user->transaction->id,
+        //     'user_id' => $user->id,
+        // ]));
+        let qrString = btoa(JSON.stringify({
+            trx_id: data.transaction.id,
+            user_id: data.id,
+        }));
+        console.log(qrString);
+        
+        select("#EditPeserta #QRArea").innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?data=${qrString}">`;
+
         const workshops = parseJsonData(data.transaction.workshops) ?? [];
         select("#EditPeserta #workshops").value = JSON.stringify(workshops);
         

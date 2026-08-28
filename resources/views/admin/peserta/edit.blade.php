@@ -1,44 +1,52 @@
 <div class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-30" id="EditPeserta">
-    <form method="POST" class="bg-white shadow-lg rounded-lg p-10 w-4/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
+    <form method="POST" class="bg-white shadow-lg rounded-lg p-10 w-6/12 mobile:w-10/12 flex flex-col gap-4 mt-4">
         @csrf
         <div class="flex items-center gap-4 mb-4">
             <h3 class="text-lg text-slate-700 font-medium flex grow">Edit Peserta</h3>
             <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#EditPeserta')"></ion-icon>
         </div>
 
-        <div>
-            <div class="text-xs text-slate-500 mb-2">NIK</div>
-            <input type="text" name="nik" id="nik" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
-        </div>
-        <div>
-            <div class="text-xs text-slate-500 mb-2">Nama</div>
-            <input type="text" name="name" id="name" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
-        </div>
-        <div>
-            <div class="text-xs text-slate-500 mb-2">Email</div>
-            <input type="email" name="email" id="email" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
-        </div>
-        <div class="group border focus-within:border-primary rounded-lg p-1 relative">
-            <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">No. Telepon</label>
-            <div class="flex items-center mt-4">
-                <div class="text-sm text-slate-600">+62</div>
-                <input type="text" name="whatsapp" id="whatsapp" class="w-full h-12 outline-none bg-transparent text-sm text-slate-700" placeholder="8XXXXXXXXXX" required />
+        <div class="grid grid-cols-2 gap-6">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <div class="text-xs text-slate-500 mb-2">NIK</div>
+                    <input type="text" name="nik" id="nik" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-500 mb-2">Nama</div>
+                    <input type="text" name="name" id="name" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-500 mb-2">Email</div>
+                    <input type="email" name="email" id="email" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
+                </div>
+                <div class="group border focus-within:border-primary rounded-lg p-1 relative">
+                    <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">No. Telepon</label>
+                    <div class="flex items-center mt-4">
+                        <div class="text-sm text-slate-600">+62</div>
+                        <input type="text" name="whatsapp" id="whatsapp" class="w-full h-12 outline-none bg-transparent text-sm text-slate-700" placeholder="8XXXXXXXXXX" required />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs text-slate-500 mb-2">Instansi</div>
+                    <input type="text" name="instansi" id="instansi" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
+                </div>
+            </div>
+            <div class="flex flex-col gap-4">
+                <div class="flex grow items-center justify-center">
+                    <div class="w-32 h-32 flex items-center justify-center" id="QRArea"></div>
+                </div>
+                <div class="flex flex-col gap-2 p-4 border rounded-lg bg-slate-50">
+                    <div class="text-xs text-slate-500 font-medium">Workshop yang dipilih:</div>
+                    <div id="SelectedWSArea" class="flex flex-wrap gap-2"></div>
+                    <button type="button" class="p-2 px-4 rounded-lg text-xs bg-primary text-white font-medium w-fit mt-2" onclick="OpenWorkshopPicker()">
+                        Atur Workshop
+                    </button>
+                    <input type="hidden" name="workshops" id="workshops">
+                </div>
             </div>
         </div>
-
-         <div>
-             <div class="text-xs text-slate-500 mb-2">Instansi</div>
-             <input type="text" name="instansi" id="instansi" class="w-full h-14 px-4 border rounded-lg text-sm text-slate-600 outline-0" required>
-         </div>
- 
-         <div class="flex flex-col gap-2 p-4 border rounded-lg bg-slate-50">
-             <div class="text-xs text-slate-500 font-medium">Workshop yang dipilih:</div>
-             <div id="SelectedWSArea" class="flex flex-wrap gap-2"></div>
-             <button type="button" class="p-2 px-4 rounded-lg text-xs bg-primary text-white font-medium w-fit mt-2" onclick="OpenWorkshopPicker()">
-                 Atur Workshop
-             </button>
-             <input type="hidden" name="workshops" id="workshops">
-         </div>
  
          <div class="flex items-center justify-end gap-4 mt-4">
             <div class="flex grow"></div>
