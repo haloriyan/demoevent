@@ -42,8 +42,8 @@
                 </button>
                 @foreach ($cat->workshops as $ws)
                     @php
-                        $totalSales = $ws->count + $ws->quantity;
-                        $salesPercentage = $ws->count / 100 * $totalSales;
+                        $totalKuota = $ws->transaction_count + $ws->quantity;
+                        $salesPercentage = $ws->transaction_count / $totalKuota * 100;
                     @endphp
 
                     <div class="bg-white rounded-lg p-8 shadow flex flex-col gap-4">
@@ -63,13 +63,39 @@
                             @endif
                         </div>
 
-                        <div class="flex items-center gap-4">
-                            <ion-icon name="time-outline" class="text-lg text-slate-500"></ion-icon>
+                        <div class="grid grid-cols-2 gap-6 mt-2">
+                            <div class="flex flex-col gap-1">
+                                <div class="text-2xl text-slate-800 font-medium">{{ $ws->quantity }}</div>
+                                <div></div>
+                                <div class="text-xs text-slate-700 font-medium">Tersedia</div>
+                                <div class="text-xs text-slate-500">Slot tersedia untuk dipilih peserta saat mendaftar</div>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <div class="text-2xl text-slate-800 font-medium">{{ $totalKuota }}</div>
+                                <div></div>
+                                <div class="text-xs text-slate-700 font-medium">Total Kuota</div>
+                                <div class="text-xs text-slate-500">Slot tersedia + Peserta terdaftar dengan workshop ini</div>
+                            </div>
                         </div>
-                        <div class="text-xs text-slate-500">Tersedia : {{ $ws->quantity }} slot peserta</div>
-                        {{-- <div class="flex bg-slate-200">
-                            <div class="h-2 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500"></div>
-                        </div> --}}
+
+                        
+                        {{-- <div class="text-xs text-slate-500">Tersedia : {{ $ws->quantity }} slot peserta</div> --}}
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-2 mt-3">
+                                <div class="text-xs text-slate-500">Jumlah Peserta :</div>
+                                <div class="flex grow"></div>
+                                <div class="text-xs text-slate-700 font-medium">
+                                    {{ $ws->transaction_count }} dari {{ $totalKuota }} Total Kuota
+                                </div>
+                            </div>
+                            <div class="flex bg-slate-200">
+                                <div class="h-5 w-[{{ $salesPercentage }}%] bg-gradient-to-r from-blue-900 to-blue-500 flex items-center justify-end pe-2 text-[8px] text-white font-bold">
+                                    @if ($salesPercentage > 20)
+                                        {{ floor($salesPercentage) }}%
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endforeach
             </div>

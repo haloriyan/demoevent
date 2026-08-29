@@ -122,21 +122,29 @@ class WorkshopController extends Controller
         $workshop = Workshop::where('id', $id)->first();
 
         $transactionsRaw = Transaction::where([
-            ['payment_status', 'PAID']
+            ['payment_status', 'PAID'],
+            ['workshops', 'LIKE', '%'.$workshop->title.'%']
         ])
         ->whereNotNull('workshops')
         ->whereNotNull('user_id')
         ->with([
             'user'
         ])
+        ->orderBy('created_at', 'DESC')
         ->get();
 
+        $userIDs = [];
         $users = [];
         foreach ($transactionsRaw as $trx) {
             if ($trx->user != null) {
+                $user = $trx->user;
                 $uworkshops = collect(json_decode($trx->workshops));
-                if (in_array($workshop->id, $uworkshops->pluck('id')->toArray())) {
-                    $users[] = $trx->user;
+                // if (in_array($workshop->id, $uworkshops->pluck('id')->toArray())) {
+                //     $users[] = $trx->user;
+                // }
+                if (!in_array($user->id, $userIDs)) {
+                    $users[] = $user;
+                    array_push($userIDs, $user->id);
                 }
             }
         }

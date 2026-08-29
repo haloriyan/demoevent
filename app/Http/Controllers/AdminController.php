@@ -422,6 +422,32 @@ class AdminController extends Controller
         ])
         ->get();
 
+        foreach ($categories as $c => $cat) {
+            foreach ($cat->workshops as $w => $ws) {
+                $transactions = Transaction::where([
+                    ['payment_status', 'PAID'],
+                    ['workshops', 'LIKE', '%'.$ws->title.'%']
+                ])
+                ->whereNotNull('workshops')
+                ->whereNotNull('user_id')
+                ->with([
+                    'user'
+                ])
+                ->orderBy('created_at', 'DESC')
+                ->get(['id', 'user_id']);
+
+                $categories[$c]->workshops[$w]->transaction_count = 0;
+
+                $userIDs = [];
+                foreach ($transactions as $t => $trx) {
+                    if (!in_array($trx->user_id, $userIDs)) {
+                        array_push($userIDs, $trx->user_id);
+                        $categories[$c]->workshops[$w]->transaction_count += 1;
+                    }
+                }
+            }
+        }
+
         return view('admin.workshop.index', [
             'me' => $me,
             'message' => $message,
