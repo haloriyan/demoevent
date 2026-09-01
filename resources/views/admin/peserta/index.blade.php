@@ -257,6 +257,10 @@
                                           <ion-icon name="mail-outline" class="text-lg text-primary"></ion-icon>
                                           Kirim Ulang Konfirmasi
                                       </a>
+                                      <a href="#" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='DetailPeserta(event, @json($user))'>
+                                            <ion-icon name="information-circle-outline" class="text-lg text-primary"></ion-icon>
+                                            Informasi Peserta
+                                        </a>
                                       @if ($me->role == "admin")
                                           <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
                                               <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
