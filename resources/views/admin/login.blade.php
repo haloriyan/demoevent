@@ -9,12 +9,12 @@
 
     <div class="flex flex-col gap-2">
         <div class="text-xs">Email</div>
-        <input type="text" name="email" class="w-full h-12 outline-0 px-4 text-sm text-slate-600 rounded-lg" value="admin@admin.com" required>
+        <input type="text" name="email" class="w-full h-12 outline-0 px-4 text-sm text-slate-600 rounded-lg" value="{{ old('email') }}" required>
     </div>
 
     <div class="flex flex-col gap-2">
         <div class="text-xs">Password</div>
-        <input type="text" name="password" class="w-full h-12 outline-0 px-4 text-sm text-slate-600 rounded-lg" value="123456" required>
+        <input type="text" name="password" class="w-full h-12 outline-0 px-4 text-sm text-slate-600 rounded-lg" value="{{ old('password') }}" required>
     </div>
 
     @include('partials.flash_message')
