@@ -163,12 +163,17 @@
                                         </a>
                                     @endif
                                     
+                                    <a href="#" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='DetailPeserta(event, @json($user))'>
+                                        <ion-icon name="information-circle-outline" class="text-lg text-primary"></ion-icon>
+                                        Informasi Peserta
+                                    </a>
                                     @if ($me->role == "admin")
                                         <a href="{{ route('admin.peserta.update', $user->id) }}" class="flex items-center gap-3 p-2 px-4 hover:bg-slate-100 text-sm text-slate-700 whitespace-nowrap" onclick='EditPeserta(event, @json($user))'>
                                             <ion-icon name="create-outline" class="text-lg text-primary"></ion-icon>
                                             Edit Peserta
                                         </a>
                                     @endif
+                                    
                                     @if (
                                         $user->transaction->payment_status == "PENDING" ||
                                         $user->transaction->payment_status == "PAID"
@@ -284,6 +289,7 @@
 @include('admin.peserta.ConfirmTransaction')
 @include('admin.peserta.filter')
 @include('admin.peserta.edit')
+@include('admin.peserta.detail')
 @include('WorkshopSelector')
 
 <form id="CancelForm" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -582,5 +588,48 @@
         
         toggleHidden("#WorkshopPicker");
     }
+
+    const DetailPeserta = (e, data) => {
+        e.preventDefault();
+        let trx = data.transaction;
+        let payload = JSON.parse(trx.payment_payload);
+
+        select("#DetailPeserta #payment_evidence_area").classList.add('hidden');
+        
+        select("#DetailPeserta #name").innerHTML = data.name;
+        select("#DetailPeserta #instansi").innerHTML = data.instansi;
+        select("#DetailPeserta #email").innerHTML = data.email;
+        select("#DetailPeserta #whatsapp").innerHTML = data.whatsapp;
+
+        select("#DetailPeserta #payment_status").innerHTML = trx.payment_status;
+        if (trx.payment_status == "PAID") {
+            select("#DetailPeserta #payment_status").classList.remove('bg-yellow-100', 'text-yellow-500');
+            select("#DetailPeserta #payment_status").classList.add('bg-green-100', 'text-green-500');
+        } else {
+            select("#DetailPeserta #payment_status").classList.remove('bg-green-100', 'text-green-500');
+            select("#DetailPeserta #payment_status").classList.add('bg-yellow-100', 'text-yellow-500');
+        }
+        select("#DetailPeserta #payment_amount").innerHTML = Currency(trx.payment_amount).encode();
+
+        if (trx.payment_evidence != null) {
+            select("#DetailPeserta #payment_evidence_area").classList.remove('hidden');
+            select("#DetailPeserta #payment_evidence").innerHTML = `<img src="/storage/payment_evidences/${trx.payment_evidence}" class="w-full aspect-[16/9] rounded-lg object-cover bg-slate-100" />`;
+        }
+
+        console.log(payload);
+        
+        toggleHidden("#DetailPeserta");
+    }
+    const openDetailSection = (section) => {
+        selectAll(".DetailTab").forEach(tab => {
+            tab.classList.remove('text-white', 'bg-primary');
+            tab.classList.add('text-primary')
+        });
+        select(`.DetailTab#${section}`).classList.add('bg-primary', 'text-white');
+
+        selectAll("#DetailPeserta section").forEach(sect => sect.classList.add('hidden'));
+        select(`#DetailPeserta section#${section}`).classList.remove('hidden');
+    }
+    openDetailSection("personal");
 </script>
 @endsection
