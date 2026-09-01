@@ -273,7 +273,7 @@ class AdminController extends Controller
 
         $u = $u->orderBy('created_at', 'DESC')
         ->with([
-            'transaction.ticket' => function ($query) {
+            'transaction.ticket.category' => function ($query) {
                 $query->orderBy('created_at', 'DESC');
             }
         ]);

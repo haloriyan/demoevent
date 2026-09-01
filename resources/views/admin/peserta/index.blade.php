@@ -593,13 +593,22 @@
         e.preventDefault();
         let trx = data.transaction;
         let payload = JSON.parse(trx.payment_payload);
+        let workshops = JSON.parse(trx.workshops);
+        openDetailSection("personal");
 
         select("#DetailPeserta #payment_evidence_area").classList.add('hidden');
+        select("#DetailPeserta #workshops_area").classList.add('hidden');
+        select("#DetailPeserta #workshops").innerHTML = "";
         
         select("#DetailPeserta #name").innerHTML = data.name;
         select("#DetailPeserta #instansi").innerHTML = data.instansi;
         select("#DetailPeserta #email").innerHTML = data.email;
         select("#DetailPeserta #whatsapp").innerHTML = data.whatsapp;
+        select("#DetailPeserta #nik").innerHTML = data.nik;
+        select("#DetailPeserta #created_at").innerHTML = data.created_at;
+
+        select("#DetailPeserta #ticket_name").innerHTML = trx.ticket.name;
+        select("#DetailPeserta #ticket_category").innerHTML = trx.ticket.category.name;
 
         select("#DetailPeserta #payment_status").innerHTML = trx.payment_status;
         if (trx.payment_status == "PAID") {
@@ -616,7 +625,16 @@
             select("#DetailPeserta #payment_evidence").innerHTML = `<img src="/storage/payment_evidences/${trx.payment_evidence}" class="w-full aspect-[16/9] rounded-lg object-cover bg-slate-100" />`;
         }
 
-        console.log(payload);
+        if (workshops !== null) {
+            select("#DetailPeserta #workshops_area").classList.remove('hidden');
+            workshops.forEach(ws => {
+                let item = document.createElement('div');
+                item.classList.add('flex', 'flex-col', 'gap-1');
+                item.innerHTML = `<div class="font-medium text-slate-800">${ws.title}</div>
+                <div class="text-xs text-slate-500">${ws.category.name}</div>`;
+                select("#DetailPeserta #workshops").appendChild(item);
+            })
+        }
         
         toggleHidden("#DetailPeserta");
     }
