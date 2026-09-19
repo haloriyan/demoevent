@@ -10,6 +10,7 @@ use App\Models\Workshop;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ExpiringJob implements ShouldQueue
@@ -31,6 +32,8 @@ class ExpiringJob implements ShouldQueue
     {
         $pendingOrders = Transaction::where('payment_status', 'PENDING')
         ->with(['user', 'ticket'])->get();
+
+        Log::info('changed');
         
         foreach ($pendingOrders as $order) {
             $expired = Carbon::parse($order->expired_at)->isPast();

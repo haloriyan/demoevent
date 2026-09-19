@@ -12,6 +12,7 @@ return [
     |
     */
     'isRemoteEnabled' => true,
+    'isHtml5ParserEnabled' => true,
     'show_warnings' => false,   // Throw an Exception on warnings from dompdf
 
     'public_path' => null,  // Override the public path if needed

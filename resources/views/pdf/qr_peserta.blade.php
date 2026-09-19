@@ -5,6 +5,17 @@
 <html>
 <head>
     <style>
+        @font-face {
+            font-family: 'syne_tactile';
+            font-style: normal;
+            font-weight: 400;
+            src: url('{{ storage_path('fonts/Syne_Tactile.ttf') }}') format('truetype');
+        }
+
+
+        .syne {
+            font-family: 'syne_tactile';
+        }
         * {
             box-sizing: border-box;
             margin: 0;

@@ -9,6 +9,10 @@
             <ion-icon name="close-outline" class="cursor-pointer text-3xl" onclick="toggleHidden('#TicketModal')"></ion-icon>
         </div>
 
+        <div class="bg-primary text-sm text-white font-medium p-4 rounded-lg">
+            Pembelian Tiket Sendratari Ramayana dapat dilakukan maksimal tanggal <u>30 September 2026</u>.
+        </div>
+
         <div class="group border focus-within:border-primary rounded-lg p-1 relative">
             <label class="text-slate-500 group-focus-within:text-primary text-xs absolute top-2 left-2">Nama</label>
             <input type="text" name="name" id="name" class="w-full h-12 px-1 mt-3 outline-none bg-transparent text-sm text-slate-700" required />

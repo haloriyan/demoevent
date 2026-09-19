@@ -47,6 +47,20 @@
             Tanggal : 8 Oktober 2026<br />
             Waktu	: {{ env('RAMAYANA_TIME') }}
         </div>
+
+        @if (env('RAMAYANA_ENABLE') == "1")
+            <div class="bg-primary text-white p-8 rounded-lg flex items-center gap-4">
+                <div class="flex flex-col gap-1 basis-24 grow">
+                    <div class="text-sm font-medium">
+                        Tiket Sendratari Ramayana hanya dapat dibeli hingga tanggal <u>30 September 2026</u>.
+                    </div>
+                </div>
+
+                <button class="bg-white text-primary text-sm font-bold rounded-full p-2 px-4" onclick="toggleHidden('#TicketModal')">
+                    Beli Tiket
+                </button>
+            </div>
+        @endif
     </div>
 </div>
 
@@ -130,7 +144,7 @@
             input = select("#TicketModal #qty");
         }
         let value = parseInt(input.value);
-        let newValue = 0;
+        let newValue = 1;
 
         if (action === null) {
             newValue = input.value;
@@ -147,6 +161,15 @@
         }
 
         input.value = newValue;
+        console.log(typeof price, price);
+        
+        console.log({
+            newValue,
+            price,
+            priceType: typeof price,
+            result: newValue * price,
+        });
+        
         select("#TicketModal #TotalPrice").innerHTML = Currency(newValue * price).encode();
     }
 
