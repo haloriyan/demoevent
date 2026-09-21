@@ -6,16 +6,12 @@
 <head>
     <style>
         @font-face {
-            font-family: 'syne_tactile';
+            font-family: 'Bebas Regular';
             font-style: normal;
             font-weight: 400;
-            src: url('{{ storage_path('fonts/Syne_Tactile.ttf') }}') format('truetype');
+            src: url("{{ storage_path('fonts/Bebas-Regular.ttf') }}") format('truetype');
         }
 
-
-        .syne {
-            font-family: 'syne_tactile';
-        }
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,7 +19,11 @@
         }
 
         body {
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
+        }
+
+        .name {
+            font-family: 'Bebas Regular', Arial, sans-serif;
         }
 
         .ib {
@@ -49,14 +49,14 @@
 
         .card {
             display: table-cell;
-            width: 105mm;
-            height: 138mm;
+            width: 80mm;
+            height: 120mm;
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: top;
             overflow: hidden;
 
-            background-image: url("{{ public_path('images/kartu_bg.jpg') }}");
+            background-image: url("{{ public_path('images/id_card.jpg') }}");
             background-repeat: no-repeat;
             background-size: 100% 100%;
             background-position: center;
@@ -72,7 +72,7 @@
         }
 
         .spacer {
-            height: 45mm;
+            height: 28mm;
             flex-shrink: 0;
         }
 
@@ -130,6 +130,7 @@
                             <div class="card_inner">
                                 <div class="spacer"></div>
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
+                                <div style="height: 4mm;"></div>
                                 <h2 class="name">{{ $user->name }}</h2>
                                 <div class="ib">
                                     @foreach ($workshops ?? [] as $ws)
