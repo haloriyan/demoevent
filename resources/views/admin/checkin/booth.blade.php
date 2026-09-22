@@ -26,20 +26,22 @@
             </thead>
             <tbody class="divide-y divide-slate-200">
                 @foreach ($checkins as $check)
-                    <tr class="hover:bg-slate-100 transition-colors">
-                        <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $check->booth->name }}
-                        </td>
-                        <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $check->user->name }}
-                        </td>
-                        <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $check->user->instansi ?? '-' }}
-                        </td>
-                        <td class="py-3 px-4 text-sm text-slate-600">
-                            {{ $check->created_at }}
-                        </td>
-                    </tr>
+                    @if ($check->user)
+                        <tr class="hover:bg-slate-100 transition-colors">
+                            <td class="py-3 px-4 text-sm text-slate-600">
+                                {{ @$check->booth->name }}
+                            </td>
+                            <td class="py-3 px-4 text-sm text-slate-600">
+                                {{ @$check->user->name ?? @$check->user_id }}
+                            </td>
+                            <td class="py-3 px-4 text-sm text-slate-600">
+                                {{ @$check->user->instansi ?? '-' }}
+                            </td>
+                            <td class="py-3 px-4 text-sm text-slate-600">
+                                {{ @$check->created_at }}
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

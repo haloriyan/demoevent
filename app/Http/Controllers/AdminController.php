@@ -249,7 +249,6 @@ class AdminController extends Controller
         $tickets = Ticket::with(['category'])
         ->orderBy('category_id', 'ASC')
         ->get();
-        // return $tickets;
 
         $u = new User();
         if ($request->q != "") {
@@ -300,7 +299,7 @@ class AdminController extends Controller
         }
 
         $workshops = WsCategory::with(['workshops.rundown.speakers'])->get();
-        $users = $u->paginate(25)->withQueryString();
+        $users = $u->paginate($request->qr == 1 ? 99999 : 25)->withQueryString();
 
         if ($request->qr == 1) {
             $filename = "QR_Peserta.pdf";
@@ -552,6 +551,81 @@ class AdminController extends Controller
     }
 
     public function scan(Request $request) {
+        $p = json_decode(base64_decode($request->p));
+        $scan = null;
+        $users = [];
+
+        $userFilter = $request->name != "" ? [['name', 'LIKE', '%'.$request->name.'%']] : [['id', $p->user_id]];
+        $users = User::where($userFilter)
+        ->whereHas('transactions', function ($query) {
+            $query->where('payment_status', 'PAID');
+        })
+        ->with([
+            'transactions' => function ($query) {
+                $query->where('payment_status', 'PAID');
+            },
+            'transactions.ticket'
+        ])
+        ->get();
+        $user = $users[0];
+        $transaction = $users[0]->transactions[0];
+
+        if ($users->count() == 0) {
+            if ($request->response_type == "api") {
+                return response()->json([
+                    'message' => "Tidak dapat menemukan data peserta dengan transaksi valid"
+                ]);
+            } else {
+                return redirect()->route('admin.dashboard')->withErrors(['Tidak dapat menemukan peserta dengan kata kunci "' . $request->name .'"']);
+            }
+        }
+
+        if ($request->confirm != "y") {
+            return view('admin.scan', [
+                'request' => $request,
+                'users' => $users,
+                'trx' => $transaction,
+                'p' => $p != null ? base64_encode(json_encode($p)) : base64_encode(json_encode([
+                    'trx_id' => $transaction->id,
+                    'user_id' => $user->id,
+                ]))
+            ]);
+        } else {
+            $sc = Scan::where([
+                ['user_id', $user->id],
+                ['transaction_id', $transaction->id],
+            ]);
+            $check = $sc->first();
+            $hasCheckedIn = $check != null;
+
+            if ($hasCheckedIn) {
+                $sc->update([
+                    'updated_at' => now()
+                ]);
+
+                $scan = $sc->with(['user', 'transaction', 'ticket'])->first();
+            } else {
+                $scan = Scan::create([
+                    'user_id' => $transaction->user_id,
+                    'transaction_id' => $p->trx_id,
+                    'ticket_id' => $transaction->ticket_id,
+                ]);
+                $scan = Scan::where('id', $scan->id)->with(['user', 'transaction', 'ticket'])->first();
+            }
+
+            if ($request->response_type == "api") {
+                return response()->json([
+                    'scan' => $scan,
+                    'message' => "Berhasil scan"
+                ]);
+            } else {
+                return redirect()->route('admin.checkin.registrasi')->with([
+                    'message' => "Berhasil scan"
+                ]);
+            }
+        }
+    }
+    public function scanx(Request $request) {
         $p = json_decode(base64_decode($request->p));
         $trx = null;
         $transaction = null;

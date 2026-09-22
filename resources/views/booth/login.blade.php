@@ -14,12 +14,12 @@
 
     <div class="flex flex-col gap-2">
         <div class="text-xs">Username</div>
-        <input type="text" name="username" class="w-full h-12 border outline-0 px-4 text-sm text-slate-600 rounded-lg" value="oncomedica" required>
+        <input type="text" name="username" class="w-full h-12 border outline-0 px-4 text-sm text-slate-600 rounded-lg" value="" required>
     </div>
 
     <div class="flex flex-col gap-2">
         <div class="text-xs">Password</div>
-        <input type="text" name="password" class="w-full h-12 border outline-0 px-4 text-sm text-slate-600 rounded-lg" value="123456" required>
+        <input type="text" name="password" class="w-full h-12 border outline-0 px-4 text-sm text-slate-600 rounded-lg" value="" required>
     </div>
 
     @include('partials.flash_message')

@@ -21,7 +21,7 @@
     </style>
     @yield('head')
 </head>
-<body class="bg-slate-300">
+<body class="bg-slate-100">
 
 <div class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center">
     <div class="flex flex-col gap-4 w-4/12">
@@ -67,7 +67,7 @@
             <div class="text-sm text-slate-500">Hasil pencarian lainnya</div>
             <div class="flex flex-wrap items-center gap-4">
                 @foreach ($users as $u => $theUser)
-                    <a href="{{ route('admin.scan', ['name' => $theUser->name]) }}" class="p-2 px-4 rounded-full border border-primary text-xs text-primary hover:bg-primary hover:text-white" onclick="ClickLink(this, event)">
+                    <a href="{{ route('admin.scan', ['name' => $theUser->name]) }}" class="p-2 px-4 rounded-full border border-primary text-xs text-primary hover:bg-primary hover:text-white bg-white" onclick="ClickLink(this, event)">
                         {{ $theUser->name }}
                     </a>
                 @endforeach

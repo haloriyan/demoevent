@@ -47,6 +47,9 @@ class User extends Authenticatable
     public function transaction() {
         return $this->hasOne(Transaction::class, 'user_id')->orderBy('created_at', 'DESC');
     }
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
     public function booth_checkins() {
         return $this->hasMany(BoothCheckin::class, 'user_id');
     }

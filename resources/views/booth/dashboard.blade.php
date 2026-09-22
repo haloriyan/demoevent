@@ -38,18 +38,20 @@
         </div>
     @endif
     @foreach ($checkins as $check)
-        <div class="flex items-center gap-4">
-            <div class="flex flex-col gap-1 basis-24 grow">
-                <div class="text-slate-600">{{ $check->user->name }}</div>
-                <div class="text-slate-500 text-xs">{{ $check->user->instansi ?? "-" }}</div>
-            </div>
-            <div class="flex flex-col items-end gap-2">
-                <ion-icon name="time-outline" class="text-slate-500 text-xs"></ion-icon>
-                <div class="text-slate-600 text-xs font-medium">
-                    {{ Carbon::parse($check->created_at)->isoFormat('DD MMM, HH:mm') }}
+        @if ($check->user)
+            <div class="flex items-center gap-4">
+                <div class="flex flex-col gap-1 basis-24 grow">
+                    <div class="text-slate-600">{{ @$check->user->name }}</div>
+                    <div class="text-slate-500 text-xs">{{ $check->user->instansi ?? "-" }}</div>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    <ion-icon name="time-outline" class="text-slate-500 text-xs"></ion-icon>
+                    <div class="text-slate-600 text-xs font-medium">
+                        {{ Carbon::parse($check->created_at)->isoFormat('DD MMM, HH:mm') }}
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     @endforeach
 </div>
 
