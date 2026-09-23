@@ -113,7 +113,7 @@
 
     @include('partials.flash_message')
 
-    <div class="overflow-x-auto scrollbar-hide bg-white p-4 shadow-sm rounded-lg">
+    <div class="overflow-x-auto scrollbar-hide bg-white p-4 shadow-sm rounded-lg min-h-[500px]">
         <table class="min-w-max table-auto border-collapse">
             <thead>
                 <tr class="text-left">

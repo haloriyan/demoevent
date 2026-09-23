@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - {{ env('APP_NAME') }}</title>
+    <title>Frontliner - {{ env('APP_NAME') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {!! json_encode(config('tailwind')) !!}
@@ -161,12 +161,44 @@
 
         users.map((user, u) => {
             let item = document.createElement('div');
-            item.classList.add('flex', 'items-center', 'gap-3');
-            item.innerHTML = `<div class="flex flex-col gap-1 grow">
-                <div class="text-sm text-slate-600 font-medium">${user.name}</div>
-                <div class="text-xs text-slate-500">${user.email ?? '-'} </div>
-            </div>
-            <button class="text-xs text-white bg-primary rounded-full font-medium p-2 px-3" data-user='${JSON.stringify(user)}' onclick="chooseUser(this)">Cek</button>`;
+            let trx = user.transaction;
+            let workshops = JSON.parse(trx.workshops) ?? [];
+
+            item.classList.add('flex', 'items-center', 'gap-3', 'p-4', 'rounded-lg', 'shadow');
+            let toRender = `<div class="flex flex-col gap-[2px] grow">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex flex-col basis-32 grow">
+                                        <div class="text-sm text-slate-600 font-medium">${user.name}</div>
+                                        <div class="text-xs text-slate-500">${user.email ?? '-'} </div>
+                                    </div>
+                                    <button class="text-xs text-white bg-primary rounded-full font-medium p-3 px-5" data-user='${JSON.stringify(user)}' onclick="chooseUser(this)">Cek</button>
+                                </div>
+
+                                <div></div><div></div>
+
+                                <div class="flex items-center gap-4 mt-2 text-xs">
+                                    <ion-icon name="ticket-outline" class="text-lg"></ion-icon>
+                                    <div class="flex flex-col grow basis-32 gap-1">
+                                        <div class="text-slate-600">Tiket</div>
+                                        <div class="text-primary font-medium">${trx.ticket.name}</div>
+                                    </div>
+                                </div>`;
+
+            if (workshops.length > 0) {
+                toRender += `<div class="flex items-center gap-4 mt-2 text-xs">
+                    <ion-icon name="clipboard-outline" class="text-lg"></ion-icon>
+                    <div class="flex flex-col grow basis-32 gap-1">
+                        <div class="text-slate-600">Workshop</div>
+                        <div class="text-primary font-medium flex flex-col">
+                            ${workshops.map((ws) => (`<div>${ws.title}</div>`))}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+                toRender += `</div>`;
+
+            item.innerHTML = toRender;
             area.appendChild(item);
         })
     }

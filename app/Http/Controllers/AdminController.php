@@ -299,7 +299,7 @@ class AdminController extends Controller
         }
 
         $workshops = WsCategory::with(['workshops.rundown.speakers'])->get();
-        $users = $u->paginate($request->qr == 1 ? 99999 : 25)->withQueryString();
+        $users = $u->paginate($request->qr == 1 ? 10 : 25)->withQueryString();
 
         if ($request->qr == 1) {
             $filename = "QR_Peserta.pdf";

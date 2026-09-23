@@ -72,7 +72,7 @@
         }
 
         .spacer {
-            height: 28mm;
+            height: 24mm;
             flex-shrink: 0;
         }
 
@@ -86,10 +86,13 @@
             font-weight: bold;
             margin: 12px 6px 4px 6px;
             line-height: 1.2;
+            /* font-weight: 700; */
         }
 
         .instansi {
-            font-size: 8.5pt;
+            font-family: 'Bebas Regular', Arial, sans-serif;
+            font-size: 7pt;
+            /* font-weight: 500; */
             margin: 0 6px;
             line-height: 1.2;
         }
@@ -132,6 +135,11 @@
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
                                 <div style="height: 4mm;"></div>
                                 <h2 class="name">{{ $user->name }}</h2>
+                                @if ($user->instansi)
+                                    <div style="height: 1mm;"></div>
+                                    <h4 class="instansi">{{ @$user->instansi ?? '-' }}</h4>
+                                    <div style="height: 2mm;"></div>
+                                @endif
                                 <div class="ib">
                                     @foreach ($workshops ?? [] as $ws)
                                         <div class="ws">{{ $ws->title }}</div>
