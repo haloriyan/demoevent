@@ -12,7 +12,7 @@
                 Beli Tiket
             </button>
         @else 
-            <div class="text-primary text-sm">Mohon maaf, pembelian Tiket Ramayana belum tersedia.</div>
+            <div class="text-primary text-sm">Mohon maaf, pembelian Tiket Ramayana telah habis.</div>
         @endif
     </div>
     <div class="mobile:h-[10vh]"></div>
@@ -99,8 +99,8 @@
         </div>
     @else
         <div class="absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/50 group-hover:backdrop-blur-md text-white p-20 mobile:p-8 flex flex-col gap-4 items-center justify-center">
-            <h4 class="text-3xl font-bold">Pembelian Tiket Belum Tersedia</h4>
-            <div>Mohon menunggu informasi selanjutnya dari panitia. Terima kasih atas kesabarannya.</div>
+            <h4 class="text-3xl font-bold">Pembelian Tiket Telah Habis</h4>
+            <div>Terima kasih atas partisiipasinya.</div>
         </div>
     @endif
 
