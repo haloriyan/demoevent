@@ -170,7 +170,13 @@
                             <div class="card_inner">
                                 <div class="spacer"></div>
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
+                                <div style="height: 4mm;"></div>
                                 <h2 class="name">{{ $user->name }}</h2>
+                                @if ($user->instansi)
+                                    <div style="height: 1mm;"></div>
+                                    <h4 class="instansi">{{ @$user->instansi ?? '-' }}</h4>
+                                    <div style="height: 2mm;"></div>
+                                @endif
                                 <div class="ib">
                                     @foreach ($workshops ?? [] as $ws)
                                         <div class="ws">{{ $ws->title }}</div>

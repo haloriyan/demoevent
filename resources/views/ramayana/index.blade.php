@@ -8,9 +8,14 @@
     <h2 class="text-4xl font-bold">Tiket Ramayana</h2>
     <div class="flex">
         @if (env('RAMAYANA_ENABLE') == "1")
-            <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
-                Beli Tiket
-            </button>
+            <div class="flex flex-col gap-4">
+                <div class="flex">
+                    <button class="p-3 px-6 rounded-full bg-primary text-white text-sm font-medium" onclick="toggleHidden('#TicketModal')">
+                        Beli Tiket
+                    </button>
+                </div>
+                <div class="text-sm text-primary font-medium">Tiket terbatas! Hanya tersedia 15 kursi.</div>
+            </div>
         @else 
             <div class="text-primary text-sm">Mohon maaf, pembelian Tiket Ramayana telah habis.</div>
         @endif
