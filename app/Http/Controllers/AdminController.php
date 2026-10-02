@@ -567,8 +567,6 @@ class AdminController extends Controller
             'transactions.ticket'
         ])
         ->get();
-        $user = $users[0];
-        $transaction = $users[0]->transactions[0];
 
         if ($users->count() == 0) {
             if ($request->response_type == "api") {
@@ -580,16 +578,25 @@ class AdminController extends Controller
             }
         }
 
+        $user = $users[0];
+        $transaction = $users[0]->transactions[0];
+
         if ($request->confirm != "y") {
-            return view('admin.scan', [
+            $payload = [
                 'request' => $request,
                 'users' => $users,
                 'trx' => $transaction,
+                'user' => @$user ?? null,
                 'p' => $p != null ? base64_encode(json_encode($p)) : base64_encode(json_encode([
                     'trx_id' => $transaction->id,
                     'user_id' => $user->id,
                 ]))
-            ]);
+            ];
+            if ($request->response_type == "api") {
+                return response()->json($payload);
+            } else {
+                return view('admin.scan', $payload);
+            }
         } else {
             $sc = Scan::where([
                 ['user_id', $user->id],

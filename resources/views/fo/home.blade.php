@@ -91,6 +91,7 @@
 </div>
 
 @yield('ModalArea')
+@include('fo.confirm')
 
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -99,6 +100,10 @@
 <script>
     const select = dom => document.querySelector(dom);
     const selectAll = dom => document.querySelectorAll(dom);
+
+    const toggleHidden = target => {
+        select(target).classList.toggle('hidden');
+    }
 
     const Currency = (amount) => {
         let props = {};
@@ -252,10 +257,18 @@
         }
     }, 3000);
 
-    const checkUser = async (p) => {
+    let qrString = null;
+
+    const confirmUser = () => {
+        checkUser(qrString, 'y');
+    }
+    const checkUser = async (p, confirm) => {
+        if (p == null) {
+            p = qrString;
+        }
+        
         const response = await axios.post("/admin/scan", {
-            p,
-            confirm: "y",
+            p, confirm,
             response_type: "api"
         });
         const res = await response.data;
@@ -263,20 +276,49 @@
 
         select("#AlertMessage").innerHTML = res.message;
         selectAll(".AlertIcon").forEach(item => item.classList.add('hidden'));
-        if (res.scan === null) {
-            select("#AlertFailed").classList.remove('hidden');
-        } else {
-            select("#AlertCheck").classList.remove('hidden');
-        }
+        
+        if (confirm === "y") {
+            toggleHidden('#ConfirmTicket');
+            if (res.scan === null || !res.scan) {
+                select("#AlertFailed").classList.remove('hidden');
+            } else {
+                select("#AlertCheck").classList.remove('hidden');
+            }
 
-        alertArea.classList.remove('hidden');
-        setTimeout(() => {
-            holdScanner = false;
-            qrScanner.start();
-            alertArea.classList.add('hidden');
-            users = [];
-            RenderUsers();
-        }, 4000);
+            console.log(res);
+
+            alertArea.classList.remove('hidden');
+            setTimeout(() => {
+                holdScanner = false;
+                qrScanner.start();
+                alertArea.classList.add('hidden');
+                users = [];
+                RenderUsers();
+            }, 4000);
+        } else {
+            let trx = res.trx;
+            let workshops = JSON.parse(trx.workshops);
+            let WSArea = select("#ConfirmTicket #WorkshopArea");
+            qrString = p;
+            
+            select("#ConfirmTicket #name").innerHTML = res.user.name;
+            select("#ConfirmTicket #ticket_name").innerHTML = trx.ticket.name;
+            if (workshops.length === 0) {
+                WSArea.classList.add('hidden');
+            } else {
+                WSArea.innerHTML = "";
+                workshops.forEach(ws => {
+                    let item = document.createElement('div');
+                    item.classList.add('text-xs', 'text-primary', 'border', 'border-primary', 'p-1', 'px-3', 'rounded-full');
+                    item.innerHTML = ws.title;
+                    WSArea.appendChild(item);
+                });
+
+                WSArea.classList.remove('hidden');
+            }
+
+            toggleHidden('#ConfirmTicket');
+        }
     }
 
     InitScanQR();
