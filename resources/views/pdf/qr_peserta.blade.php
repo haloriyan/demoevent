@@ -133,7 +133,7 @@
                             <div class="card_inner">
                                 <div class="spacer"></div>
                                 <img class="qr-img" src="data:image/svg+xml;base64,{{ $qr }}">
-                                <div>{{ $qrString }}</div>
+                                {{-- <div>{{ $qrString }}</div> --}}
                                 <div style="height: 4mm;"></div>
                                 <h2 class="name">{{ $user->name }}</h2>
                                 @if ($user->instansi)
