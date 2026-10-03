@@ -152,7 +152,8 @@
         } else {
             const response = await axios.post("/api/users/search", {
                 q,
-                with: ['transaction.ticket']
+                with: ['transaction.ticket'],
+                payment_status: "PAID"
             });
             const res = await response.data;
             users = res.users;
@@ -285,8 +286,6 @@
                 select("#AlertCheck").classList.remove('hidden');
             }
 
-            console.log(res);
-
             alertArea.classList.remove('hidden');
             setTimeout(() => {
                 holdScanner = false;
@@ -296,28 +295,44 @@
                 RenderUsers();
             }, 4000);
         } else {
+            console.log(res);
             let trx = res.trx;
-            let workshops = JSON.parse(trx.workshops);
-            let WSArea = select("#ConfirmTicket #WorkshopArea");
-            qrString = p;
-            
-            select("#ConfirmTicket #name").innerHTML = res.user.name;
-            select("#ConfirmTicket #ticket_name").innerHTML = trx.ticket.name;
-            if (workshops.length === 0) {
-                WSArea.classList.add('hidden');
+            if (!trx) {
+                select("#AlertFailed").classList.remove('hidden');
+
+                alertArea.classList.remove('hidden');
+                setTimeout(() => {
+                    holdScanner = false;
+                    qrScanner.start();
+                    alertArea.classList.add('hidden');
+                    users = [];
+                    RenderUsers();
+                }, 4000);
             } else {
-                WSArea.innerHTML = "";
-                workshops.forEach(ws => {
-                    let item = document.createElement('div');
-                    item.classList.add('text-xs', 'text-primary', 'border', 'border-primary', 'p-1', 'px-3', 'rounded-full');
-                    item.innerHTML = ws.title;
-                    WSArea.appendChild(item);
-                });
+                let workshops = JSON.parse(trx.workshops);
+                let WSArea = select("#ConfirmTicket #WorkshopArea");
+                qrString = p;
+                
+                select("#ConfirmTicket #name").innerHTML = res.user.name;
+                select("#ConfirmTicket #ticket_name").innerHTML = trx.ticket.name;
+                if (workshops.length === 0) {
+                    WSArea.classList.add('hidden');
+                } else {
+                    WSArea.innerHTML = "";
+                    workshops.forEach(ws => {
+                        let item = document.createElement('div');
+                        item.classList.add('text-xs', 'text-primary', 'border', 'border-primary', 'p-1', 'px-3', 'rounded-full');
+                        item.innerHTML = ws.title;
+                        WSArea.appendChild(item);
+                    });
 
-                WSArea.classList.remove('hidden');
+                    WSArea.classList.remove('hidden');
+                }
+
+                qrScanner.start();
+
+                toggleHidden('#ConfirmTicket');
             }
-
-            toggleHidden('#ConfirmTicket');
         }
     }
 

@@ -221,6 +221,12 @@ class UserController extends Controller
     }
     public function search(Request $request) {
         $u = User::where('name', 'LIKE', "%".$request->q."%");
+        if ($request->payment_status != "") {
+            $u = $u->whereHas('transactions', function ($query) use ($request) {
+                $query->where('payment_status', $request->payment_status);
+            });
+        }
+        
         if ($request->with != "") {
             $u = $u->with($request->with);
         }
