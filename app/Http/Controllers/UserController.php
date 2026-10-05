@@ -298,6 +298,7 @@ class UserController extends Controller
         return $transactions;
     }
     public function register(Request $request, $step = 'detail') {
+        return view('under_construction');
         $payload = json_decode(base64_decode($request->p), true) ?? [];
         $me = me();
 

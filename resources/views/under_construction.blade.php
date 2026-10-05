@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Construction | Medical Portal</title>
+    <title>Pendaftaran Ditutup | {{ env('APP_NAME') }}</title>
     
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -54,7 +54,7 @@
 
 <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col gap-4 items-center justify-center">
     <div class="p-3 px-7 text-xs font-bold bg-blue-100 text-blue-500 rounded-full">
-        UNDER CONSTRUCTION
+        PENDAFTARAN DITUTUP
     </div>
     <svg class="w-64 h-64 md:w-80 md:h-80 medical-float drop-shadow-xl" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Shield Base -->
@@ -75,7 +75,7 @@
         <circle cx="200" cy="200" r="140" stroke="#cbd5e1" stroke-width="2" stroke-opacity="0.3"/>
     </svg>
     <div class="w-7/12 mobile:w-10/12 flex flex-col items-center text-center gap-4">
-        <h1 class="text-3xl mobile:text-xl text-slate-700 font-bold leading-[48px]">Kami Sedang Merencanakan<br /><span class="text-blue-500">Pengalaman Terbaik</span> untuk Anda.</h1>
+        <h1 class="text-3xl mobile:text-xl text-slate-700 font-bold leading-[48px]">Mohon Maaf, Pendaftaran telah ditutup.</h1>
         <div class="text-slate-600 mobile:text-sm">
             Terima kasih atas antusias Anda mengikuti acara ini. Nantikan persembahan terbaik dari Kami.
         </div>

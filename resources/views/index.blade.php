@@ -29,9 +29,9 @@
             <h1 class="text-[7vh] mobile:text-[4vh] font-bold">{{ env('EVENT_NAME') }}</h1>
             <div>{{ env('EVENT_DATES') }}, {{ env('EVENT_PLACE') }}</div>
             <div class="flex items-center gap-4 mt-4">
-                <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-secondary text-white">
+                {{-- <a href="{{ route('register') }}" class="p-3 px-6 rounded-full text-sm font-medium bg-secondary text-white">
                     Daftar Sekarang
-                </a>
+                </a> --}}
                 <a href="#" class="p-3 px-6 rounded-full text-sm font-medium border border-white text-white hover:bg-white hover:border-primary hover:text-primary" onclick="selengkapnya(event)">
                     Selengkapnya
                 </a>
