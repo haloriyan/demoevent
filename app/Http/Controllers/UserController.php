@@ -299,7 +299,7 @@ class UserController extends Controller
     }
     public function register(Request $request, $step = 'detail') {
         if (env('REGISTER') != 1) {
-            return view('under_construction');
+            // return view('under_construction');
         }
         $payload = json_decode(base64_decode($request->p), true) ?? [];
         $me = me();

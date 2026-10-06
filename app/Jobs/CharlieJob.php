@@ -52,7 +52,7 @@ class CharlieJob implements ShouldQueue
 
         sleep(rand(1, 5));
 
-        if ($this->user->whatsapp != null) {
+        if ($this->user->whatsapp != null && $this->device) {
             Http::post(env('WA_URL') . "/send", [
                 'client_id' => $this->device->client_id,
                 'destination' => "62" . $this->user->whatsapp,
