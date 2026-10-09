@@ -270,15 +270,23 @@ class AdminController extends Controller
             });
         }
 
-        $u = $u->orderBy('created_at', 'DESC')
-        ->with([
-            'transaction.ticket.category' => function ($query) {
-                $query->orderBy('created_at', 'DESC');
-            }
-        ]);
+        $u = $u->orderBy('created_at', 'DESC');
+
+        if ($request->qr == 1) {
+            $u = $u->with([
+                'transaction',
+            ]);
+        } else {
+            $u = $u->with([
+                'transaction.ticket.category' => function ($query) {
+                    $query->orderBy('created_at', 'DESC');
+                },
+            ]);
+        }
 
         if ($request->download == 1) {
             $users = $u->get();
+
             $filename = "Data_Peserta-Exported_at_" . Carbon::now()->isoFormat('DD-MMM-Y HH:mm:ss') . ".xlsx";
 
             $activeFilters = [];
@@ -298,8 +306,19 @@ class AdminController extends Controller
             );
         }
 
+        if ($request->qr == 1) {
+            $users = $u->get();
+
+            $pages = array_chunk($users->all(), 4);
+
+            return Pdf::loadView('pdf.qr_peserta', [
+                'pages' => $pages,
+            ])->stream('QR_Peserta.pdf');
+        }
+
         $workshops = WsCategory::with(['workshops.rundown.speakers'])->get();
-        $users = $u->paginate($request->qr == 1 ? 999999 : 25)->withQueryString();
+
+        $users = $u->paginate(25)->withQueryString();
 
         if ($request->qr == 1) {
             $filename = "QR_Peserta.pdf";

@@ -16,6 +16,7 @@
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;" colspan="2">Tiket</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop Pagi</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Workshop Siang</th>
+            <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Nominal Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Status Pembayaran</th>
             <th style="font-weight: bold; background-color: #eeeeee; color: #333;">Timestamp</th>
         </tr>
@@ -93,6 +94,9 @@
                             -
                         @endif
                     @endif
+                </td>
+                <td>
+                    {{ currency_encode($user->transaction->payment_amount) }}
                 </td>
                 <td style="background-color: {{ $statusColor }};color: #fff">
                     {{ $user->transaction->payment_status }}
